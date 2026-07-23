@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   structs.h                                          :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: aiga </var/spool/mail/aiga>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/22 15:51:04 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/23 19:24:59 by aiga             ###   ########.fr       */
+/*   Created: 2026/07/23 19:19:49 by aiga              #+#    #+#             */
+/*   Updated: 2026/07/23 19:20:19 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCTS_H
-# define STRUCTS_H
+#ifndef PARSING_H
+# define PARSING_H
 
-typedef struct s_map
-{
-	char	cell[MAP_SIZE_MAX * MAP_SIZE_MAX];
-	uint8_t	width;
-	uint8_t	height;
-}	t_map;
-
-typedef struct s_game
-{
-	t_map	*map;
-}	t_game;
+void	parsing(t_map *map, char *path);
 
 #endif

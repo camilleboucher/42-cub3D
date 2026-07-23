@@ -6,7 +6,7 @@
 #    By: Camille <private_mail>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 10:13:22 by Camille           #+#    #+#              #
-#    Updated: 2026/07/09 18:50:08 by cboucher         ###   ########.fr        #
+#    Updated: 2026/07/23 19:06:14 by aiga             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ endif
 
 SRC_DIR := src/
 
-SRC_BASENAMES := main
+SRC_BASENAMES := main errors_manager parsing
 SRCS := $(addprefix $(SRC_DIR), $(addsuffix .c,$(SRC_BASENAMES)))
 
 OBJ_DIR := .build/

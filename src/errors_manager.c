@@ -12,14 +12,16 @@
 
 #include "cub3D.h"
 
-static	first_pool(int oflag);
+static void	parsing_error(uint64_t eflag);
 
-void	error_exit(int oflag)//TODO:ajouter struct principal quel nom ?
+void	error_exit(uint64_t eflag)//TODO:ajouter struct principal quel nom ?
 {
-	exit(oflag);
+	parsing_error(eflag);
+	exit(eflag);
 }
 
-static	first_pool(int oflag)
+static void	parsing_error(uint64_t eflag)
 {
-	if (oflag & O)
+	if (eflag & ERR_NO_ARG)
+		printf("%s%s\n", MSG_USAGE, MSG_NO_ARG);
 }

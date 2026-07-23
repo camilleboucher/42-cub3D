@@ -13,10 +13,16 @@
 #ifndef ERRORS_MANAGER_H
 # define ERRORS_MANAGER_H
 
-# define O_BAD_ARGS 2
-# define USAGE_MSG1 "\x1b[38:5:196mUsage:\x1b[0m cub3D needs a path "
-# define USAGE_MSG2 "to the .cub map as the parameter\n"
+typedef enum e_error
+{
+	ERR_NONE = 0u,
+	ERR_SYS = 1u << 0,
+	ERR_NO_ARG = 1u << 1
+}	t_error;
 
-void	error_exit(int oflag);//TODO:ajouter struct principal quel nom ?
+# define MSG_USAGE "\x1b[38:5:196mUsage:\x1b[0m "
+# define MSG_NO_ARG "cub3D needs a path to the .cub map as the parameter."
+
+void	error_exit(uint64_t eflag);//TODO:ajouter struct principal quel nom ?
 
 #endif

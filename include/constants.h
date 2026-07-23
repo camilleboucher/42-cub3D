@@ -6,12 +6,11 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:03:01 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/22 16:10:02 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/07/23 19:30:11 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONSTANTS_H
 # define CONSTANTS_H
-
 
 #endif
