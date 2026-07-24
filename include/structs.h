@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:51:04 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/23 19:24:59 by aiga             ###   ########.fr       */
+/*   Updated: 2026/07/24 14:25:34 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 typedef struct s_map
 {
-	char	cell[MAP_SIZE_MAX * MAP_SIZE_MAX];
+	char	cell[65536];
 	uint8_t	width;
 	uint8_t	height;
 }	t_map;

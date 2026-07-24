@@ -6,7 +6,7 @@
 #    By: Camille <private_mail>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 10:13:22 by Camille           #+#    #+#              #
-#    Updated: 2026/07/23 19:06:14 by aiga             ###   ########.fr        #
+#    Updated: 2026/07/24 14:28:17 by cboucher         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,9 +34,12 @@ ifeq ($(FSANITIZE_THREAD), true)
 endif
 
 SRC_DIR := src/
+PARSER_DIR := parser/
 
-SRC_BASENAMES := main errors_manager parsing
-SRCS := $(addprefix $(SRC_DIR), $(addsuffix .c,$(SRC_BASENAMES)))
+SRC_BASENAMES := main error_manager parser
+PARSER_BASENAMES := 
+SRCS := $(addprefix $(SRC_DIR), $(addsuffix .c,$(SRC_BASENAMES))) \
+		$(addprefix $(SRC_DIR)$(PARSER_DIR), $(addsuffix .c,$(PARSER_BASENAMES)))
 
 OBJ_DIR := .build/
 OBJS := $(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)

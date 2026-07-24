@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aiga </var/spool/mail/aiga>                +#+  +:+       +#+        */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/23 19:19:49 by aiga              #+#    #+#             */
-/*   Updated: 2026/07/23 19:20:19 by aiga             ###   ########.fr       */
+/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
+/*   Updated: 2026/07/24 15:26:15 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef PARSER_H
+# define PARSER_H
 
 void	parsing(t_map *map, char *path);
+
+void	check_extension(char *path, char *ext, int ext_size);
+int		open_map(char *path);
 
 #endif
