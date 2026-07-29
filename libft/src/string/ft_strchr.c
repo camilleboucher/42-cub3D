@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: Camille <private_mail>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 17:20:23 by aiga             ###   ########.fr       */
+/*   Created: 2025/10/27 11:34:51 by Camille           #+#    #+#             */
+/*   Updated: 2025/10/29 10:32:59 by Camille          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ft_string.h"
 
-void	parsing(t_map *map, int fd);
-
-#endif
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		else
+			s++;
+	}
+	if ((*s | (char)c) == '\0')
+		return ((char *)s);
+	return (NULL);
+}

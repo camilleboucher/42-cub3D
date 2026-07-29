@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: Camille <private_mail>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 17:20:23 by aiga             ###   ########.fr       */
+/*   Created: 2025/10/22 18:56:12 by Camille           #+#    #+#             */
+/*   Updated: 2025/10/22 18:59:42 by Camille          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ft_string.h"
 
-void	parsing(t_map *map, int fd);
-
-#endif
+void	ft_bzero(void *s, size_t n)
+{
+	while (n > 0)
+	{
+		((char *)s)[n - 1] = '\0';
+		n--;
+	}
+}

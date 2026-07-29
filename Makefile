@@ -6,7 +6,7 @@
 #    By: Camille <private_mail>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 10:13:22 by Camille           #+#    #+#              #
-#    Updated: 2026/07/24 14:28:17 by cboucher         ###   ########.fr        #
+#    Updated: 2026/07/25 19:24:29 by aiga             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,19 @@ YELLOW := \033[0;33m
 BOLD   := \033[1m
 RESET  := \033[0m
 
-INCLUDES := -Iinclude
+#LIBMLX_DIR := libmlx/
+#LIBMLX:= $(LIBMLX_DIR)libmlx.so
+#LIBMLXFLAG := -lSDL2
+
+LIBFT_DIR := libft/
+LIBFT_NAME := libft.a
+LIBFT := $(LIBFT_DIR)$(LIBFT_NAME)
+MAKEFLAGS += --no-print-directory
+
+LIBS := $(LIBFT_DIR)
+INCLUDES := -Iinclude $(addprefix -I, $(addsuffix include, $(LIBS)))
+#LIBS := $(LIBMLX_DIR)
+#INCLUDES += $(addprefix -I, $(addsuffix includes, $(LIBS)))
 
 CC := cc
 CFLAGS := -Wall -Werror -Wextra $(INCLUDES)
@@ -37,7 +49,7 @@ SRC_DIR := src/
 PARSER_DIR := parser/
 
 SRC_BASENAMES := main error_manager parser
-PARSER_BASENAMES := 
+PARSER_BASENAMES := get_next_line get_next_line_utils
 SRCS := $(addprefix $(SRC_DIR), $(addsuffix .c,$(SRC_BASENAMES))) \
 		$(addprefix $(SRC_DIR)$(PARSER_DIR), $(addsuffix .c,$(PARSER_BASENAMES)))
 
@@ -46,20 +58,29 @@ OBJS := $(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+#TODO: ajouter la libmlx pour les lignes suivante, voir solong
+$(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $^ -o $@
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
+	@printf "$(CYAN)Compiling$(RESET) $(BOLD)%s			$(GREEN)[OK]\n" $<
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)$(PARSER_DIR)
 	@printf "$(CYAN)Compiling$(RESET) $(BOLD)%s			$(GREEN)[OK]\n" $<
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean
+	@printf "$(GREEN)Cleaned objs files!\n$(RESET)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@printf "$(GREEN)Cleaned everything!\n$(RESET)Enjoy the Free Space!\n"
+	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@printf "$(GREEN)Cleaned $(NAME) and libraries!\n$(RESET)"
 
 re: fclean all
 

@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   print_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: Camille <private_mail>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 17:20:23 by aiga             ###   ########.fr       */
+/*   Created: 2025/11/06 09:52:35 by Camille           #+#    #+#             */
+/*   Updated: 2025/11/08 14:27:11 by Camille          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ft_stdio.h"
 
-void	parsing(t_map *map, int fd);
+int	print_string(va_list args, int fd)
+{
+	int		size;
+	char	*str;
 
-#endif
+	str = va_arg(args, char *);
+	if (!str)
+		size = ft_putstr_fd("(null)", fd);
+	else
+		size = ft_putstr_fd(str, fd);
+	return (size);
+}

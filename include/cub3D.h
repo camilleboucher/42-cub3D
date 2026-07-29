@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:51:12 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/24 15:49:01 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/07/25 18:26:42 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 
 # include <errno.h>
 # include <fcntl.h>
-# include <stdarg.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdint.h>
 # include <string.h>
+# include <unistd.h>
+
+# include "ft_ctype.h"
+# include "ft_stdlib.h"
+# include "get_next_line.h"
 
 # include "constants.h"
 # include "structs.h"

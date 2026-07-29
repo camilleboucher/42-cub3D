@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: Camille <private_mail>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 17:20:23 by aiga             ###   ########.fr       */
+/*   Created: 2025/11/03 09:16:47 by Camille           #+#    #+#             */
+/*   Updated: 2025/11/08 14:04:34 by Camille          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ft_list.h"
 
-void	parsing(t_map *map, int fd);
+void	ft_lstadd_back(t_list **lst, t_list *node)
+{
+	t_list	*last;
 
-#endif
+	if (!lst || !node)
+		return ;
+	if (!*lst)
+	{
+		*lst = node;
+		return ;
+	}
+	last = ft_lstlast(*lst);
+	last->next = node;
+}

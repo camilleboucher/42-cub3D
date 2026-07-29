@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: Camille <private_mail>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 17:20:23 by aiga             ###   ########.fr       */
+/*   Created: 2025/11/01 14:21:24 by Camille           #+#    #+#             */
+/*   Updated: 2025/11/01 15:01:44 by Camille          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ft_stdio.h"
+#include "ft_string.h"
 
-void	parsing(t_map *map, int fd);
+int	ft_putstr_fd(char *s, int fd)
+{
+	size_t	size;
 
-#endif
+	if (!s)
+		return (0);
+	size = ft_strlen(s);
+	write(fd, s, size);
+	return ((int)size);
+}
