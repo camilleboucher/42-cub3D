@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:09:17 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 19:06:39 by aiga             ###   ########.fr       */
+/*   Updated: 2026/07/29 19:31:03 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ typedef enum e_error
 	ERR_DUPLICATE_INFO = 1u << 5,
 	ERR_NO_RGB_FLOOR = 1u << 6,
 	ERR_NO_RGB_CEILING = 1u << 7,
-	ERR_NOT_RGB8 = 1u << 8
+	ERR_NOT_RGB8 = 1u << 8,
+	ERR_EMPTY_LINE = 1u << 9,
+	ERR_OPEN_MAP = 1u << 10,
+	ERR_INVALID_C = 1u << 11
 }	t_error;
 
-# define MASK_ERR_PARSER 0x4
+# define MASK_ERR_PARSER 0xFFC //TODO: A Mettre a jour si ajout
 # define MASK_ERR_NO_RGBS 0xC0
 
 # define MSG_USAGE "\x1b[38:5:213mUsage:\x1b[0m "
@@ -50,6 +53,12 @@ typedef enum e_error
 # define MSG_NO_RGB_CEILING "- The ceiling's color is missing."
 
 # define MSG_NOT_RGB8 "- A color is not RGB 8 bits (0-255)."
+
+# define MSG_EMPTY_LINE "- Empty lines are not allowed in the map's lines."
+
+# define MSG_OPEN_MAP "- The map is not closed/surrounded by walls."
+
+# define MSG_INVALID_C "- A character in the map's data is not a valid one."
 
 void	error_exit(uint64_t eflag);//TODO:ajouter struct principal quel nom ?
 

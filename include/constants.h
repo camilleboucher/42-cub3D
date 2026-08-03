@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:03:01 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 17:41:53 by aiga             ###   ########.fr       */
+/*   Updated: 2026/07/29 18:45:58 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,9 @@
 // size type.
 # define TYPE_MAP_SIZE uint8_t
 # define MAP_SIZE_MAX_VALUES 256
+
+# define C_VOID ' '
+# define C_FLOOR '0'
+# define C_WALL '1'
 
 #endif

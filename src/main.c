@@ -69,6 +69,8 @@ static int	open_map(char *path)
 
 static void	init_map(t_map *map)
 {
+	ft_memset(map->cell, C_VOID, sizeof(map->cell));
+	map->height = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));
 	ft_memset(map->floor_rgb, 0, sizeof(map->floor_rgb));
 	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));

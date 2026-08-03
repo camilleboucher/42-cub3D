@@ -49,7 +49,7 @@ SRC_DIR := src/
 PARSER_DIR := parser/
 
 SRC_BASENAMES := main error_manager parser
-PARSER_BASENAMES := get_next_line get_next_line_utils
+PARSER_BASENAMES := element_infos element_map
 SRCS := $(addprefix $(SRC_DIR), $(addsuffix .c,$(SRC_BASENAMES))) \
 		$(addprefix $(SRC_DIR)$(PARSER_DIR), $(addsuffix .c,$(PARSER_BASENAMES)))
 
