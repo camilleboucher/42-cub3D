@@ -24,6 +24,7 @@
 
 # include "ft_ctype.h"
 # include "ft_stdlib.h"
+# include "ft_string.h"
 # include "get_next_line.h"
 
 # include "constants.h"

@@ -25,6 +25,30 @@ int	main(int argc, char *argv[])
 	return (EXIT_SUCCESS);
 }
 
+void	print_map(t_map *map)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	printf("MAP:\n====\n\nNO:	%s\n", map->path_textures[0]);
+	printf("SO:	%s\n", map->path_textures[1]);
+	printf("WE:	%s\n", map->path_textures[2]);
+	printf("EA:	%s\n\n", map->path_textures[3]);
+	while (y != map->height)
+	{
+		write(1, map->cell + x + y * MAP_SIZE_MAX_VALS, 1);
+		x++;
+		if (x == map->width)
+		{
+			x = 0;
+			y++;
+			write(1, "\n", 1);
+		}
+	}
+}
+
 static void	start(char *map_path)
 {
 	t_map	map;
@@ -34,7 +58,7 @@ static void	start(char *map_path)
 	fd = open_map(map_path);
 	init_map(&map);
 	parsing(&map, fd);
-	//TODO: printf la map pour voir si parsing OK
+	print_map(&map);//WARN: TMP
 }
 
 static void	check_file_extension(char *path, char *ext, int ext_size)

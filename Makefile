@@ -10,8 +10,6 @@
 #                                                                              #
 # **************************************************************************** #
 
-# 3h
-
 NAME := cub3D
 
 BLUE  := \033[38;5;33m
@@ -62,10 +60,10 @@ all: $(NAME)
 
 #TODO: ajouter la libmlx pour les lignes suivante, voir solong
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) $^ -o $@
+	@$(CC) $(CFLAGS) $^ -o $@ $(LIBFT)
 
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) -j
 	@printf "$(CYAN)Compiling$(RESET) $(BOLD)%s			$(GREEN)[OK]\n" $<
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c

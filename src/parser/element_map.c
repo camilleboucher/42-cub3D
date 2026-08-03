@@ -14,7 +14,7 @@
 
 static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width);
 static t_error	save_line(char *s, char *cell, t_map *map);
-static bool		valid_floor_place(char *s, int x, int y);
+static bool		valid_place(char *s, int x, int y, char forbidden);
 
 t_error	get_map_line(t_map *map, char *s, t_step *step)
 {
@@ -74,12 +74,11 @@ static t_error	save_line(char *s, char *cell, t_map *map)
 	{
 		if (i > MAP_SIZE_MAX_VALS)
 			return (error |= ERR_MAP_OVERFLOW);
-		else if (s[i] == C_FLOOR)
-		{
-			if (!valid_floor_place(s, i, y))
-				error |= ERR_OPEN_MAP;
-		}
-		else if (!(s[i] == C_VOID || s[i] == C_WALL))
+		else if (s[i] == C_VOID && !valid_place(s, i, y, C_FLOOR))
+			error |= ERR_OPEN_MAP;
+		else if (s[i] == C_FLOOR && !valid_place(s, i, y, C_VOID))
+			error |= ERR_OPEN_MAP;
+		else if (!(s[i] == C_VOID || s[i] == C_FLOOR || s[i] == C_WALL))
 			error |= ERR_INVALID_C;
 		cell[i + y] = s[i];
 		i++;
@@ -90,16 +89,16 @@ static t_error	save_line(char *s, char *cell, t_map *map)
 	return (error);
 }
 
-static bool	valid_floor_place(char *s, int x, int y)
+static bool	valid_place(char *s, int x, int y, char forbidden)
 {
 	if (x == 0)
 		return (false);
 	else if (!s[x + 1] && s[x + 1] == '\n')
 		return (false);
-	else if (s[x - 1] == C_VOID || s[x + 1] == C_VOID
-		|| s[x - 1 - y] == C_VOID
-		|| s[x - y] == C_VOID
-		|| s[x + 1 - y] == C_VOID)
+	else if (s[x - 1] == forbidden || s[x + 1] == forbidden
+		|| s[x - 1 - y] == forbidden
+		|| s[x - y] == forbidden
+		|| s[x + 1 - y] == forbidden)
 		return (false);
 	return (true);
 }

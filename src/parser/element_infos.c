@@ -64,23 +64,23 @@ static t_direction	get_info_direction(char *s, int size)
 static bool	set_info_direction(t_map *map, t_direction direction,
 					char *s, t_error *error)
 {
-	char	*path_texture_dir;
+	char	**path_texture_dir;
 
 	if (direction <= EAST)
 	{
-		path_texture_dir = map->path_textures[direction];
-		if (path_texture_dir)
+		path_texture_dir = &map->path_textures[direction];
+		if (*path_texture_dir)
 			return (*error |= ERR_DUPLICATE_INFO);
-		path_texture_dir = ft_strdup(s);
-		if (!path_texture_dir)
+		*path_texture_dir = ft_strdup(s);
+		if (!*path_texture_dir)
 			return (*error |= ERR_SYS);
-		path_texture_dir[ft_strlen(path_texture_dir) - 1] = '\0';
+		(*path_texture_dir)[ft_strlen(*path_texture_dir) - 1] = '\0';
 	}
 	else if (direction == FLOOR)
-		*error |= set_info_color(map->floor_rgb, direction, s, *error)
+		*error = (*error | set_info_color(map->floor_rgb, direction, s, *error))
 			& ~ERR_NO_RGB_FLOOR;
 	else
-		*error |= set_info_color(map->ceiling_rgb, direction, s, *error)
+		*error = (*error | set_info_color(map->ceiling_rgb, direction, s, *error))
 			& ~ERR_NO_RGB_CEILING;
 	if (check_complete_infos(map->path_textures, error))
 		return (false);
