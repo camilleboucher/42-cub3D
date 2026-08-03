@@ -6,11 +6,14 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/29 19:22:15 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/03 14:26:46 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+static t_error	last_line_verification(char *cell, int y);
+static void		parser_clean_error_exit(uint64_t eflag, t_map *map);
 
 void	parsing(t_map *map, int fd)
 {
@@ -30,13 +33,15 @@ void	parsing(t_map *map, int fd)
 			if (s[0] != '\n')
 				step = !get_info(map, s, &error);
 		}
-		else if (!(error & ERR_INVALID_C))
+		else if (!(error & MASK_ERR_CRITICAL_BUGS)) //TODO: Avoir un gnl protege si errsys pour free la stash
 			error |= get_map_line(map, s, &step);
 		free(s);
 	}
 	close(fd);
-	if (error) //TODO: remplacer par bool last verif (surtout pour derniere ligne) truc dans le genre  AND enregistrer map height grace a line_n - 1 ?
-		error_exit(error);//TODO: implementer clean_exit et clean_error_exit pour free les textures path par exemple
+	if (!(error & MASK_ERR_CRITICAL_BUGS))
+		error |= last_line_verification(map->cell, map->height * MAP_SIZE_MAX_VALS);
+	if (error)
+		parser_clean_error_exit(error, map);
 }
 
 char	*skip_spaces(char *s)
@@ -60,4 +65,27 @@ bool	is_rgb8(char *s)
 		s++;
 	}
 	return (true);
+}
+
+static t_error	last_line_verification(char *cell, int y)
+{
+	int	i;
+
+	i = 0;
+	while (i < MAP_SIZE_MAX_VALS)
+	{
+		if (cell[i + y] == C_FLOOR)
+			return (ERR_OPEN_MAP);
+		i++;
+	}
+	return (ERR_NONE);
+}
+
+static void	parser_clean_error_exit(uint64_t eflag, t_map *map)
+{
+	free(map->path_textures[0]);
+	free(map->path_textures[1]);
+	free(map->path_textures[2]);
+	free(map->path_textures[3]);
+	error_exit(eflag);
 }

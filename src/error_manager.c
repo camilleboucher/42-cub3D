@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:23:59 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/29 19:32:56 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/03 14:25:41 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static void	parsing_error_map_data(uint64_t eflag)
 {
 	if (eflag & ERR_EMPTY_LINE)
 		printf("%s\n", MSG_EMPTY_LINE);
+	if (eflag & ERR_MAP_OVERFLOW)
+		printf("%s%d%s\n", MSG_MAP_OVERFLOW_1, MAP_SIZE_MAX_VALS, MSG_MAP_OVERFLOW_2);
 	if (eflag & ERR_OPEN_MAP)
 		printf("%s\n", MSG_OPEN_MAP);
 	if (eflag & ERR_INVALID_C)

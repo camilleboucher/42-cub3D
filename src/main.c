@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:22:43 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 16:52:47 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/03 14:27:28 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static void	start(char *map_path)
 	fd = open_map(map_path);
 	init_map(&map);
 	parsing(&map, fd);
+	//TODO: printf la map pour voir si parsing OK
 }
 
 static void	check_file_extension(char *path, char *ext, int ext_size)

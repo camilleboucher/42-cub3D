@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/22 15:51:04 by cboucher          #+#    #+#             */
-/*   Updated: 2026/07/25 18:54:05 by aiga             ###   ########.fr       */
+/*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
+/*   Updated: 2026/08/03 13:57:21 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef enum e_rgb
 
 typedef struct s_map
 {
-	char			cell[MAP_SIZE_MAX_VALUES * MAP_SIZE_MAX_VALUES];
+	char			cell[MAP_SIZE_MAX_VALS * MAP_SIZE_MAX_VALS];
 	TYPE_MAP_SIZE	width;
 	TYPE_MAP_SIZE	height;
 	char			*path_textures[4];
