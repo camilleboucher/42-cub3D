@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="random_button.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   sodipodi:docname="random_button.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="2"
+     inkscape:cx="366.75"
+     inkscape:cy="405"
+     inkscape:window-width="1920"
+     inkscape:window-height="1019"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <path
+       style="fill:#ffffff;stroke:none;stroke-width:8.065;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 50.525017,121.81857 c -0.493124,-0.93935 0.392861,-2.40296 0.392861,-2.40296 L 64.595942,95.724501 c 0,0 0.82581,-1.442125 1.695422,-1.948526 0.930708,-0.541979 3.161761,-0.42095 3.161761,-0.42095 h 97.102085 c 0,0 2.04712,-0.148769 2.56217,0.677995 0.69424,1.114403 0,2.338838 0,2.338838 l -13.59657,23.549952 c 0,0 -0.95236,1.44317 -1.65945,1.89676 -0.73747,0.47307 -2.51969,0.74835 -2.51969,0.74835 H 52.784375 c 0,0 -1.866497,0 -2.259358,-0.74835 z"
+       id="path2"
+       sodipodi:nodetypes="sccsccsccaccs" />
+  </g>
+</svg>
