@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 13:57:21 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/08/04 18:40:24 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,16 @@ typedef struct s_map
 	uint8_t			ceiling_rgb[3];
 }	t_map;
 
+typedef struct s_player
+{
+	t_position	pos;
+	float		angle;
+}	t_player;
+
 typedef struct s_game
 {
-	t_map	*map;
+	t_player	player;
+	t_map		map;
 }	t_game;
 
 #endif

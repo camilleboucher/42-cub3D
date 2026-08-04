@@ -23,3 +23,7 @@ Example : `./cub3D maps/1.cub`
 1.	MacroLibX Documentation : [https://macrolibx.kbz8.me/]
 2.	[Key codes](https://wiki.libsdl.org/SDL2/SDL_Scancode)
 3.	Web research and AI chat for some notions about double linked list.
+
+TODO :
+1 ) tester toutes les erreurs de parsing pottentiels :
+	A ) si la ligne se fini il faut quand meme continuer jusqua map->width pour voir si 0 au dessus de rien (check map invalid/			dup_player_AND_open_map.cub par exemple)

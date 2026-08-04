@@ -6,16 +6,16 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:26:46 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/08/04 18:56:20 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-static t_error	last_line_verification(char *cell, int y);
+static t_error	last_line_verification(char *cell, int map_height);
 static void		parser_clean_error_exit(uint64_t eflag, t_map *map);
 
-void	parsing(t_map *map, int fd)
+void	parsing(int fd, t_game *game)
 {
 	char	*s;
 	t_error	error;
@@ -31,17 +31,17 @@ void	parsing(t_map *map, int fd)
 		if (step == GET_INFOS)
 		{
 			if (s[0] != '\n')
-				step = !get_info(map, s, &error);
+				step = !get_info(&game->map, s, &error);
 		}
 		else if (!(error & MASK_ERR_CRITICAL_BUGS)) //TODO: Avoir un gnl protege si errsys pour free la stash
-			error |= get_map_line(map, s, &step);
+			error |= get_map_line(game, &game->map, s, &step);
 		free(s);
 	}
 	close(fd);
 	if (!(error & MASK_ERR_CRITICAL_BUGS))
-		error |= last_line_verification(map->cell, map->height * MAP_SIZE_MAX_VALS);
+		error |= last_line_verification(game->map.cell, game->map.height);
 	if (error)
-		parser_clean_error_exit(error, map);
+		parser_clean_error_exit(error, &game->map);
 }
 
 char	*skip_spaces(char *s)
@@ -67,11 +67,13 @@ bool	is_rgb8(char *s)
 	return (true);
 }
 
-static t_error	last_line_verification(char *cell, int y)
+static t_error	last_line_verification(char *cell, int map_height)
 {
 	int	i;
+	int	y;
 
 	i = 0;
+	y = map_height * MAP_SIZE_MAX_VALS;
 	while (i < MAP_SIZE_MAX_VALS)
 	{
 		if (cell[i + y] == C_FLOOR)

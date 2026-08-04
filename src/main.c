@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:22:43 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:27:28 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/08/04 23:41:28 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	start(char *map_path);
 static void	check_file_extension(char *path, char *ext, int ext_size);
 static int	open_map(char *path);
-static void	init_map(t_map *map);
+static void	init_game(t_player *player, t_map *map);
 
 int	main(int argc, char *argv[])
 {
@@ -25,14 +25,15 @@ int	main(int argc, char *argv[])
 	return (EXIT_SUCCESS);
 }
 
-void	print_map(t_map *map)
+void	print_map_player(t_map *map, t_player *player)
 {
 	int	x;
 	int	y;
 
 	x = 0;
 	y = 0;
-	printf("MAP:\n====\n\nNO:	%s\n", map->path_textures[0]);
+	printf("MAP:\n====\n");
+	printf("NO:	%s\n", map->path_textures[0]);
 	printf("SO:	%s\n", map->path_textures[1]);
 	printf("WE:	%s\n", map->path_textures[2]);
 	printf("EA:	%s\n\n", map->path_textures[3]);
@@ -40,25 +41,34 @@ void	print_map(t_map *map)
 	{
 		write(1, map->cell + x + y * MAP_SIZE_MAX_VALS, 1);
 		x++;
-		if (x == map->width)
+		if (x > map->width)
 		{
 			x = 0;
 			y++;
 			write(1, "\n", 1);
 		}
 	}
+	printf("\n\nPLAYER:\n=======\n");
+	printf("X: %d\n", player->pos.x);
+	printf("Y: %d\n", player->pos.y);
+	printf("Angle: %f\n", player->angle);
 }
 
 static void	start(char *map_path)
 {
-	t_map	map;
+	t_game		game;
 	int		fd;
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
-	init_map(&map);
-	parsing(&map, fd);
-	print_map(&map);//WARN: TMP
+	init_game(&game.player, &game.map);
+	parsing(fd, &game);
+	print_map_player(&game.map, &game.player);//WARN: TMP
+	//TODO: FAIRE UN MOD CLEANER
+	free(game.map.path_textures[0]);
+	free(game.map.path_textures[1]);
+	free(game.map.path_textures[2]);
+	free(game.map.path_textures[3]);
 }
 
 static void	check_file_extension(char *path, char *ext, int ext_size)
@@ -92,8 +102,9 @@ static int	open_map(char *path)
 	return (fd);
 }
 
-static void	init_map(t_map *map)
+static void	init_game(t_player *player, t_map *map)
 {
+	player->pos = (t_position){0};
 	ft_memset(map->cell, C_VOID, sizeof(map->cell));
 	map->height = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));

@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:23:59 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:25:41 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/08/04 19:16:37 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,6 @@ static void	parsing_error_map_data(uint64_t eflag)
 		printf("%s\n", MSG_OPEN_MAP);
 	if (eflag & ERR_INVALID_C)
 		printf("%s\n", MSG_INVALID_C);
+	if (eflag & ERR_DUPLICATE_PLAYER)
+		printf("%s\n", MSG_DUPLICATE_PLAYER);
 }

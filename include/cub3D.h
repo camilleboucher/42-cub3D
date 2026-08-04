@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:51:12 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:12:37 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/08/04 22:57:18 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <errno.h>
 # include <fcntl.h>
+# include <math.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -28,6 +29,7 @@
 # include "get_next_line.h"
 
 # include "constants.h"
+# include "components.h"
 # include "structs.h"
 
 # include "error_manager.h"
