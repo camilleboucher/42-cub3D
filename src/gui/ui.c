@@ -1,7 +1,7 @@
-#include <bool.h>
-#include "../../MacroLibX/includes/mlx.h"
-#include "../../MacroLibX/includes/mlx_extended.h"
-#include "../../include/vector.h"
+#include <stdbool.h>
+#include "mlx.h"
+#include "mlx_extended.h"
+#include "vector.h"
 
 typedef struct s_color_button
 {

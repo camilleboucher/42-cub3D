@@ -1,53 +1,44 @@
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -g -O3 -Wno-unused-result
+CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result
 LDFLAGS = -lSDL2 -lm
 
-NAME := so_long
+NAME := cube
 
 OUTPUT_DIR := output
 
 SRC_DIR := src
 
-SRC := $(SRC_DIR)/ui.c
+SRC := $(SRC_DIR)/gui/ui.c \
+	   $(SRC_DIR)/app/init.c \
+	   $(SRC_DIR)/vector2/vec2f.c \
+	   $(SRC_DIR)/vector2/vec2i.c \
+	   $(SRC_DIR)/menus/main_menu.c \
+	   $(SRC_DIR)/main.c
 
-INCLUDES := list,gnl,libft,ft_printf,include,MacroLibX
+INCLUDES := -Iinclude -IMacroLibX/includes
 
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OUTPUT_DIR)/%.o)
 
-$(NAME): $(OUTPUT_DIR) $(OBJ) $(OUTPUT_DIR)/main.o MacroLibX/libmlx.so libft/libft.a ft_printf/libftprintf.a
-	$(CC) $(OBJ) $(OUTPUT_DIR)/main.o MacroLibX/libmlx.so libft/libft.a ft_printf/libftprintf.a $(CFLAGS) $(LDFLAGS) -o $@
+$(NAME): $(OUTPUT_DIR) $(OBJ) MacroLibX/libmlx.so
+	$(CC) $(OBJ) MacroLibX/libmlx.so $(CFLAGS) $(LDFLAGS) -o $@
 
 $(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR)/gnl $(OUTPUT_DIR)/list
-
-$(OUTPUT_DIR)/main_bonus.o: $(SRC_DIR)/main_bonus.c $(OUTPUT_DIR)
-	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDES)
-
-$(OUTPUT_DIR)/main.o: $(SRC_DIR)/main.c $(OUTPUT_DIR)
-	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDES)
+	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/gui $(OUTPUT_DIR)/vector2 $(OUTPUT_DIR)/app $(OUTPUT_DIR)/menus
 
 $(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) -o $@ -c $< $(CFLAGS) -I$(INCLUDES)
+	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES)
 
 MacroLibX/libmlx.so:
 	make -C MacroLibX -j10
 
-libft/libft.a:
-	make -C libft
-
-ft_printf/libftprintf.a:
-	make -C ft_printf
-
 all: $(NAME)
 
-bonus: $(OUTPUT_DIR) $(OBJ) $(OUTPUT_DIR)/main_bonus.o MacroLibX/libmlx.so libft/libft.a ft_printf/libftprintf.a
-	$(CC) $(OBJ) $(OUTPUT_DIR)/main_bonus.o MacroLibX/libmlx.so libft/libft.a ft_printf/libftprintf.a $(CFLAGS) $(LDFLAGS) -o $(NAME)
+bonus:
+	@echo not implemented btw
 
 clean:
 	rm -rf $(OUTPUT_DIR)
 	make -C MacroLibX fclean
-	make -C libft fclean
-	make -C ft_printf fclean
 
 fclean: clean
 	rm -f $(NAME)

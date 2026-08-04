@@ -1,7 +1,7 @@
-#include "../MacroLibX/includes/mlx.h"
-#include "../MacroLibX/includes/mlx_extended.h"
-#include "../../include/input_handler.h"
-#include "../../include/app.h"
+#include "mlx.h"
+#include "mlx_extended.h"
+#include "input_handler.h"
+#include "app.h"
 
 bool app_init(struct s_app *app) {
     (*app).ctx = mlx_init();
