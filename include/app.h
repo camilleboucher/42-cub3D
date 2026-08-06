@@ -7,6 +7,7 @@
 typedef struct s_frame_buffer
 {
     mlx_color *buffer;
+    mlx_color *shader_buffer;
     unsigned int width;
     unsigned int height;
     mlx_image frame_buffer_image;
@@ -33,5 +34,7 @@ void clear_frame_buffer(struct s_app *app, mlx_color color);
 void push_frame_buffer_to_screen(struct s_app *app);
 
 bool resize_frame_buffer(struct s_app *app, unsigned int width, unsigned height);
+
+void apply_blur(struct s_app *app, int distance, int quality);
 
 #endif
