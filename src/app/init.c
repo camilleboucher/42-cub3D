@@ -38,12 +38,12 @@ void app_destroy(struct s_app *app)
 }
 
 
-static bool allocate_buffers(struct s_app *app, mlx_color **buffer, mlx_color **shader_buffer, mlx_image *frame_buffer_image)
+static bool allocate_buffers(struct s_app *app, t_region **buffer, t_region **shader_buffer, mlx_image *frame_buffer_image)
 {
-    *buffer = malloc(sizeof(mlx_color) * (app->frame_buffer.width * app->frame_buffer.height));
+    *buffer = malloc(sizeof(t_region) + sizeof(mlx_color) * (app->frame_buffer.width * app->frame_buffer.height));
     if (!buffer)
         return (false);
-    *shader_buffer = malloc(sizeof(mlx_color) * (app->frame_buffer.width * app->frame_buffer.height));
+    *shader_buffer = malloc(sizeof(t_region) + sizeof(mlx_color) * (app->frame_buffer.width * app->frame_buffer.height));
     if (!*shader_buffer)
     {
         free(*buffer);
@@ -61,8 +61,8 @@ static bool allocate_buffers(struct s_app *app, mlx_color **buffer, mlx_color **
 
 bool reallocate_frame_buffer(struct s_app *app)
 {
-    mlx_color *buffer;
-    mlx_color *shader_buffer;
+    t_region *buffer;
+    t_region *shader_buffer;
     mlx_image frame_buffer_image;
 
     if (!allocate_buffers(app, &buffer, &shader_buffer, &frame_buffer_image))
@@ -95,11 +95,16 @@ void clear_frame_buffer(struct s_app *app, mlx_color color)
     while (i < app->frame_buffer.width * app->frame_buffer.height)
     {
         if (((i / app->frame_buffer.height) / 64 + (i % app->frame_buffer.height) / 64) % 2 == 0)
-            app->frame_buffer.buffer[i] = color;
+            app->frame_buffer.buffer->buffer[i] = color;
         else
-            app->frame_buffer.buffer[i] = (mlx_color){ .rgba = 0xFFFFFFFF };
+            app->frame_buffer.buffer->buffer[i] = (mlx_color){ .rgba = 0xFFFFFFFF };
         i++;
     }
+}
+
+void set_pixel(t_region frame_buffer, unsigned int x, unsigned int y, mlx_color color) {
+    frame_buffer.buffer[y + x * frame_buffer.height] = color;
+
 }
 
 void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
@@ -113,14 +118,14 @@ void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
     color[1] = 0;
     color[2] = 0;
     total_color = 0;
-    neighbor_coords.x = coords.x - distance;
+    neighbor_coords.x = coords.x;
     if (neighbor_coords.x < 0)
         neighbor_coords.x = 0;
     while (neighbor_coords.x < coords.x + distance)
     {
         if (neighbor_coords.x >= (int)app->frame_buffer.width)
             break;
-        neighbor_coords.y = coords.y - distance;
+        neighbor_coords.y = coords.y;
         if (neighbor_coords.y < 0)
             neighbor_coords.y = 0;
         while (neighbor_coords.y < coords.y + distance)
@@ -166,8 +171,11 @@ void apply_blur(struct s_app *app, int distance, int quality)
 
 void push_frame_buffer_to_screen(struct s_app *app)
 {
+    static int a = 0;
+
+    a ++;
     mlx_clear_window(app->ctx, app->window, (mlx_color){ .rgba = 0x000000FF });
     mlx_set_image_region(app->ctx, app->frame_buffer.frame_buffer_image, 0, 0, app->frame_buffer.height, app->frame_buffer.width, app->frame_buffer.buffer);
-    //mlx_put_transformed_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, 0, 0, 1, 1, 90);
-    mlx_put_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, 0, 0);
+    mlx_put_transformed_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, 0, 100, 1, 1, 0);
+    //mlx_put_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, 0, 0);
 }
