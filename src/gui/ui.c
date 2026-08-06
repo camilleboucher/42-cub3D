@@ -32,6 +32,11 @@ typedef struct s_label
     mlx_color color;
 } t_label;
 
+
+void color_button_draw(t_color_button button) {
+    
+}
+
 bool color_button_update(t_color_button button) {
     
 }
