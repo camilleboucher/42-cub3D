@@ -49,7 +49,7 @@ static bool allocate_buffers(struct s_app *app, t_region **buffer, t_region **sh
         free(*buffer);
         return (false);
     }
-    *frame_buffer_image = mlx_new_image(app->ctx, app->frame_buffer.width, app->frame_buffer.height);
+    *frame_buffer_image = mlx_new_image(app->ctx, app->frame_buffer.height, app->frame_buffer.width);
     if (*frame_buffer_image == MLX_NULL_HANDLE)
     {
         free(*buffer);
@@ -69,8 +69,12 @@ bool reallocate_frame_buffer(struct s_app *app)
         return (false);
     free(app->frame_buffer.buffer);
     app->frame_buffer.buffer = buffer;
+    buffer->width = app->frame_buffer.width;
+    buffer->height = app->frame_buffer.height;
     free(app->frame_buffer.shader_buffer);
     app->frame_buffer.shader_buffer = shader_buffer;
+    shader_buffer->width = app->frame_buffer.width;
+    shader_buffer->height = app->frame_buffer.height;
     if (app->frame_buffer.frame_buffer_image != NULL)
         mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
     app->frame_buffer.frame_buffer_image = frame_buffer_image;
@@ -87,6 +91,14 @@ bool resize_frame_buffer(struct s_app *app, unsigned int width, unsigned height)
     return (true);
 }
 
+void set_pixel(t_region *frame_buffer, unsigned int x, unsigned int y, mlx_color color) {
+    frame_buffer->buffer[y + x * frame_buffer->height] = color;
+}
+
+mlx_color get_pixel(t_region *frame_buffer, unsigned int x, unsigned int y) {
+    return (frame_buffer->buffer[y + x * frame_buffer->height]);
+}
+
 void clear_frame_buffer(struct s_app *app, mlx_color color)
 {
     unsigned int i;
@@ -100,11 +112,6 @@ void clear_frame_buffer(struct s_app *app, mlx_color color)
             app->frame_buffer.buffer->buffer[i] = (mlx_color){ .rgba = 0xFFFFFFFF };
         i++;
     }
-}
-
-void set_pixel(t_region frame_buffer, unsigned int x, unsigned int y, mlx_color color) {
-    frame_buffer.buffer[y + x * frame_buffer.height] = color;
-
 }
 
 void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
@@ -132,7 +139,7 @@ void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
         {
             if (neighbor_coords.y >= (int)app->frame_buffer.height)
                 break;
-            other_color = app->frame_buffer.buffer[neighbor_coords.y + neighbor_coords.x * app->frame_buffer.height];
+            other_color = get_pixel(app->frame_buffer.buffer, neighbor_coords.x, neighbor_coords.y);
             color[0] += other_color.r;
             color[1] += other_color.g;
             color[2] += other_color.b;
@@ -141,13 +148,13 @@ void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
         }
         neighbor_coords.x += steps;
     }
-    app->frame_buffer.shader_buffer[coords.y + coords.x * app->frame_buffer.height] = (mlx_color){.r = color[0] / total_color, .g = color[1] / total_color, .b = color[2] / total_color, .a = 0xFF};
+    set_pixel(app->frame_buffer.shader_buffer, coords.x, coords.y, (mlx_color){.r = color[0] / total_color, .g = color[1] / total_color, .b = color[2] / total_color, .a = 0xFF});
 }
 
 void apply_blur(struct s_app *app, int distance, int quality)
 {
     t_vec2i coords;
-    mlx_color *temp_swap;
+    t_region *temp_swap;
     int steps;
 
     steps = distance / quality;
@@ -175,7 +182,7 @@ void push_frame_buffer_to_screen(struct s_app *app)
 
     a ++;
     mlx_clear_window(app->ctx, app->window, (mlx_color){ .rgba = 0x000000FF });
-    mlx_set_image_region(app->ctx, app->frame_buffer.frame_buffer_image, 0, 0, app->frame_buffer.height, app->frame_buffer.width, app->frame_buffer.buffer);
-    mlx_put_transformed_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, 0, 100, 1, 1, 0);
+    mlx_set_image_region(app->ctx, app->frame_buffer.frame_buffer_image, 0, 0, app->frame_buffer.buffer->height, app->frame_buffer.buffer->width, app->frame_buffer.buffer->buffer);
+    mlx_put_transformed_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, ((int)app->frame_buffer.width - (int)app->frame_buffer.height) / 2, ((int)app->frame_buffer.height - (int)app->frame_buffer.width) / 2, 1, 1, -90);
     //mlx_put_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, 0, 0);
 }
