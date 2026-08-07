@@ -1,4 +1,4 @@
-#include "menus.h"
+#include "cube3D2.h"
 
 void main_menu_window_update(void *param) {
     struct s_app *app;

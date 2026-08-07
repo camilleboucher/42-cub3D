@@ -1,5 +1,4 @@
-#include "../../include/vector.h"
-#include <math.h>
+#include "cube3D2.h"
 
 t_vec2f vec2f_add(t_vec2f a, t_vec2f b) {
     t_vec2f new;

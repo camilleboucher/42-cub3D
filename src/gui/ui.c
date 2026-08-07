@@ -1,7 +1,4 @@
-#include <stdbool.h>
-#include "mlx.h"
-#include "mlx_extended.h"
-#include "vector.h"
+#include "cube3D2.h"
 
 
 typedef struct s_tex_button
