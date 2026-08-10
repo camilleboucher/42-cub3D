@@ -10,7 +10,7 @@ mlx_color get_pixel(t_region *frame_buffer, unsigned int x, unsigned int y)
     return (frame_buffer->buffer[y + x * frame_buffer->height]);
 }
 
-void clear_frame_buffer(struct s_app *app, mlx_color color)
+void clear_frame_buffer(t_app *app, mlx_color color)
 {
     unsigned int i;
 

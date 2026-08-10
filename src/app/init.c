@@ -2,7 +2,7 @@
 
 #define PI 3.14159265359
 
-bool app_init(struct s_app *app)
+bool app_init(t_app *app)
 {
     app->ctx = mlx_init();
     if (app->ctx == MLX_NULL_HANDLE)
@@ -25,7 +25,7 @@ bool app_init(struct s_app *app)
     return (true);
 }
 
-void app_destroy(struct s_app *app)
+void app_destroy(t_app *app)
 {
     mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
     mlx_destroy_window(app->ctx, app->window);

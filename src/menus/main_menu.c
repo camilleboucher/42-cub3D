@@ -1,7 +1,7 @@
 #include "cube3D2.h"
 
 void main_menu_window_update(void *param) {
-    struct s_app *app;
+    t_app *app;
     static int a = 0;
 
     app = param;
@@ -13,7 +13,7 @@ void main_menu_window_update(void *param) {
     push_frame_buffer_to_screen(app);
 }
 
-void handle_resize_event(struct s_app *app) {
+void handle_resize_event(t_app *app) {
     int width;
     int height;
 
@@ -23,7 +23,7 @@ void handle_resize_event(struct s_app *app) {
 }
 
 void main_menu_window_event_handle(int event, void *param) {
-    struct s_app *app;
+    t_app *app;
 
     app = param;
     if (app->request_immediate_abort)
@@ -38,7 +38,7 @@ void main_menu_window_event_handle(int event, void *param) {
     }
 }
 
-void open_main_menu(struct s_app *app) {
+void open_main_menu(t_app *app) {
     mlx_add_loop_hook(app->ctx, &main_menu_window_update, app);
     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &main_menu_window_event_handle, app);
     mlx_loop(app->ctx);

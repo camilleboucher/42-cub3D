@@ -1,6 +1,6 @@
 #include "cube3D2.h"
 
-void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
+void blur_pixel(t_app *app, t_vec2i coords, int distance, int steps)
 {
     t_vec2i neighbor_coords;
     unsigned int color[3];
@@ -37,7 +37,7 @@ void blur_pixel(struct s_app *app, t_vec2i coords, int distance, int steps)
     set_pixel(app->frame_buffer.shader_buffer, coords.x, coords.y, (mlx_color){.r = color[0] / total_color, .g = color[1] / total_color, .b = color[2] / total_color, .a = 0xFF});
 }
 
-void apply_blur(struct s_app *app, int distance, int quality)
+void apply_blur(t_app *app, int distance, int quality)
 {
     t_vec2i coords;
     t_region *temp_swap;

@@ -1,6 +1,6 @@
 #include "cube3D2.h"
 
-static bool allocate_buffers(struct s_app *app, t_region **buffer, t_region **shader_buffer, mlx_image *frame_buffer_image)
+static bool allocate_buffers(t_app *app, t_region **buffer, t_region **shader_buffer, mlx_image *frame_buffer_image)
 {
     *buffer = malloc(sizeof(t_region) + sizeof(mlx_color) * (app->frame_buffer.width * app->frame_buffer.height));
     if (!buffer)
@@ -21,7 +21,7 @@ static bool allocate_buffers(struct s_app *app, t_region **buffer, t_region **sh
     return (true);
 }
 
-bool reallocate_frame_buffer(struct s_app *app)
+bool reallocate_frame_buffer(t_app *app)
 {
     t_region *buffer;
     t_region *shader_buffer;
@@ -43,7 +43,7 @@ bool reallocate_frame_buffer(struct s_app *app)
     return (true);
 }
 
-bool resize_frame_buffer(struct s_app *app, unsigned int width, unsigned height) 
+bool resize_frame_buffer(t_app *app, unsigned int width, unsigned height) 
 {
     app->frame_buffer.width = width;
     app->frame_buffer.height = height;
@@ -53,7 +53,7 @@ bool resize_frame_buffer(struct s_app *app, unsigned int width, unsigned height)
     return (true);
 }
 
-void push_frame_buffer_to_screen(struct s_app *app)
+void push_frame_buffer_to_screen(t_app *app)
 {
     static int a = 0;
 
