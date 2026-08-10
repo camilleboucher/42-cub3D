@@ -8,7 +8,7 @@ void main_menu_window_update(void *param) {
     if (app->request_immediate_abort)
         return ;
     clear_frame_buffer(app, (mlx_color){ .rgba = 0x305050FF } );
-    apply_blur(app, a / 2 % 20 + 1, 5);
+    //apply_blur(app, a / 2 % 20 + 1, 5);
     a++;
     push_frame_buffer_to_screen(app);
 }

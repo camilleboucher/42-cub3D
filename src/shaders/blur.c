@@ -11,14 +11,14 @@ void blur_pixel(t_app *app, t_vec2i coords, int distance, int steps)
     color[1] = 0;
     color[2] = 0;
     total_color = 0;
-    neighbor_coords.x = coords.x;
+    neighbor_coords.x = coords.x - distance;
     if (neighbor_coords.x < 0)
         neighbor_coords.x = 0;
     while (neighbor_coords.x < coords.x + distance)
     {
         if (neighbor_coords.x >= (int)app->frame_buffer.width)
             break;
-        neighbor_coords.y = coords.y;
+        neighbor_coords.y = coords.y - distance;
         if (neighbor_coords.y < 0)
             neighbor_coords.y = 0;
         while (neighbor_coords.y < coords.y + distance)

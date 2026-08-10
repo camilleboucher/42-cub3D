@@ -1,7 +1,5 @@
 #include "cube3D2.h"
 
-#define PI 3.14159265359
-
 bool app_init(t_app *app)
 {
     app->ctx = mlx_init();
@@ -19,7 +17,7 @@ bool app_init(t_app *app)
     app->frame_buffer.shader_buffer = NULL;
     app->frame_buffer.frame_buffer_image = NULL;
     app->request_immediate_abort = false;
-    mlx_set_fps_goal(app->ctx, 30);
+    mlx_set_fps_goal(app->ctx, 60);
     if (!resize_frame_buffer(app, app->info.width, app->info.height))
         return (false);
     return (true);
@@ -27,6 +25,8 @@ bool app_init(t_app *app)
 
 void app_destroy(t_app *app)
 {
+    free(app->frame_buffer.buffer);
+    free(app->frame_buffer.shader_buffer);
     mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
     mlx_destroy_window(app->ctx, app->window);
     mlx_destroy_context(app->ctx);

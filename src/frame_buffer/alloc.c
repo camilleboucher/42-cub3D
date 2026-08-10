@@ -43,13 +43,13 @@ bool reallocate_frame_buffer(t_app *app)
     return (true);
 }
 
-bool resize_frame_buffer(t_app *app, unsigned int width, unsigned height) 
+bool resize_frame_buffer(t_app *app, unsigned int width, unsigned height)
 {
     app->frame_buffer.width = width;
     app->frame_buffer.height = height;
     if (!reallocate_frame_buffer(app))
         return (false);
-    clear_frame_buffer(app, (mlx_color){ .rgba = 0x000000FF });
+    clear_frame_buffer(app, (mlx_color){.rgba = 0x000000FF});
     return (true);
 }
 
@@ -57,8 +57,13 @@ void push_frame_buffer_to_screen(t_app *app)
 {
     static int a = 0;
 
-    a ++;
-    mlx_clear_window(app->ctx, app->window, (mlx_color){ .rgba = 0x000000FF });
-    mlx_set_image_region(app->ctx, app->frame_buffer.frame_buffer_image, 0, 0, app->frame_buffer.buffer->height, app->frame_buffer.buffer->width, app->frame_buffer.buffer->buffer);
-    mlx_put_transformed_image_to_window(app->ctx, app->window, app->frame_buffer.frame_buffer_image, ((int)app->frame_buffer.width - (int)app->frame_buffer.height) / 2, ((int)app->frame_buffer.height - (int)app->frame_buffer.width) / 2, 1, 1, -90);
+    a++;
+    mlx_clear_window(app->ctx, app->window, (mlx_color){.rgba = 0x000000FF});
+    mlx_set_image_region(app->ctx, app->frame_buffer.frame_buffer_image, 0, 0, 
+        app->frame_buffer.buffer->height, app->frame_buffer.buffer->width, 
+        app->frame_buffer.buffer->buffer);
+    mlx_put_transformed_image_to_window(app->ctx, app->window, 
+        app->frame_buffer.frame_buffer_image, 
+        ((int)app->frame_buffer.width - (int)app->frame_buffer.height) / 2, 
+        ((int)app->frame_buffer.height - (int)app->frame_buffer.width) / 2, 1, 1, -90);
 }
