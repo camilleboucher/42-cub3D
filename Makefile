@@ -1,5 +1,5 @@
 CC := cc
-CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result
+CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
 NAME := cube
@@ -17,23 +17,30 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/frame_buffer/alloc.c \
 	   $(SRC_DIR)/frame_buffer/interface.c \
 	   $(SRC_DIR)/shaders/blur.c \
-	   $(SRC_DIR)/main.c
+	   $(SRC_DIR)/main.c \
+	   $(SRC_DIR)/error_manager/error_manager.c \
+	   $(SRC_DIR)/parser/parser.c \
+	   $(SRC_DIR)/parser/element_infos.c \
+	   $(SRC_DIR)/parser/element_map.c
 
-INCLUDES := -Iinclude -IMacroLibX/includes
+INCLUDES := -Iinclude -IMacroLibX/includes -Ilibft/include
 
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OUTPUT_DIR)/%.o)
 
-$(NAME): $(OUTPUT_DIR) $(OBJ) MacroLibX/libmlx.so
-	$(CC) $(OBJ) MacroLibX/libmlx.so $(CFLAGS) $(LDFLAGS) -o $@
+$(NAME): $(OUTPUT_DIR) $(OBJ) MacroLibX/libmlx.so libft/libft.a
+	$(CC) $(OBJ) MacroLibX/libmlx.so libft/libft.a $(CFLAGS) $(LDFLAGS) -o $@ libft/libft.a
 
 $(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/gui $(OUTPUT_DIR)/vector2 $(OUTPUT_DIR)/app $(OUTPUT_DIR)/menus $(OUTPUT_DIR)/atlas $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/shaders
+	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/gui $(OUTPUT_DIR)/vector2 $(OUTPUT_DIR)/app $(OUTPUT_DIR)/menus $(OUTPUT_DIR)/atlas $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/shaders $(OUTPUT_DIR)/parser $(OUTPUT_DIR)/error_manager
 
 $(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES)
 
 MacroLibX/libmlx.so:
 	make -C MacroLibX -j10
+
+libft/libft.a:
+	make -C libft
 
 all: $(NAME)
 
@@ -43,6 +50,7 @@ bonus:
 clean:
 	rm -rf $(OUTPUT_DIR)
 	make -C MacroLibX fclean
+	make -C libft fclean
 
 fclean: clean
 	rm -f $(NAME)
