@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 18:08:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/12 14:23:15 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/08/19 13:16:13 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width);
 static t_error	save_line(char *s, char *cell, t_game *game, t_map *map);
-static bool		is_char_valid_place(char *s, int x, char *cell);
+static bool		is_char_valid_place(char *s, int x, int y, char *cell);
 static bool		save_player(char *s, int *i, t_game *game, t_error *error);
 
 t_error	get_map_line(t_game *game, t_map *map, char *s, t_step *step)
@@ -75,7 +75,7 @@ static t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 	{
 		if (i > MAP_SIZE_MAX_VALS)
 			return (error | ERR_MAP_OVERFLOW);
-		else if (!is_char_valid_place(s, i, cell))
+		else if (!is_char_valid_place(s, i, y, cell))
 			error |= ERR_OPEN_MAP;
 		else if (save_player(s, &i, game, &error))
 			continue ;
@@ -91,11 +91,11 @@ static t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 	return (error);
 }
 
-static bool		is_char_valid_place(char *s, int x, char *cell)
+static bool		is_char_valid_place(char *s, int x, int y, char *cell)
 {
-	if (s[x] != C_VOID && x >= MAP_SIZE_MAX_VALS)
+	if (s[x] == C_VOID)
 	{
-		if (cell[x - MAP_SIZE_MAX_VALS] == C_FLOOR)
+		if (cell[x + y - MAP_SIZE_MAX_VALS] == C_FLOOR)
 			return (false);
 	}
 	else if (s[x] == C_FLOOR)
@@ -104,9 +104,9 @@ static bool		is_char_valid_place(char *s, int x, char *cell)
 			return (false);
 		else if (!s[x + 1] || s[x + 1] == '\n')
 			return (false);
-		else if (x >= MAP_SIZE_MAX_VALS && (s[x - 1] == C_VOID
+		else if (s[x - 1] == C_VOID
 			|| s[x + 1] == C_VOID
-			|| cell[x - MAP_SIZE_MAX_VALS] == C_VOID))
+			|| cell[x + y - MAP_SIZE_MAX_VALS] == C_VOID)
 			return (false);
 	}
 	return (true);

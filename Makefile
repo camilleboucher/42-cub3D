@@ -2,6 +2,10 @@ CC := cc
 CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
+ifeq ($(FSANITIZE), true)
+	CFLAGS += -fsanitize=address
+endif
+
 NAME := cube
 
 OUTPUT_DIR := output
