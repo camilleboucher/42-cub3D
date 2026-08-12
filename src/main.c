@@ -19,7 +19,11 @@ int main(int argc, char *argv[]) {
     app = (struct s_app){ 0 };
 
     app_init(&app);
-
+	if (!atlas_load_buttons(&app))
+	{
+		app_destroy(&app);
+		return (1);
+	}
     open_main_menu(&app);
 
     app_destroy(&app);
