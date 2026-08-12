@@ -1,14 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/22 15:22:43 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 23:41:28 by aiga             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "app.h"
+#include "menus.h"
 
 #include "cub3D.h"
 
@@ -17,12 +8,21 @@ static void	check_file_extension(char *path, char *ext, int ext_size);
 static int	open_map(char *path);
 static void	init_game(t_player *player, t_map *map);
 
-int	main(int argc, char *argv[])
-{
-	if (argc != 2)
+
+int main(int argc, char *argv[]) {
+    struct s_app app;
+
+    if (argc != 2)
 		error_exit(ERR_NO_ARG);
 	start(argv[1]);
-	return (EXIT_SUCCESS);
+
+    app = (struct s_app){ 0 };
+
+    app_init(&app);
+
+    open_main_menu(&app);
+
+    app_destroy(&app);
 }
 
 void	print_map_player(t_map *map, t_player *player)
