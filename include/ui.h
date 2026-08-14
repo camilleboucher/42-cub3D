@@ -1,13 +1,15 @@
 #ifndef UI_H
 #define UI_H
 
+#include "animated_sprite.h"
+
 typedef struct s_tex_button
 {
     t_vec2i pos;
     t_vec2i size;
     bool is_hover;
     bool is_down;
-    t_region *image;
+    t_animated_sprite *image;
 } t_tex_button;
 
 typedef struct s_label
@@ -18,8 +20,7 @@ typedef struct s_label
     mlx_color color;
 } t_label;
 
-
 bool tex_button_update(t_app *app, t_tex_button button);
-t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *image);
+t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_animated_sprite *image);
 
 #endif
