@@ -57,14 +57,14 @@ static t_vec2i get_start_pos(t_vec2i pos)
     return (start_pos);
 }
 
-void draw_animated_sprite_strech(t_app *app, t_vec2i pos, t_vec2i size, t_animated_sprite *image)
+void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image)
 {
     int x;
     int y;
     mlx_color color;
     t_vec2i out_size;
     t_vec2i start_pos;
-    // TODO: Somehow find a way to get the frame here in an optimized way.
+
     if (pos.x > (int)app->frame_buffer.buffer->width
         || pos.y > (int)app->frame_buffer.buffer->height || pos.x + size.x < 0 || pos.y + size.y < 0)
         return;
@@ -76,7 +76,6 @@ void draw_animated_sprite_strech(t_app *app, t_vec2i pos, t_vec2i size, t_animat
         y = start_pos.y;
         while (y < out_size.y)
         {
-            
             color = blend_colors(get_pixel(image, image->width * x / size.x, image->height * y / size.y),
                                  get_pixel(app->frame_buffer.buffer, x + pos.x, y + pos.y));
             set_pixel(app->frame_buffer.buffer, x + pos.x, y + pos.y, color);
@@ -88,7 +87,7 @@ void draw_animated_sprite_strech(t_app *app, t_vec2i pos, t_vec2i size, t_animat
 
 void tex_button_draw(t_app *app, t_tex_button button)
 {
-    draw_animated_sprite_strech(app, button.pos, button.size, button.image);
+    draw_image_strech(app, button.pos, button.size, button.image);
 }
 
 bool tex_button_update(t_app *app, t_tex_button button)
@@ -97,7 +96,7 @@ bool tex_button_update(t_app *app, t_tex_button button)
     return (false);
 }
 
-t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_animated_sprite *image)
+t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *image)
 {
     t_tex_button button;
 
