@@ -65,8 +65,7 @@ void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image)
     t_vec2i out_size;
     t_vec2i start_pos;
 
-    if (pos.x > (int)app->frame_buffer.buffer->width
-        || pos.y > (int)app->frame_buffer.buffer->height || pos.x + size.x < 0 || pos.y + size.y < 0)
+    if (pos.x > (int)app->frame_buffer.buffer->width || pos.y > (int)app->frame_buffer.buffer->height || pos.x + size.x < 0 || pos.y + size.y < 0)
         return;
     out_size = get_out_size(app, pos, size);
     start_pos = get_start_pos(pos);
@@ -96,7 +95,7 @@ bool tex_button_update(t_app *app, t_tex_button button)
     return (false);
 }
 
-t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *image)
+t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image)
 {
     t_tex_button button;
 
@@ -104,6 +103,7 @@ t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *image)
     button.is_down = false;
     button.pos = pos;
     button.size = size;
-    button.image = image;
+    button.default_image = default_image;
+    button.hover_image = hover_image;
     return (button);
 }
