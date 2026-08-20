@@ -17,6 +17,7 @@ bool app_init(t_app *app)
     app->frame_buffer.shader_buffer = NULL;
     app->frame_buffer.frame_buffer_image = NULL;
     app->request_immediate_abort = false;
+    app->input_handler = (t_input_handler){ 0 };
     mlx_set_fps_goal(app->ctx, 60);
     if (!resize_frame_buffer(app, app->info.width, app->info.height))
         return (false);

@@ -64,5 +64,8 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[i] = load_image(app, "assets/play_button.png");
     if (!app->image_atlas.images[i++])
         return (false);
+    app->image_atlas.images[i] = load_image(app, "assets/play_button_hover.png");
+    if (!app->image_atlas.images[i++])
+        return (false);
     return (true);
 }

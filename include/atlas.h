@@ -9,5 +9,6 @@ typedef struct s_image_atlas {
 } t_image_atlas;
 
 bool atlas_load_buttons(t_app *app);
+void free_all_images(t_app *app);
 
 #endif

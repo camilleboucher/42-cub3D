@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 		return (1);
 	}
     open_main_menu(&app);
-
+	free_all_images(&app);
     app_destroy(&app);
 }
 

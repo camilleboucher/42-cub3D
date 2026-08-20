@@ -84,15 +84,30 @@ void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image)
     }
 }
 
+bool point_to_box_collision(t_vec2i box_pos, t_vec2i box_size, t_vec2i point_pos)
+{
+    return (point_pos.x > box_pos.x && point_pos.x < box_pos.x + box_size.x && point_pos.y > box_pos.y && point_pos.y < box_pos.y + box_size.y);
+}
+
 void tex_button_draw(t_app *app, t_tex_button button)
 {
-    draw_image_strech(app, button.pos, button.size, button.image);
+    if (button.is_hover)
+        draw_image_strech(app, button.pos, button.size, button.hover_image);
+    else
+        draw_image_strech(app, button.pos, button.size, button.default_image);
 }
 
 bool tex_button_update(t_app *app, t_tex_button button)
 {
+    bool clicked;
+
+    button.is_hover = point_to_box_collision(button.pos, button.size, app->input_handler.mouse_pos) 
+        && get_pixel(button.default_image, app->input_handler.mouse_pos.x - button.pos.x,
+            app->input_handler.mouse_pos.y - button.pos.y).a != 0;
     tex_button_draw(app, button);
-    return (false);
+    clicked = button.is_hover && app->input_handler.registered_click;
+    app->input_handler.registered_click = false;
+    return (clicked);
 }
 
 t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image)
