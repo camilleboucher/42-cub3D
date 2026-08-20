@@ -24,6 +24,7 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/error_manager/error_manager.c \
 	   $(SRC_DIR)/parser/parser.c \
+	   $(SRC_DIR)/parser/map_parser.c \
 	   $(SRC_DIR)/parser/element_infos.c \
 	   $(SRC_DIR)/parser/element_map.c
 

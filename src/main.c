@@ -1,4 +1,5 @@
 #include "app.h"
+#include "cleaner.h"
 #include "menus.h"
 
 #include "cub3D.h"
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]) {
     app_destroy(&app);
 }
 
-void	print_map_player(t_map *map, t_player *player)
+void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 {
 	int	x;
 	int	y;
@@ -64,11 +65,7 @@ static void	start(char *map_path)
 	init_game(&game.player, &game.map);
 	parsing(fd, &game);
 	print_map_player(&game.map, &game.player);//WARN: TMP
-	//TODO: FAIRE UN MOD CLEANER
-	free(game.map.path_textures[0]);
-	free(game.map.path_textures[1]);
-	free(game.map.path_textures[2]);
-	free(game.map.path_textures[3]);
+	clean_game(&game);
 }
 
 static void	check_file_extension(char *path, char *ext, int ext_size)
@@ -104,9 +101,9 @@ static int	open_map(char *path)
 
 static void	init_game(t_player *player, t_map *map)
 {
-	player->pos = (t_position){0};
-	ft_memset(map->cell, C_VOID, sizeof(map->cell));
+	player->pos = (t_vec2i){0};
 	map->height = 0;
+	map->width = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));
 	ft_memset(map->floor_rgb, 0, sizeof(map->floor_rgb));
 	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));

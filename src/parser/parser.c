@@ -12,17 +12,18 @@
 
 #include "cub3D.h"
 
-static t_error	last_line_verification(char *cell, int map_height);
-static void		parser_clean_error_exit(uint64_t eflag, t_map *map);
+static int	strlen_map_line(char *s);
 
 void	parsing(int fd, t_game *game)
 {
 	char	*s;
 	t_error	error;
 	t_step	step;
+	t_list	*map_lines;
 
 	error = ERR_NO_RGB_FLOOR | ERR_NO_RGB_CEILING;
 	step = GET_INFOS;
+	map_lines = ft_lstnew(NULL);
 	while (1)
 	{
 		s = get_next_line(fd, false);//WARN: ya un monde où mon gnl leak + TESTER avec CTRL+D injection fin de fichier
@@ -32,16 +33,36 @@ void	parsing(int fd, t_game *game)
 		{
 			if (s[0] != '\n')
 				step = !get_info(&game->map, s, &error);
+			free(s);
 		}
 		else if (!(error & MASK_ERR_CRITICAL_BUGS)) //TODO: Avoir un gnl protege si errsys pour free la stash
-			error |= get_map_line(game, &game->map, s, &step);
-		free(s);
+			error |= backup_map_line(&game->map, map_lines, s);
 	}
 	close(fd);
-	if (!(error & MASK_ERR_CRITICAL_BUGS))
-		error |= last_line_verification(game->map.cell, game->map.height);
-	if (error)
-		parser_clean_error_exit(error, &game->map);
+	parsing_map(game, map_lines, error, step);
+}
+
+t_error	backup_map_line(t_map *map, t_list *map_lines, char *s)
+{
+	t_list	*node;
+	int		size;
+
+	if (!map_lines)
+		return (ERR_SYS);
+	size = strlen_map_line(s);
+	if (map->width < size)
+		map->width = size;
+	map->height++;
+	if (!map_lines->content)
+		map_lines->content = s;
+	else
+	{
+		node = ft_lstnew(s);
+		if (!node)
+			return (ERR_SYS);
+		ft_lstadd_back(&map_lines, node);
+	}
+	return (ERR_NONE);
 }
 
 char	*skip_spaces(char *s)
@@ -67,27 +88,12 @@ bool	is_rgb8(char *s)
 	return (true);
 }
 
-static t_error	last_line_verification(char *cell, int map_height)
+static int	strlen_map_line(char *s)
 {
 	int	i;
-	int	y;
 
 	i = 0;
-	y = map_height * MAP_SIZE_MAX_VALS;
-	while (i < MAP_SIZE_MAX_VALS)
-	{
-		if (cell[i + y] == C_FLOOR)
-			return (ERR_OPEN_MAP);
+	while (s[i] || s[i] == '\n')
 		i++;
-	}
-	return (ERR_NONE);
-}
-
-static void	parser_clean_error_exit(uint64_t eflag, t_map *map)
-{
-	free(map->path_textures[0]);
-	free(map->path_textures[1]);
-	free(map->path_textures[2]);
-	free(map->path_textures[3]);
-	error_exit(eflag);
+	return (i);
 }

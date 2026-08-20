@@ -12,41 +12,18 @@
 
 #include "cub3D.h"
 
-static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width);
-static t_error	save_line(char *s, char *cell, t_game *game, t_map *map);
+static t_error	verifs_openmap(char *cell, int x, int y);
 static bool		is_char_valid_place(char *s, int x, int y, char *cell);
 static bool		save_player(char *s, int *i, t_game *game, t_error *error);
 
-t_error	get_map_line(t_game *game, t_map *map, char *s, t_step *step)
-{
-	t_error	error;
-
-	if (*step == SKIP_NEW_LINES)
-	{
-		if (*s == '\n')
-			return (ERR_NONE);
-		*step = GET_MAP;
-	}
-	else if (*s == '\n')
-		return (ERR_EMPTY_LINE);
-	if (map->height == MAP_SIZE_MAX_VALS)
-		return (ERR_MAP_OVERFLOW);
-	else if (map->height == 0)
-		error = save_first_line(s, map->cell, &map->width);
-	else
-		error = save_line(s, map->cell, game, map);
-	map->height++;
-	return (error);
-}
-
-static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width)
+t_error	save_first_line(char *s, char *cell)
 {
 	t_error	error;
 	int		i;
 
 	error = ERR_NONE;
 	i = 0;
-	while (s[i] && s[i] != '\n') //WARN: s[i] utile ? pour protection si fin de fichier ?
+	while (s[i] && s[i] != '\n')
 	{
 		if (i == MAP_SIZE_MAX_VALS)
 			return (error | ERR_MAP_OVERFLOW);
@@ -57,12 +34,10 @@ static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width)
 		cell[i] = s[i];
 		i++;
 	}
-	i--;
-	*width = i;
 	return (error);
 }
 
-static t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
+t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 {
 	t_error	error;
 	int		i;
@@ -85,10 +60,22 @@ static t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 		cell[i + y] = s[i];
 		i++;
 	}
-	i--;
-	if (i > map->width)
-		map->width = i;
+	error |= verifs_openmap(game->map.cell, i, y);
 	return (error);
+}
+
+static t_error	verifs_openmap(char *cell, int x, int y)
+{
+	while (x < MAP_SIZE_MAX_VALS)
+	{
+		if (cell[x + y] == C_VOID)
+		{
+			if (cell[x + y - MAP_SIZE_MAX_VALS] == C_FLOOR)
+				return (ERR_OPEN_MAP);
+		}
+		x++;
+	}
+	return (ERR_NONE);
 }
 
 static bool		is_char_valid_place(char *s, int x, int y, char *cell)
@@ -130,7 +117,7 @@ static bool		save_player(char *s, int *i, t_game *game, t_error *error)
 	else if (dir == 'S')
 		game->player.angle = -M_PI_2;
 	game->map.cell[*i + game->map.height * MAP_SIZE_MAX_VALS] = C_FLOOR;
-	game->player.pos = (t_position){*i, game->map.height};
+	game->player.pos = (t_vec2i){*i, game->map.height};
 	(*i)++;
 	return (true);
 }

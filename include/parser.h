@@ -22,13 +22,18 @@ typedef enum e_step
 
 // parser.c
 void	parsing(int fd, t_game *game);
+t_error	backup_map_line(t_map *map, t_list *map_lines, char *s);
 char	*skip_spaces(char *s);
 bool	is_rgb8(char *s);
 
 // element_infos.c
 bool	get_info(t_map *map, char *s, t_error *error);
 
+// map_parser.c
+void	parsing_map(t_game *game, t_list *map_head, t_error error, t_step step);
+
 // element_map.c
-t_error	get_map_line(t_game *game, t_map *map, char *s, t_step *step);
+t_error	save_first_line(char *s, char *cell);
+t_error	save_line(char *s, char *cell, t_game *game, t_map *map);
 
 #endif

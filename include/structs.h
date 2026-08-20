@@ -33,18 +33,18 @@ typedef enum e_rgb
 
 typedef struct s_map
 {
-	char			cell[MAP_SIZE_MAX_VALS * MAP_SIZE_MAX_VALS];
-	TYPE_MAP_SIZE	width;
-	TYPE_MAP_SIZE	height;
-	char			*path_textures[4];
-	uint8_t			floor_rgb[3];
-	uint8_t			ceiling_rgb[3];
+	char		*cell;
+	uint16_t	width;
+	uint16_t	height;
+	char		*path_textures[4];
+	uint8_t		floor_rgb[3];
+	uint8_t		ceiling_rgb[3];
 }	t_map;
 
 typedef struct s_player
 {
-	t_position	pos;
-	float		angle;
+	t_vec2i	pos;
+	float	angle;
 }	t_player;
 
 typedef struct s_game

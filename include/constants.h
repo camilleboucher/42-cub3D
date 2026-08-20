@@ -15,9 +15,6 @@
 
 // MAP's CONSTANTS :
 // =================
-// MAP_SIZE_MAX_VALUES corresponds to the max number of values for the map
-// inferior size type.
-# define TYPE_MAP_SIZE uint16_t
 # define MAP_SIZE_MAX_VALS 256
 
 # define C_VOID ' '

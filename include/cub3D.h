@@ -23,16 +23,18 @@
 # include <string.h>
 # include <unistd.h>
 
+# include "ft_list.h"
 # include "ft_ctype.h"
 # include "ft_stdlib.h"
 # include "ft_string.h"
 # include "get_next_line.h"
 
 # include "constants.h"
-# include "components.h"
+# include "vector.h"
 # include "structs.h"
 
 # include "error_manager.h"
 # include "parser.h"
+# include "cleaner.h"
 
 #endif
