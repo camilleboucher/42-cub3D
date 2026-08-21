@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 18:56:13 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/21 18:58:18 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ typedef enum e_step
 }	t_step;
 
 // parser.c
-void	parsing(int fd, t_game *game);
-t_error	backup_map_line(t_map *map, t_list *map_lines, char *s);
+void	parsing(int fd, t_game *game, t_step step);
+
+// parser_utils.c
 char	*skip_spaces(char *s);
 bool	is_rgb8(char *s);
 
@@ -30,7 +31,7 @@ bool	is_rgb8(char *s);
 bool	get_info(t_map *map, char *s, t_error *error);
 
 // map_parser.c
-void	parsing_map(t_game *game, t_list *map_head, t_error error, t_step step);
+void	parsing_map(t_game *game, t_map *map, t_list *map_head, t_error error);
 
 // element_map.c
 t_error	save_first_line(char *s, char *cell);

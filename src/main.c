@@ -1,5 +1,4 @@
 #include "app.h"
-#include "cleaner.h"
 #include "menus.h"
 
 #include "cub3D.h"
@@ -11,19 +10,19 @@ static void	init_game(t_player *player, t_map *map);
 
 
 int main(int argc, char *argv[]) {
-    struct s_app app;
+    //struct s_app app;
 
     if (argc != 2)
 		error_exit(ERR_NO_ARG);
 	start(argv[1]);
 
-    app = (struct s_app){ 0 };
+    //app = (struct s_app){ 0 };
 
-    app_init(&app);
+    //app_init(&app);
 
-    open_main_menu(&app);
+    //open_main_menu(&app);
 
-    app_destroy(&app);
+    //app_destroy(&app);
 }
 
 void	print_map_player(t_map *map, t_player *player) //WARN: TMP
@@ -38,11 +37,11 @@ void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 	printf("SO:	%s\n", map->path_textures[1]);
 	printf("WE:	%s\n", map->path_textures[2]);
 	printf("EA:	%s\n\n", map->path_textures[3]);
-	while (y != map->height)
+	while (y < map->height)
 	{
-		write(1, map->cell + x + y * MAP_SIZE_MAX_VALS, 1);
+		write(1, map->cell + x + y * map->width, 1);
 		x++;
-		if (x > map->width)
+		if (x == map->width)
 		{
 			x = 0;
 			y++;
@@ -53,6 +52,7 @@ void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 	printf("X: %d\n", player->pos.x);
 	printf("Y: %d\n", player->pos.y);
 	printf("Angle: %f\n", player->angle);
+	printf("%d\n", map->cell[461]);
 }
 
 static void	start(char *map_path)
@@ -63,7 +63,7 @@ static void	start(char *map_path)
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
 	init_game(&game.player, &game.map);
-	parsing(fd, &game);
+	parsing(fd, &game, GET_INFOS);
 	print_map_player(&game.map, &game.player);//WARN: TMP
 	clean_game(&game);
 }

@@ -6,23 +6,24 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 18:56:20 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/21 19:42:22 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-static int	strlen_map_line(char *s);
+static t_error	backup_map_line(t_map *map, t_list *map_lines,
+	char *s, t_step *step);
+static t_error	skip_new_lines(t_step *step, char **s);
+static int		strlen_map_line(char *s);
 
-void	parsing(int fd, t_game *game)
+void	parsing(int fd, t_game *game, t_step step)
 {
 	char	*s;
 	t_error	error;
-	t_step	step;
 	t_list	*map_lines;
 
 	error = ERR_NO_RGB_FLOOR | ERR_NO_RGB_CEILING;
-	step = GET_INFOS;
 	map_lines = ft_lstnew(NULL);
 	while (1)
 	{
@@ -35,18 +36,25 @@ void	parsing(int fd, t_game *game)
 				step = !get_info(&game->map, s, &error);
 			free(s);
 		}
-		else if (!(error & MASK_ERR_CRITICAL_BUGS)) //TODO: Avoir un gnl protege si errsys pour free la stash
-			error |= backup_map_line(&game->map, map_lines, s);
+		else if (error & MASK_ERR_CRITICAL_BUGS)
+			free(s);
+		else
+			error |= backup_map_line(&game->map, map_lines, s, &step);
 	}
 	close(fd);
-	parsing_map(game, map_lines, error, step);
+	parsing_map(game, &game->map, map_lines, error); //TODO: Avoir un gnl protege si errsys pour free la stash
 }
 
-t_error	backup_map_line(t_map *map, t_list *map_lines, char *s)
+static t_error	backup_map_line(t_map *map, t_list *map_lines,
+	char *s, t_step *step)
 {
 	t_list	*node;
 	int		size;
+	t_error	error;
 
+	error = skip_new_lines(step, &s);
+	if (!s || error)
+		return (error);
 	if (!map_lines)
 		return (ERR_SYS);
 	size = strlen_map_line(s);
@@ -65,27 +73,24 @@ t_error	backup_map_line(t_map *map, t_list *map_lines, char *s)
 	return (ERR_NONE);
 }
 
-char	*skip_spaces(char *s)
+static t_error	skip_new_lines(t_step *step, char **s)
 {
-	while (ft_isspace((int)*s))
-		s++;
-	return (s);
-}
-
-bool	is_rgb8(char *s)
-{
-	int	size;
-
-	size = ft_strlen(s);
-	if (size > 3)
-		return (false);
-	while (*s)
+	if (*step == SKIP_NEW_LINES)
 	{
-		if (!ft_isdigit(*s))
-			return (false);
-		s++;
+		if (**s == '\n')
+		{
+			free(*s);
+			*s = NULL;
+			return (ERR_NONE);
+		}
+		*step = GET_MAP;
 	}
-	return (true);
+	else if (**s == '\n')
+	{
+		free(*s);
+		return (ERR_EMPTY_LINE);
+	}
+	return (ERR_NONE);
 }
 
 static int	strlen_map_line(char *s)
@@ -93,7 +98,7 @@ static int	strlen_map_line(char *s)
 	int	i;
 
 	i = 0;
-	while (s[i] || s[i] == '\n')
+	while (s[i] && s[i] != '\n')
 		i++;
 	return (i);
 }
