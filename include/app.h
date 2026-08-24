@@ -6,6 +6,7 @@
 #include "atlas.h"
 #include "mlx.h"
 #include <stdbool.h>
+#include "cub3D.h"
 
 typedef struct s_app
 {
@@ -16,6 +17,8 @@ typedef struct s_app
     t_frame_buffer frame_buffer;
     bool request_immediate_abort;
     t_image_atlas image_atlas;
+    t_map map;
+    t_player player;
 } t_app;
 
 bool app_init(t_app *app);

@@ -3,32 +3,32 @@
 
 #include "cub3D.h"
 
-static void	start(char *map_path);
-static void	check_file_extension(char *path, char *ext, int ext_size);
-static int	open_map(char *path);
-static void	init_game(t_player *player, t_map *map);
+static void load_map(t_app *app, char *map_path);
+static void check_file_extension(char *path, char *ext, int ext_size);
+static int open_map(char *path);
+static void init_game(t_player *player, t_map *map);
 
+int main(int argc, char *argv[])
+{
+	struct s_app app;
 
-int main(int argc, char *argv[]) {
-    struct s_app app;
-
-    if (argc != 2)
+	if (argc != 2)
 		error_exit(ERR_NO_ARG);
-	start(argv[1]);
+	load_map(&app, argv[1]);
 
-    app = (struct s_app){ 0 };
+	app = (struct s_app){0};
 
-    app_init(&app);
+	app_init(&app);
 
-    open_main_menu(&app);
+	open_main_menu(&app);
 
-    app_destroy(&app);
+	app_destroy(&app);
 }
 
-void	print_map_player(t_map *map, t_player *player)
+void print_map_player(t_map *map, t_player *player)
 {
-	int	x;
-	int	y;
+	int x;
+	int y;
 
 	x = 0;
 	y = 0;
@@ -54,26 +54,25 @@ void	print_map_player(t_map *map, t_player *player)
 	printf("Angle: %f\n", player->angle);
 }
 
-static void	start(char *map_path)
+static void load_map(t_app *app, char *map_path)
 {
-	t_game		game;
-	int		fd;
+	int fd;
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
-	init_game(&game.player, &game.map);
-	parsing(fd, &game);
-	print_map_player(&game.map, &game.player);//WARN: TMP
-	//TODO: FAIRE UN MOD CLEANER
-	free(game.map.path_textures[0]);
-	free(game.map.path_textures[1]);
-	free(game.map.path_textures[2]);
-	free(game.map.path_textures[3]);
+	init_game(&app->player, &app->map);
+	parsing(fd, app);
+	print_map_player(&app->map, &app->player); // WARN: TMP
+	// TODO: FAIRE UN MOD CLEANER
+	free(app->map.path_textures[0]);
+	free(app->map.path_textures[1]);
+	free(app->map.path_textures[2]);
+	free(app->map.path_textures[3]);
 }
 
-static void	check_file_extension(char *path, char *ext, int ext_size)
+static void check_file_extension(char *path, char *ext, int ext_size)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (path[i])
@@ -92,9 +91,9 @@ static void	check_file_extension(char *path, char *ext, int ext_size)
 	}
 }
 
-static int	open_map(char *path)
+static int open_map(char *path)
 {
-	int	fd;
+	int fd;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1 || read(fd, NULL, 0) == -1)
@@ -102,7 +101,7 @@ static int	open_map(char *path)
 	return (fd);
 }
 
-static void	init_game(t_player *player, t_map *map)
+static void init_game(t_player *player, t_map *map)
 {
 	player->pos = (t_position){0};
 	ft_memset(map->cell, C_VOID, sizeof(map->cell));

@@ -14,31 +14,31 @@ t_vec2f vec2f_comp_mul(t_vec2f a, t_vec2f b) {
     return (new);
 }
 
-t_vec2f vec2f_mul(t_vec2f a, float b) {
+t_vec2f vec2f_mul(t_vec2f a, double b) {
     t_vec2f new;
     new.x = a.x * b;
     new.y = a.y * b;
     return (new);
 }
 
-t_vec2f vec2f_div(t_vec2f a, float b) {
+t_vec2f vec2f_div(t_vec2f a, double b) {
     t_vec2f new;
     new.x = a.x / b;
     new.y = a.y / b;
     return (new);
 }
 
-float vec2f_lenght(t_vec2f a) {
-    float lenght;
+double vec2f_lenght(t_vec2f a) {
+    double lenght;
 
     lenght = sqrtf(a.x * a.x + a.y * a.y);
     return (lenght);
 }
 
-float vec2f_dist(t_vec2f a, t_vec2f b) {
-    float dist;
-    float x_dist;
-    float y_dist;
+double vec2f_dist(t_vec2f a, t_vec2f b) {
+    double dist;
+    double x_dist;
+    double y_dist;
 
     x_dist = b.x - a.x;
     y_dist = b.y - a.y;

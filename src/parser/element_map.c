@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   element_map.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 18:08:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 23:35:51 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/24 18:30:35 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "cube3D2.h"
 
 static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width);
-static t_error	save_line(char *s, char *cell, t_game *game, t_map *map);
+static t_error	save_line(char *s, char *cell, t_app *app, t_map *map);
 static bool		is_char_valid_place(char *s, int x, int y, char *cell);
-static bool		save_player(char *s, int *i, t_game *game, t_error *error);
+static bool		save_player(char *s, int *i, t_app *app, t_error *error);
 
-t_error	get_map_line(t_game *game, t_map *map, char *s, t_step *step)
+t_error	get_map_line(t_app *app, t_map *map, char *s, t_step *step)
 {
 	t_error	error;
 
@@ -34,7 +35,7 @@ t_error	get_map_line(t_game *game, t_map *map, char *s, t_step *step)
 	else if (map->height == 0)
 		error = save_first_line(s, map->cell, &map->width);
 	else
-		error = save_line(s, map->cell, game, map);
+		error = save_line(s, map->cell, app, map);
 	map->height++;
 	return (error);
 }
@@ -62,7 +63,7 @@ static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width)
 	return (error);
 }
 
-static t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
+static t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
 {
 	t_error	error;
 	int		i;
@@ -77,7 +78,7 @@ static t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 			return (error | ERR_MAP_OVERFLOW);
 		else if (!is_char_valid_place(s, i, y, cell))
 			error |= ERR_OPEN_MAP;
-		else if (save_player(s, &i, game, &error))
+		else if (save_player(s, &i, app, &error))
 			continue ;
 		else if (!(s[i] == C_VOID || s[i] == C_FLOOR || s[i] == C_WALL
 			|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
@@ -112,25 +113,25 @@ static bool		is_char_valid_place(char *s, int x, int y, char *cell)
 	return (true);
 }
 
-static bool		save_player(char *s, int *i, t_game *game, t_error *error)
+static bool		save_player(char *s, int *i, t_app *app, t_error *error)
 {
 	char	dir;
 
 	dir = s[*i];
 	if (!(dir == 'N' || dir == 'S' || dir == 'E' || dir == 'W'))
 		return (false);
-	if (game->player.pos.x || game->player.pos.y)
+	if (app->player.pos.x || app->player.pos.y)
 		*error |= ERR_DUPLICATE_PLAYER;
 	else if (dir == 'E')
-		game->player.angle = 0;
+		app->player.angle = 0;
 	else if (dir == 'N')
-		game->player.angle = M_PI_2;
+		app->player.angle = M_PI_2;
 	else if (dir == 'W')
-		game->player.angle = M_PI;
+		app->player.angle = M_PI;
 	else if (dir == 'S')
-		game->player.angle = -M_PI_2;
-	game->map.cell[*i + game->map.height * MAP_SIZE_MAX_VALS] = C_FLOOR;
-	game->player.pos = (t_position){*i, game->map.height};
+		app->player.angle = -M_PI_2;
+	app->map.cell[*i + app->map.height * MAP_SIZE_MAX_VALS] = C_FLOOR;
+	app->player.pos = (t_position){*i, app->map.height};
 	(*i)++;
 	return (true);
 }
