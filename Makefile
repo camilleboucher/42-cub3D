@@ -43,7 +43,7 @@ $(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES)
 
 MacroLibX/libmlx.so:
-	make -C MacroLibX -j10
+	make -C MacroLibX -j
 
 libft/libft.a:
 	make -C libft
