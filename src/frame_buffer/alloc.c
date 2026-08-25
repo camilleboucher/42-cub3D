@@ -64,6 +64,6 @@ void push_frame_buffer_to_screen(t_app *app)
         app->frame_buffer.buffer->buffer);
     mlx_put_transformed_image_to_window(app->ctx, app->window, 
         app->frame_buffer.frame_buffer_image, 
-        ((int)app->frame_buffer.width - (int)app->frame_buffer.height) / 2, 
-        ((int)app->frame_buffer.height - (int)app->frame_buffer.width) / 2, 1, 1, -90);
+        ((float)app->frame_buffer.width + (float)app->frame_buffer.height) / 2.f, 
+        ((float)app->frame_buffer.height - (float)app->frame_buffer.width) / 2.f, -1, 1, 90);
 }
