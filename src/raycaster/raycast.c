@@ -3,8 +3,19 @@
 #include "raycaster.h"
 #include "map_tools.h"
 
+void draw_vertical_line(t_app *app, unsigned int x, int start, int end) {
+    unsigned int y;
+
+    y = start;
+    while (y < end)
+    {
+        set_pixel(app->frame_buffer.buffer, x, y, (mlx_color){ .rgba = 0x00FF00FF});
+        y++;
+    }
+}
+
 void draw_raycast(t_app *app, t_raycaster *raycaster) {
-    unsigned int x;
+    int x;
     t_vec2f dir = {-1., 0.};
     t_vec2f plane = {0, 0.66};
 
@@ -62,7 +73,24 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
                 side = 1;
             }
             if (map_get(&app->map, map_pos.x, map_pos.y) != '0')
+            {
                 hit = 1;
+                if(side == 0)
+                    perp_wall_dist = side_dist.x - delta_dist.x;
+                else
+                    perp_wall_dist = side_dist.y - delta_dist.y;
+
+                int line_height = (int)((double)app->frame_buffer.height / perp_wall_dist);
+
+                int draw_start = -(int)line_height / 2 + (int)app->frame_buffer.height / 2;
+                if (draw_start < 0)
+                    draw_start = 0;
+                int draw_end = (int)line_height / 2 + (int)app->frame_buffer.height / 2;
+                if (draw_end < 0)
+                    draw_end = (int)app->frame_buffer.height - 1;
+                draw_vertical_line(app, x, draw_start, draw_end);
+            }
         }
+        x++;
     }
 }

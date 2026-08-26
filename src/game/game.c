@@ -38,7 +38,7 @@ void ingame_update(t_app *app) {
 
     raycaster = (t_raycaster){0};
 
-    raycaster.camera_pos = (t_vec2f){3, 3};
+    raycaster.camera_pos = (t_vec2f){10, 2};
     clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
     draw_raycast(app, &raycaster);
     push_frame_buffer_to_screen(app);
