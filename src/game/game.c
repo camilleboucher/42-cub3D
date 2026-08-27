@@ -1,4 +1,5 @@
 #include "cube3D2.h"
+#include "map_tools.h"
 
 void main_menu_window_update(t_app *app)
 {
@@ -36,9 +37,18 @@ void handle_mouse_up(int button, void *param)
 void ingame_update(t_app *app) {
     t_raycaster raycaster;
 
+
+    static double a = 1.0;
+    static double last_time = 0.;
+    double time = get_time();
+    printf("frame time : %f - FPS: %f\n", time, 1. / (time - last_time));
+    if (last_time != 0.)
+        a += (time - last_time) * 0.1;
+    last_time = time;
+
     raycaster = (t_raycaster){0};
 
-    raycaster.camera_pos = (t_vec2f){10, 2};
+    raycaster.camera_pos = (t_vec2f){12.5, a};
     clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
     draw_raycast(app, &raycaster);
     push_frame_buffer_to_screen(app);
@@ -85,6 +95,7 @@ void game_update(void *param) {
 void main_loop(t_app *app)
 {
     app->game_state = main_menu;
+
     init_main_menu(app);
     mlx_add_loop_hook(app->ctx, &game_update, app);
     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &window_event_handle, app);

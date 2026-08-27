@@ -14,11 +14,11 @@ int main(int argc, char *argv[])
 
 	if (argc != 2)
 		error_exit(ERR_NO_ARG);
-	load_map(&app, argv[1]);
 
 	app = (struct s_app){0};
 
 	app_init(&app);
+	load_map(&app, argv[1]);
 	if (!atlas_load_buttons(&app))
 	{
 		app_destroy(&app);

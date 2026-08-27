@@ -13,5 +13,6 @@
 #include "vector.h"
 #include "math.h"
 #include "raycaster.h"
+#include "time_tools.h"
 
 #endif
