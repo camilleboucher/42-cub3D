@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 18:08:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/25 14:30:04 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/08/27 17:59:44 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static bool		save_player(char *s, int *i, t_app *app, t_error *error)
 	else if (dir == 'S')
 		app->player.angle = -M_PI_2;
 	app->map.cell[*i + app->map.height * MAP_SIZE_MAX_VALS] = C_FLOOR;
-	app->player.pos = (t_position){*i, app->map.height};
+	app->player.pos = (t_vec2f){*i, app->map.height};
 	(*i)++;
 	return (true);
 }

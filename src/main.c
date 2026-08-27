@@ -2,6 +2,7 @@
 #include "menus.h"
 
 #include "cub3D.h"
+#include "vector.h"
 
 static void load_map(t_app *app, char *map_path);
 static void check_file_extension(char *path, char *ext, int ext_size);
@@ -53,8 +54,8 @@ void print_map_player(t_map *map, t_player *player)
 		}
 	}
 	printf("\n\nPLAYER:\n=======\n");
-	printf("X: %d\n", player->pos.x);
-	printf("Y: %d\n", player->pos.y);
+	printf("X: %f\n", player->pos.x);
+	printf("Y: %f\n", player->pos.y);
 	printf("Angle: %f\n", player->angle);
 }
 
@@ -107,7 +108,7 @@ static int open_map(char *path)
 
 static void init_game(t_player *player, t_map *map)
 {
-	player->pos = (t_position){0};
+	player->pos = (t_vec2f){0};
 	ft_memset(map->cell, C_VOID, sizeof(map->cell));
 	map->height = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));

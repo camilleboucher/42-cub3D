@@ -6,12 +6,14 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/24 18:17:13 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/08/27 17:59:24 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+#include "vector.h"
 
 typedef enum e_direction
 {
@@ -43,7 +45,7 @@ typedef struct s_map
 
 typedef struct s_player
 {
-	t_position	pos;
+	t_vec2f	pos;
 	float		angle;
 }	t_player;
 

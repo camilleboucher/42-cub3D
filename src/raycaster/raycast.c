@@ -1,24 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycast.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/27 18:49:14 by yben-dje          #+#    #+#             */
+/*   Updated: 2026/08/27 19:11:29 by yben-dje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cube3D2.h"
 #include "vector.h"
 #include "raycaster.h"
 #include "map_tools.h"
 
-void draw_vertical_line(t_app *app, unsigned int x, int start, int end) {
+void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) {
     unsigned int y;
 
-    y = start;
-    if (end > app->frame_buffer.height)
-        end = app->frame_buffer.height;
-    while (y < end)
+    int draw_start = ((int)app->frame_buffer.height - line_height) / 2;
+    if (draw_start < 0)
+        draw_start = 0;
+    int draw_end = ((int)app->frame_buffer.height + line_height) / 2;
+    if (draw_end < 0)
+        draw_end = (int)app->frame_buffer.height - 1;
+    if (draw_end > app->frame_buffer.height)
+        draw_end = app->frame_buffer.height;
+    double step = 64. / (double)line_height;
+    double tex_pos = (draw_start - app->frame_buffer.height /2 + line_height / 2) * step;
+    y = 0;
+    while (y < draw_start)
+        set_pixel(app->frame_buffer.buffer, x, y++, (mlx_color){ .rgba = 0x000000FF});
+    while (y < draw_end)
     {
-        set_pixel(app->frame_buffer.buffer, x, y, (mlx_color){ .rgba = 0x00FF00FF});
+        tex_pos += step;
+        mlx_color color = get_pixel(app->image_atlas.images[2], tex_x, (int)tex_pos & (64 - 1));
+        set_pixel(app->frame_buffer.buffer, x, y, color);
         y++;
     }
+    while (y < app->frame_buffer.height)
+        set_pixel(app->frame_buffer.buffer, x, y++, (mlx_color){ .rgba = 0x000000FF});
 }
 
 double dabs(double a) {
     unsigned long int*b=(unsigned long int *)&a;
-    *b&=(0ul << 63u);
+    *b&=~(1ul << 63u);
     return *(double *)b;
 }
 
@@ -38,14 +64,13 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
         if (ray_dir.x == 0.)
             delta_dist.x = 1e30;
         else
-            delta_dist.x = fabs(1 / ray_dir.x);
+            delta_dist.x = fabs(1. / ray_dir.x);
         if (ray_dir.y == 0.)
             delta_dist.y = 1e30;
         else
-            delta_dist.y = fabs(1 / ray_dir.y);
+            delta_dist.y = fabs(1. / ray_dir.y);
         double perp_wall_dist;
         t_vec2f step;
-        int hit = 0;
         int side;
         if (ray_dir.x < 0)
         {
@@ -67,7 +92,7 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
             step.y = 1.;
             side_dist.y = (map_pos.y + 1. - raycaster->camera_pos.y) * delta_dist.y;
         }
-        while (!hit)
+        while (1)
         {
             if (side_dist.x < side_dist.y)
             {
@@ -82,7 +107,7 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
                 side = 1;
             }
             if (map_get(&app->map, map_pos.x, map_pos.y) != '0')
-                hit = 1;
+                break;
         }
         if(side == 0)
             perp_wall_dist = side_dist.x - delta_dist.x;
@@ -90,13 +115,17 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
             perp_wall_dist = side_dist.y - delta_dist.y;
 
         int line_height = (int)((double)app->frame_buffer.height / perp_wall_dist);
-        int draw_start = ((int)app->frame_buffer.height - (int)line_height) / 2;
-        if (draw_start < 0)
-            draw_start = 0;
-        int draw_end = ((int)app->frame_buffer.height + (int)line_height) / 2;
-        if (draw_end < 0)
-            draw_end = (int)app->frame_buffer.height - 1;
-        draw_vertical_line(app, x, draw_start, draw_end);
+
+        double wall_x;
+        if (side == 0)
+            wall_x = raycaster->camera_pos.y + perp_wall_dist * ray_dir.y;
+        else
+            wall_x = raycaster->camera_pos.x + perp_wall_dist * ray_dir.x;
+        wall_x -= floorf(wall_x);
+        int tex_x = wall_x * 64.;
+        if (side == 0 && ray_dir.x > 0) tex_x = 64 - tex_x - 1;
+        if (side == 1 && ray_dir.x < 0) tex_x = 64 - tex_x - 1;
+        draw_vertical_line(app, x, line_height, tex_x);
         x++;
     }
 }

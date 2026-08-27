@@ -40,16 +40,27 @@ void ingame_update(t_app *app) {
 
     static double a = 1.0;
     static double last_time = 0.;
+    static double old_average = 0.0;
+    static unsigned int frame_count = 0;
+
+    printf("%f - %f\n", app->player.pos, app->player.pos.y);
+
     double time = get_time();
-    printf("frame time : %f - FPS: %f\n", time, 1. / (time - last_time));
+    double average = (1. / (time - last_time) + old_average * (double)frame_count) / ((double)frame_count + 1.);
+    old_average = average;
+    frame_count++;
+    printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
     if (last_time != 0.)
-        a += (time - last_time) * 0.1;
+    {
+        //app->player.pos.x += (time - last_time) * 0.2;
+        app->player.pos.y -= (time - last_time) * 0.2;
+    }
     last_time = time;
 
     raycaster = (t_raycaster){0};
 
-    raycaster.camera_pos = (t_vec2f){12.5, a};
-    clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
+    raycaster.camera_pos = app->player.pos;
+    //clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
     draw_raycast(app, &raycaster);
     push_frame_buffer_to_screen(app);
 }
