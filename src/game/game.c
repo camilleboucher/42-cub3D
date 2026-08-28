@@ -1,5 +1,6 @@
 #include "cube3D2.h"
 #include "map_tools.h"
+#include "mlx_keycodes.h"
 
 void main_menu_window_update(t_app *app)
 {
@@ -43,17 +44,21 @@ void ingame_update(t_app *app) {
     static double old_average = 0.0;
     static unsigned int frame_count = 0;
 
-    printf("%f - %f\n", app->player.pos, app->player.pos.y);
+    //printf("%f - %f\n", app->player.pos, app->player.pos.y);
 
     double time = get_time();
     double average = (1. / (time - last_time) + old_average * (double)frame_count) / ((double)frame_count + 1.);
     old_average = average;
     frame_count++;
     printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
-    if (last_time != 0.)
+    if (is_key_down(&app->input_handler, MLX_KEY_SPACE) && last_time != 0.)
     {
         //app->player.pos.x += (time - last_time) * 0.2;
-        app->player.pos.y -= (time - last_time) * 0.2;
+        app->player.pos.y -= (time - last_time) * 0.4;
+    }
+    if (is_key_down(&app->input_handler, MLX_KEY_C)) {
+        average = 0.0;
+        frame_count = 0;
     }
     last_time = time;
 
@@ -76,8 +81,9 @@ void window_event_handle(int event, void *param)
     {
         mlx_loop_end(app->ctx);
     }
-    else if (event == 8)
+    else if (event == MLX_WINDOW_SIZE_CHANGED)
     {
+        printf("bla\n");
         handle_resize_event(app);
         if (app->request_immediate_abort)
             mlx_loop_end(app->ctx);
@@ -103,6 +109,20 @@ void game_update(void *param) {
         main_menu_window_update(app);
 }
 
+void handle_key_down(int key, void *param) {
+    t_app *app;
+
+    app = param;
+    input_handler_set_down(&app->input_handler, key);
+}
+
+void handle_key_up(int key, void *param) {
+    t_app *app;
+
+    app = param;
+    input_handler_set_up(&app->input_handler, key);
+}
+
 void main_loop(t_app *app)
 {
     app->game_state = main_menu;
@@ -110,6 +130,8 @@ void main_loop(t_app *app)
     init_main_menu(app);
     mlx_add_loop_hook(app->ctx, &game_update, app);
     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &window_event_handle, app);
-    mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app); 
+    mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app);
+    mlx_on_event(app->ctx, app->window, MLX_KEYDOWN, &handle_key_down, app);
+    mlx_on_event(app->ctx, app->window, MLX_KEYUP, &handle_key_up, app);
     mlx_loop(app->ctx);
 }

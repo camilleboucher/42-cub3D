@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 18:49:14 by yben-dje          #+#    #+#             */
-/*   Updated: 2026/08/28 13:47:40 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/08/28 19:34:07 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "vector.h"
 #include "raycaster.h"
 #include "map_tools.h"
+
 
 
 void set_pixel_opt(t_region *frame_buffer, unsigned int i, mlx_color color)
@@ -26,9 +27,13 @@ mlx_color get_pixel_opt(t_region *frame_buffer, unsigned int i)
     return (frame_buffer->buffer[i]);
 }
 
-void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) {
-    unsigned int y;
+int max(int a, int b) {
+    if (a < b)
+        return (b);
+    return (a);
+}
 
+void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) {
     int draw_start = ((int)app->frame_buffer.height - line_height) / 2;
     if (draw_start < 0)
         draw_start = 0;
@@ -36,20 +41,54 @@ void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) 
     if (draw_end > app->frame_buffer.height)
         draw_end = app->frame_buffer.height;
     double step = 64. / (double)line_height;
-    double tex_pos = (draw_start - app->frame_buffer.height / 2. + line_height / 2.) * step;
-    y = 0;
+    unsigned int y = 0;
     unsigned int fb_row = x * app->frame_buffer.buffer->height;
     while (y < draw_start)
         set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x000000FF});
     unsigned int tex_row = tex_x * app->image_atlas.images[2]->height;
-    while (y < draw_end)
+    if (step >= 2.) {
+        double tex_pos = (draw_start - app->frame_buffer.height / 2. + line_height / 2.) * step;
+        while (y < draw_end)
+        {
+            tex_pos += step;
+            mlx_color color = get_pixel_opt(app->image_atlas.images[2], tex_row + ((unsigned int)tex_pos & (64 - 1)));
+            set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, color);
+        }
+    }
+    else if (step > 0.)
     {
-        tex_pos += step;
-        mlx_color color = get_pixel_opt(app->image_atlas.images[2], tex_row + ((unsigned int)tex_pos & (64 - 1)));
-        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, color);
+        int tex_pos = 0;
+        double scale = 1. / step;
+        double stepstep = (((int)app->frame_buffer.height - line_height) / 2.);
+        if (stepstep < -scale)
+            stepstep = fmod(stepstep, scale);
+        int stop = 64.;
+        if (line_height > app->frame_buffer.height)
+        {
+            tex_pos += (int)((line_height - app->frame_buffer.height) * step) / 2;
+            stop -= (int)((line_height - app->frame_buffer.height) * step) / 2;
+            stop -= max((stepstep + scale * (stop - tex_pos)) - app->frame_buffer.height, 0) / scale;
+        }
+        while (tex_pos < stop)
+        {
+            stepstep += scale;
+            mlx_color color = get_pixel_opt(app->image_atlas.images[2], tex_row + ((unsigned int)tex_pos & (64 - 1)));
+            while (y < stepstep - 1e-6) {
+                set_pixel_opt(app->frame_buffer.buffer, fb_row + y, color);
+                y++;
+            }
+            tex_pos++;
+        }
+        if (stepstep + scale >= app->frame_buffer.height) {
+            mlx_color color = get_pixel_opt(app->image_atlas.images[2], tex_row + ((unsigned int)tex_pos & (64 - 1)));
+            while (y < app->frame_buffer.height) {
+                set_pixel_opt(app->frame_buffer.buffer, fb_row + y, color);
+                y++;
+            }
+        }
     }
     while (y < app->frame_buffer.height)
-        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x000000FF});
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0xFF0000FF});
 }
 
 double dabs(double a) {
