@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 18:49:14 by yben-dje          #+#    #+#             */
-/*   Updated: 2026/08/27 19:11:29 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/08/28 13:47:40 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,17 @@
 #include "raycaster.h"
 #include "map_tools.h"
 
+
+void set_pixel_opt(t_region *frame_buffer, unsigned int i, mlx_color color)
+{
+    frame_buffer->buffer[i] = color;
+}
+
+mlx_color get_pixel_opt(t_region *frame_buffer, unsigned int i)
+{
+    return (frame_buffer->buffer[i]);
+}
+
 void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) {
     unsigned int y;
 
@@ -22,24 +33,23 @@ void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) 
     if (draw_start < 0)
         draw_start = 0;
     int draw_end = ((int)app->frame_buffer.height + line_height) / 2;
-    if (draw_end < 0)
-        draw_end = (int)app->frame_buffer.height - 1;
     if (draw_end > app->frame_buffer.height)
         draw_end = app->frame_buffer.height;
     double step = 64. / (double)line_height;
-    double tex_pos = (draw_start - app->frame_buffer.height /2 + line_height / 2) * step;
+    double tex_pos = (draw_start - app->frame_buffer.height / 2. + line_height / 2.) * step;
     y = 0;
+    unsigned int fb_row = x * app->frame_buffer.buffer->height;
     while (y < draw_start)
-        set_pixel(app->frame_buffer.buffer, x, y++, (mlx_color){ .rgba = 0x000000FF});
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x000000FF});
+    unsigned int tex_row = tex_x * app->image_atlas.images[2]->height;
     while (y < draw_end)
     {
         tex_pos += step;
-        mlx_color color = get_pixel(app->image_atlas.images[2], tex_x, (int)tex_pos & (64 - 1));
-        set_pixel(app->frame_buffer.buffer, x, y, color);
-        y++;
+        mlx_color color = get_pixel_opt(app->image_atlas.images[2], tex_row + ((unsigned int)tex_pos & (64 - 1)));
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, color);
     }
     while (y < app->frame_buffer.height)
-        set_pixel(app->frame_buffer.buffer, x, y++, (mlx_color){ .rgba = 0x000000FF});
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x000000FF});
 }
 
 double dabs(double a) {
@@ -114,7 +124,7 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
         else
             perp_wall_dist = side_dist.y - delta_dist.y;
 
-        int line_height = (int)((double)app->frame_buffer.height / perp_wall_dist);
+        int line_height = app->frame_buffer.height / perp_wall_dist;
 
         double wall_x;
         if (side == 0)
