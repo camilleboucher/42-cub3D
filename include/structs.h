@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/29 15:50:40 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/08/31 14:32:17 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,5 @@ typedef struct s_map
 	uint8_t			floor_rgb[3];
 	uint8_t			ceiling_rgb[3];
 }	t_map;
-
-typedef struct s_player
-{
-	t_vec2f	pos;
-	float		angle;
-}	t_player;
 
 #endif

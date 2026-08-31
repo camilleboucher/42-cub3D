@@ -35,9 +35,38 @@ void handle_mouse_up(int button, void *param)
         app->input_handler.registered_click = true;
 }
 
+void mouse_jail(t_app *app) {
+    t_vec2i mouse_box;
+    mouse_box.x = app->frame_buffer.width / 4;
+    mouse_box.y = app->frame_buffer.height / 4;
+    if (app->input_handler.mouse_pos.x > app->frame_buffer.width / 2 + mouse_box.x)
+    {
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2 - mouse_box.x, app->input_handler.mouse_pos.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2 - mouse_box.x, app->input_handler.mouse_pos.y};
+        app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+    }
+    if (app->input_handler.mouse_pos.x < app->frame_buffer.width / 2 - mouse_box.x)
+    {
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2 + mouse_box.x, app->input_handler.mouse_pos.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2 + mouse_box.x, app->input_handler.mouse_pos.y};
+        app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+    }
+    if (app->input_handler.mouse_pos.y < app->frame_buffer.height / 2 - mouse_box.y)
+    {
+        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 + mouse_box.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 + mouse_box.y};
+        app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+    }
+    if (app->input_handler.mouse_pos.y > app->frame_buffer.height / 2 + mouse_box.y)
+    {
+        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 - mouse_box.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 - mouse_box.y};
+        app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+    }
+}
+
 void ingame_update(t_app *app) {
     t_raycaster raycaster;
-
 
     static double a = 1.0;
     static double last_time = 0.;
@@ -60,14 +89,24 @@ void ingame_update(t_app *app) {
         average = 0.0;
         frame_count = 0;
     }
-    last_time = time;
 
     raycaster = (t_raycaster){0};
 
     raycaster.camera_pos = app->player.pos;
+    raycaster.camera_dir.x = cos(app->player.angle);
+    raycaster.camera_dir.y = sin(app->player.angle);
     //clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
+
+    mouse_jail(app);
+    player_input(&app->player, &app->input_handler, time - last_time);
+    
+    app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
+    app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
+    app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     draw_raycast(app, &raycaster);
+    //apply_blur(app, 3, 2);
     push_frame_buffer_to_screen(app);
+    last_time = time;
 }
 
 void window_event_handle(int event, void *param)

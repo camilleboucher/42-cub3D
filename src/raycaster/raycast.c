@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yben-dje <yben-dje@student.642.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/27 18:49:14 by yben-dje          #+#    #+#             */
-/*   Updated: 2026/08/28 19:34:07 by yben-dje         ###   ########.fr       */
+/*   Created: 2026/08/27 18:649:164 by yben-dje          #+#    #+#             */
+/*   Updated: 2026/08/31 17:643:07 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) 
         {
             tex_pos += (int)((line_height - app->frame_buffer.height) * step) / 2;
             stop -= (int)((line_height - app->frame_buffer.height) * step) / 2;
-            stop -= max((stepstep + scale * (stop - tex_pos)) - app->frame_buffer.height, 0) / scale;
+            stop -= max((stepstep + scale * (stop - tex_pos)) - (app->frame_buffer.height - 1), 0) / scale;
         }
         while (tex_pos < stop)
         {
@@ -79,7 +79,7 @@ void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) 
             }
             tex_pos++;
         }
-        if (stepstep + scale >= app->frame_buffer.height) {
+        if (tex_pos < 64 && stepstep + scale >= app->frame_buffer.height - 1) {
             mlx_color color = get_pixel_opt(app->image_atlas.images[2], tex_row + ((unsigned int)tex_pos & (64 - 1)));
             while (y < app->frame_buffer.height) {
                 set_pixel_opt(app->frame_buffer.buffer, fb_row + y, color);
@@ -99,13 +99,16 @@ double dabs(double a) {
 
 void draw_raycast(t_app *app, t_raycaster *raycaster) {
     int x;
-    t_vec2f dir = {-1., 0.};
-    t_vec2f plane = {0, 0.66};
-
+    t_vec2f plane = {0., 0.66};
+    plane.x = -raycaster->camera_dir.y;
+    plane.y = raycaster->camera_dir.x;
+    plane = vec2f_div(plane, vec2f_lenght(plane));
+    plane = vec2f_mul(plane, 0.66);
+    
     x = 0;
     while (x < app->frame_buffer.width) {
         double camera_x = 2 * x / (double)app->frame_buffer.width - 1;
-        t_vec2f ray_dir = {dir.x + plane.x * camera_x, dir.y + plane.y * camera_x};
+        t_vec2f ray_dir = {raycaster->camera_dir.x + plane.x * camera_x, raycaster->camera_dir.y + plane.y * camera_x};
         t_vec2i map_pos = {(int)raycaster->camera_pos.x , (int)raycaster->camera_pos.y};
         t_vec2f side_dist;
         t_vec2f delta_dist;
@@ -161,19 +164,23 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
         if(side == 0)
             perp_wall_dist = side_dist.x - delta_dist.x;
         else
-            perp_wall_dist = side_dist.y - delta_dist.y;
-
-        int line_height = app->frame_buffer.height / perp_wall_dist;
+            perp_wall_dist = side_dist.y - delta_dist.y;        
 
         double wall_x;
         if (side == 0)
             wall_x = raycaster->camera_pos.y + perp_wall_dist * ray_dir.y;
         else
             wall_x = raycaster->camera_pos.x + perp_wall_dist * ray_dir.x;
+        
+        //perp_wall_dist += cos((double)wall_x + 1.);
+        int line_height = app->frame_buffer.height / perp_wall_dist;
+        //if (line_height > app->frame_buffer.height * 64)
+        //    {x++; continue ;}
         wall_x -= floorf(wall_x);
+                
         int tex_x = wall_x * 64.;
         if (side == 0 && ray_dir.x > 0) tex_x = 64 - tex_x - 1;
-        if (side == 1 && ray_dir.x < 0) tex_x = 64 - tex_x - 1;
+        if (side == 1 && ray_dir.y < 0) tex_x = 64 - tex_x - 1;
         draw_vertical_line(app, x, line_height, tex_x);
         x++;
     }

@@ -25,4 +25,8 @@ double		vec2f_lenght(t_vec2f a);
 
 double		vec2f_dist(t_vec2f a, t_vec2f b);
 
+t_vec2f		vec2f_sub(t_vec2f a, t_vec2f b);
+
+t_vec2f vec2f_normalize(t_vec2f a);
+
 #endif

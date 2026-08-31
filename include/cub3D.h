@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:51:12 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 22:57:18 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/31 15:42:20 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include "structs.h"
 
 # include "error_manager.h"
+# include "player.h"
 # include "parser.h"
 
 #endif
