@@ -172,10 +172,7 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
         else
             wall_x = raycaster->camera_pos.x + perp_wall_dist * ray_dir.x;
         
-        //perp_wall_dist += cos((double)wall_x + 1.);
         int line_height = app->frame_buffer.height / perp_wall_dist;
-        //if (line_height > app->frame_buffer.height * 64)
-        //    {x++; continue ;}
         wall_x -= floorf(wall_x);
                 
         int tex_x = wall_x * 64.;

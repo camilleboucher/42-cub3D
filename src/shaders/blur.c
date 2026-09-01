@@ -1,63 +1,80 @@
 #include "cube3D2.h"
+#include "mlx.h"
 
-void blur_pixel(t_app *app, t_vec2i coords, int distance, int steps)
-{
-    t_vec2i neighbor_coords;
-    unsigned int color[3];
-    mlx_color other_color;
-    unsigned int total_color;
-
-    color[0] = 0;
-    color[1] = 0;
-    color[2] = 0;
-    total_color = 0;
-    neighbor_coords.x = coords.x - distance;
-    if (neighbor_coords.x < 0)
-        neighbor_coords.x = 0;
-    while (neighbor_coords.x < coords.x + distance)
-    {
-        if (neighbor_coords.x >= (int)app->frame_buffer.width)
-            break;
-        neighbor_coords.y = coords.y - distance;
-        if (neighbor_coords.y < 0)
-            neighbor_coords.y = 0;
-        while (neighbor_coords.y < coords.y + distance)
-        {
-            if (neighbor_coords.y >= (int)app->frame_buffer.height)
-                break;
-            other_color = get_pixel(app->frame_buffer.buffer, neighbor_coords.x, neighbor_coords.y);
-            color[0] += other_color.r;
-            color[1] += other_color.g;
-            color[2] += other_color.b;
-            total_color++;
-            neighbor_coords.y += steps;
-        }
-        neighbor_coords.x += steps;
-    }
-    set_pixel(app->frame_buffer.shader_buffer, coords.x, coords.y, (mlx_color){.r = color[0] / total_color, .g = color[1] / total_color, .b = color[2] / total_color, .a = 0xFF});
-}
+// Adapted from https://zingl.github.io/blurring.html
 
 void apply_blur(t_app *app, int distance, int quality)
 {
-    t_vec2i coords;
-    t_region *temp_swap;
-    int steps;
+    mlx_color buffer [5] = { 0 };
 
-    steps = distance / quality;
-    if (steps < 1)
-        steps = 1;
-    coords.x = 0;
-    while (coords.x < (int)app->frame_buffer.width)
+    unsigned int x = 0;
+    while (x < (int)app->frame_buffer.width - 5)
     {
-        coords.y = 0;
-        while (coords.y < (int)app->frame_buffer.height)
+        long dif[3] = {0};
+        long sum[3] = {0};
+        int y = 0;
+        while (y < (int)app->frame_buffer.height - 5)
         {
-            blur_pixel(app, coords, distance, steps);
-            coords.y++;
+            sum[0] += (long)dif[0];
+            sum[1] += (long)dif[1];
+            sum[2] += (long)dif[2];
+            mlx_color color = get_pixel(app->frame_buffer.buffer, x, y + 5);
+            dif[0] += (long)color.r;
+            dif[1] += (long)color.g;
+            dif[2] += (long)color.b;
+            if (y >= 0)
+            {
+                dif[0] += (long)buffer[y % 5].r;
+                dif[1] += (long)buffer[y % 5].g;
+                dif[2] += (long)buffer[y % 5].b;
+                set_pixel(app->frame_buffer.buffer, x, y, (mlx_color){ .r = sum[0] / (5 * 5), .g = sum[1] / (5 * 5), .b = sum[2] / (5 * 5), .a=255});
+            }
+            if (y + 5 >= 0) {
+                mlx_color p = get_pixel(app->frame_buffer.buffer, x, y);
+                buffer[y % 5] = p;
+                dif[0] -= 2 * (long)p.r;
+                dif[1] -= 2 * (long)p.g;
+                dif[2] -= 2 * (long)p.b;
+            }
+            y++;
         }
-        coords.x++;
+        x++;
     }
-    temp_swap = app->frame_buffer.shader_buffer;
-    app->frame_buffer.shader_buffer = app->frame_buffer.buffer;
-    app->frame_buffer.buffer = temp_swap;
+
+
+
+    unsigned int y = 0;
+    while (y < (int)app->frame_buffer.height - 5)
+    {
+        long dif[3] = {0};
+        long sum[3] = {0};
+        int x = 0;
+        while (x < (int)app->frame_buffer.width - 5)
+        {
+            sum[0] += (long)dif[0];
+            sum[1] += (long)dif[1];
+            sum[2] += (long)dif[2];
+            mlx_color color = get_pixel(app->frame_buffer.buffer, x + 5, y);
+            dif[0] += (long)color.r;
+            dif[1] += (long)color.g;
+            dif[2] += (long)color.b;
+            if (x >= 0)
+            {
+                dif[0] += (long)buffer[x % 5].r;
+                dif[1] += (long)buffer[x % 5].g;
+                dif[2] += (long)buffer[x % 5].b;
+                set_pixel(app->frame_buffer.buffer, x, y, (mlx_color){ .r = sum[0] / (5 * 5), .g = sum[1] / (5 * 5), .b = sum[2] / (5 * 5), .a=255});
+            }
+            if (x + 5 >= 0) {
+                mlx_color p = get_pixel(app->frame_buffer.buffer, x, y);
+                buffer[x % 5] = p;
+                dif[0] -= 2 * (long)p.r;
+                dif[1] -= 2 * (long)p.g;
+                dif[2] -= 2 * (long)p.b;
+            }
+            x++;
+        }
+        y++;
+    }
+    
 }
