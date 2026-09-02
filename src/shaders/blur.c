@@ -3,78 +3,66 @@
 
 // Adapted from https://zingl.github.io/blurring.html
 
+#define BLUR_RADIUS 32
+
+void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color) {
+    unsigned int i;
+
+    sum[0] = BLUR_RADIUS * (long)color.r;
+    sum[1] = BLUR_RADIUS * (long)color.g;
+    sum[2] = BLUR_RADIUS * (long)color.b;
+    i = 0;
+    while (i < BLUR_RADIUS)
+        buffer[i++] = color;
+}
+
 void apply_blur(t_app *app, int distance, int quality)
 {
-    mlx_color buffer [5] = { 0 };
+    mlx_color buffer[BLUR_RADIUS];
 
-    unsigned int x = 0;
-    while (x < (int)app->frame_buffer.width - 5)
+    unsigned int row = 0;
+    while (row < app->frame_buffer.width * app->frame_buffer.height)
     {
-        long dif[3] = {0};
         long sum[3] = {0};
+        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.buffer, row));
         int y = 0;
-        while (y < (int)app->frame_buffer.height - 5)
+        while (y < app->frame_buffer.height)
         {
-            sum[0] += (long)dif[0];
-            sum[1] += (long)dif[1];
-            sum[2] += (long)dif[2];
-            mlx_color color = get_pixel(app->frame_buffer.buffer, x, y + 5);
-            dif[0] += (long)color.r;
-            dif[1] += (long)color.g;
-            dif[2] += (long)color.b;
-            if (y >= 0)
-            {
-                dif[0] += (long)buffer[y % 5].r;
-                dif[1] += (long)buffer[y % 5].g;
-                dif[2] += (long)buffer[y % 5].b;
-                set_pixel(app->frame_buffer.buffer, x, y, (mlx_color){ .r = sum[0] / (5 * 5), .g = sum[1] / (5 * 5), .b = sum[2] / (5 * 5), .a=255});
-            }
-            if (y + 5 >= 0) {
-                mlx_color p = get_pixel(app->frame_buffer.buffer, x, y);
-                buffer[y % 5] = p;
-                dif[0] -= 2 * (long)p.r;
-                dif[1] -= 2 * (long)p.g;
-                dif[2] -= 2 * (long)p.b;
-            }
+            sum[0] -= buffer[y % BLUR_RADIUS].r;
+            sum[1] -= buffer[y % BLUR_RADIUS].g;
+            sum[2] -= buffer[y % BLUR_RADIUS].b;
+            mlx_color color = get_pixel_opt(app->frame_buffer.buffer, row + y);
+            sum[0] += color.r;
+            sum[1] += color.g;
+            sum[2] += color.b;
+            buffer[y % BLUR_RADIUS] = color;
+            set_pixel_opt(app->frame_buffer.shader_buffer, row + y, (mlx_color){.r = sum[0] / BLUR_RADIUS, .g = sum[1] / BLUR_RADIUS, .b = sum[2] / BLUR_RADIUS, .a = 255});
             y++;
         }
-        x++;
+        row += app->frame_buffer.height;
     }
 
-
-
     unsigned int y = 0;
-    while (y < (int)app->frame_buffer.height - 5)
+    while (y < app->frame_buffer.height)
     {
-        long dif[3] = {0};
         long sum[3] = {0};
+        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.shader_buffer, y));
         int x = 0;
-        while (x < (int)app->frame_buffer.width - 5)
+        int row = 0;
+        while (x < app->frame_buffer.width)
         {
-            sum[0] += (long)dif[0];
-            sum[1] += (long)dif[1];
-            sum[2] += (long)dif[2];
-            mlx_color color = get_pixel(app->frame_buffer.buffer, x + 5, y);
-            dif[0] += (long)color.r;
-            dif[1] += (long)color.g;
-            dif[2] += (long)color.b;
-            if (x >= 0)
-            {
-                dif[0] += (long)buffer[x % 5].r;
-                dif[1] += (long)buffer[x % 5].g;
-                dif[2] += (long)buffer[x % 5].b;
-                set_pixel(app->frame_buffer.buffer, x, y, (mlx_color){ .r = sum[0] / (5 * 5), .g = sum[1] / (5 * 5), .b = sum[2] / (5 * 5), .a=255});
-            }
-            if (x + 5 >= 0) {
-                mlx_color p = get_pixel(app->frame_buffer.buffer, x, y);
-                buffer[x % 5] = p;
-                dif[0] -= 2 * (long)p.r;
-                dif[1] -= 2 * (long)p.g;
-                dif[2] -= 2 * (long)p.b;
-            }
+            sum[0] -= buffer[x % BLUR_RADIUS].r;
+            sum[1] -= buffer[x % BLUR_RADIUS].g;
+            sum[2] -= buffer[x % BLUR_RADIUS].b;
+            mlx_color color = get_pixel_opt(app->frame_buffer.shader_buffer, row + y);
+            sum[0] += color.r;
+            sum[1] += color.g;
+            sum[2] += color.b;
+            buffer[x % BLUR_RADIUS] = color;
+            set_pixel_opt(app->frame_buffer.buffer, row + y, (mlx_color){.r = sum[0] / BLUR_RADIUS, .g = sum[1] / BLUR_RADIUS, .b = sum[2] / BLUR_RADIUS, .a = 255});
             x++;
+            row += app->frame_buffer.height;
         }
         y++;
     }
-    
 }

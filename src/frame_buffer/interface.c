@@ -24,3 +24,13 @@ void clear_frame_buffer(t_app *app, mlx_color color)
         i++;
     }
 }
+
+void set_pixel_opt(t_region *frame_buffer, unsigned int i, mlx_color color)
+{
+    frame_buffer->buffer[i] = color;
+}
+
+mlx_color get_pixel_opt(t_region *frame_buffer, unsigned int i)
+{
+    return (frame_buffer->buffer[i]);
+}

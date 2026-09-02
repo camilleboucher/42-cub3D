@@ -15,18 +15,6 @@
 #include "raycaster.h"
 #include "map_tools.h"
 
-
-
-void set_pixel_opt(t_region *frame_buffer, unsigned int i, mlx_color color)
-{
-    frame_buffer->buffer[i] = color;
-}
-
-mlx_color get_pixel_opt(t_region *frame_buffer, unsigned int i)
-{
-    return (frame_buffer->buffer[i]);
-}
-
 int max(int a, int b) {
     if (a < b)
         return (b);
@@ -44,7 +32,7 @@ void draw_vertical_line(t_app *app, unsigned int x, int line_height, int tex_x) 
     unsigned int y = 0;
     unsigned int fb_row = x * app->frame_buffer.buffer->height;
     while (y < draw_start)
-        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x000000FF});
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x0000FFFF});
     unsigned int tex_row = tex_x * app->image_atlas.images[2]->height;
     if (step >= 2.) {
         double tex_pos = (draw_start - app->frame_buffer.height / 2. + line_height / 2.) * step;
