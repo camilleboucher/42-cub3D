@@ -3,16 +3,16 @@
 
 // Adapted from https://zingl.github.io/blurring.html
 
-#define BLUR_RADIUS 32
+#define BLUR_RADIUS 5
 
-void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color) {
+void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color, unsigned int size) {
     unsigned int i;
 
-    sum[0] = BLUR_RADIUS * (long)color.r;
-    sum[1] = BLUR_RADIUS * (long)color.g;
-    sum[2] = BLUR_RADIUS * (long)color.b;
+    sum[0] = size * (long)color.r;
+    sum[1] = size * (long)color.g;
+    sum[2] = size * (long)color.b;
     i = 0;
-    while (i < BLUR_RADIUS)
+    while (i < size)
         buffer[i++] = color;
 }
 
@@ -24,7 +24,7 @@ void apply_blur(t_app *app, int distance, int quality)
     while (row < app->frame_buffer.width * app->frame_buffer.height)
     {
         long sum[3] = {0};
-        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.buffer, row));
+        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.buffer, row), BLUR_RADIUS);
         int y = 0;
         while (y < app->frame_buffer.height)
         {
@@ -46,7 +46,7 @@ void apply_blur(t_app *app, int distance, int quality)
     while (y < app->frame_buffer.height)
     {
         long sum[3] = {0};
-        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.shader_buffer, y));
+        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.shader_buffer, y), BLUR_RADIUS);
         int x = 0;
         int row = 0;
         while (x < app->frame_buffer.width)
