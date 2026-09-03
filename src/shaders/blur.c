@@ -1,9 +1,7 @@
 #include "cube3D2.h"
 #include "mlx.h"
 
-// Adapted from https://zingl.github.io/blurring.html
-
-#define BLUR_RADIUS 5
+#define BLUR_RADIUS 16
 
 void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color, unsigned int size) {
     unsigned int i;
@@ -16,7 +14,7 @@ void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color, unsigned int 
         buffer[i++] = color;
 }
 
-void apply_blur(t_app *app, int distance, int quality)
+void apply_blur(t_app *app)
 {
     mlx_color buffer[BLUR_RADIUS];
 

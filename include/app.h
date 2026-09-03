@@ -34,6 +34,4 @@ bool app_init(t_app *app);
 
 void app_destroy(t_app *app);
 
-void apply_blur(t_app *app, int distance, int quality);
-
 #endif
