@@ -104,7 +104,7 @@ void ingame_update(t_app *app) {
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     draw_raycast(app, &raycaster);
-    //apply_blur(app, 3, 2);
+    //apply_blur(app, 32, 2);
     push_frame_buffer_to_screen(app);
     last_time = time;
 }

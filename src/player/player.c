@@ -4,9 +4,9 @@
 #include "input_handler.h"
 #include "vector.h"
 
-#define PLAYER_MAX_SPEED 0.8
-#define PLAYER_SPEED_DECREASE 1.
-#define PLAYER_FORCE 1000.
+#define PLAYER_MAX_SPEED 2.
+#define PLAYER_SPEED_DECREASE 6.
+#define PLAYER_FORCE 6.
 
 void player_input(t_player *player, t_input_handler *input_handler, double delta_time) {
     player->forward.x = cos(player->angle);
@@ -30,26 +30,22 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     move = vec2f_mul(vec2f_normalize(move), PLAYER_FORCE);
     player->speed = vec2f_add(player->speed, vec2f_mul(move, delta_time));
 
-        printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
+    printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
 
-
-    if (player->speed.x > PLAYER_MAX_SPEED)
-        player->speed.x = PLAYER_MAX_SPEED;
-    if (player->speed.x < -PLAYER_MAX_SPEED)
-        player->speed.x = -PLAYER_MAX_SPEED;
-    if (player->speed.y > PLAYER_MAX_SPEED)
-        player->speed.y = PLAYER_MAX_SPEED;
-    if (player->speed.y < -PLAYER_MAX_SPEED)
-        player->speed.y = -PLAYER_MAX_SPEED;
+    if (vec2f_lenght(player->speed) > PLAYER_MAX_SPEED)
+        player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
     
-    /*if (player->speed.x > 0.)
-        player->speed.x -= fmin(player->speed.x, PLAYER_SPEED_DECREASE * delta_time);
-    if (player->speed.y > 0.)
-        player->speed.y -= fmin(player->speed.y, PLAYER_SPEED_DECREASE * delta_time);
-    if (player->speed.x < 0.)
-        player->speed.x -= fmax(player->speed.x, -PLAYER_SPEED_DECREASE * delta_time);
-    if (player->speed.y < 0.)
-        player->speed.y -= fmax(player->speed.y, -PLAYER_SPEED_DECREASE * delta_time);*/
+    
+    if (vec2f_lenght(move) < 1e-6) {
+        if (vec2f_lenght(player->speed) > 0.)
+        {
+            t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
+            if (vec2f_lenght(invert_friction) > vec2f_lenght(player->speed))
+                player->speed = (t_vec2f){0., 0.};
+            else
+                player->speed = vec2f_sub(player->speed, invert_friction);
+        }
+    }
 
     printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
 
