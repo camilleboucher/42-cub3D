@@ -87,11 +87,11 @@ double dabs(double a) {
 
 void draw_raycast(t_app *app, t_raycaster *raycaster) {
     int x;
-    t_vec2f plane = {0., 0.66};
+    t_vec2f plane;
     plane.x = -raycaster->camera_dir.y;
     plane.y = raycaster->camera_dir.x;
-    plane = vec2f_div(plane, vec2f_lenght(plane));
-    plane = vec2f_mul(plane, 0.66);
+    plane = vec2f_normalize(plane);
+    plane = vec2f_mul(plane, (double)app->frame_buffer.width / (double)app->frame_buffer.height * 0.5);
     
     x = 0;
     while (x < app->frame_buffer.width) {
