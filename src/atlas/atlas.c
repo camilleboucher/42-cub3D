@@ -70,5 +70,17 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[i] = load_image(app, "assets/stone.png");
     if (!app->image_atlas.images[i++])
         return (false);
+    app->image_atlas.images[i] = load_image(app, "assets/west.png");
+    if (!app->image_atlas.images[i++])
+        return (false);
+    app->image_atlas.images[i] = load_image(app, "assets/east.png");
+    if (!app->image_atlas.images[i++])
+        return (false);
+    app->image_atlas.images[i] = load_image(app, "assets/north.png");
+    if (!app->image_atlas.images[i++])
+        return (false);
+    app->image_atlas.images[i] = load_image(app, "assets/south.png");
+    if (!app->image_atlas.images[i++])
+        return (false);
     return (true);
 }

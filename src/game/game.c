@@ -11,6 +11,7 @@ void main_menu_window_update(t_app *app)
     if (tex_button_update(app, app->main_menu.play_button))
     {
         printf("Click!\n");
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
         app->game_state = ingame;
     }
     push_frame_buffer_to_screen(app);
