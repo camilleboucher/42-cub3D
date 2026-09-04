@@ -12,6 +12,7 @@ void main_menu_window_update(t_app *app)
     {
         printf("Click!\n");
         mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
+        app->input_handler.old_mouse_pos = (t_vec2i){app->frame_buffer.width / 2, app->frame_buffer.height / 2};
         app->game_state = ingame;
     }
     push_frame_buffer_to_screen(app);
@@ -105,6 +106,7 @@ void ingame_update(t_app *app) {
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     draw_raycast(app, &raycaster);
+    render_minimap(app);
     //apply_blur(app, 32, 2);
     push_frame_buffer_to_screen(app);
     last_time = time;

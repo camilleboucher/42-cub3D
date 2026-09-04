@@ -28,5 +28,7 @@ typedef struct s_main_menu
 
 bool tex_button_update(t_app *app, t_tex_button button);
 t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image);
+void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image);
+void render_minimap(t_app *app);
 
 #endif

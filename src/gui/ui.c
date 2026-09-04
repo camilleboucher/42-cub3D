@@ -1,23 +1,5 @@
 #include "cube3D2.h"
 
-void draw_rect(t_app *app, t_vec2i pos, t_vec2i size, mlx_color color)
-{
-    int x;
-    int y;
-
-    x = 0;
-    while (x < size.x)
-    {
-        y = 0;
-        while (y < size.y)
-        {
-            set_pixel(app->frame_buffer.buffer, x, y, color);
-            y++;
-        }
-        x++;
-    }
-}
-
 mlx_color blend_colors(mlx_color a, mlx_color b)
 {
     mlx_color merged;

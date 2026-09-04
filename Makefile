@@ -31,7 +31,8 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
 	   $(SRC_DIR)/time_tools/time_tools.c \
 	   $(SRC_DIR)/input_handler/input_handler.c \
-	   $(SRC_DIR)/player/player.c
+	   $(SRC_DIR)/player/player.c \
+	   $(SRC_DIR)/gui/minimap.c
 
 INCLUDES := -Iinclude -IMacroLibX/includes -Ilibft/include
 
