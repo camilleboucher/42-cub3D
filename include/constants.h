@@ -24,4 +24,8 @@
 # define C_FLOOR '0'
 # define C_WALL '1'
 
+// The minimp's size relative to the screen height
+# define MINIMAP_SCREEN_FRACTION 4
+# define MINIMAP_POS_SCREEN_FRACTION 4
+
 #endif

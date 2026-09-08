@@ -30,7 +30,7 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     move = vec2f_mul(vec2f_normalize(move), PLAYER_FORCE);
     player->speed = vec2f_add(player->speed, vec2f_mul(move, delta_time));
 
-    printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
+    //printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
 
     if (vec2f_lenght(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
@@ -47,7 +47,7 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
         }
     }
 
-    printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
+    //printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
 
     player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
 

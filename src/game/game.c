@@ -1,6 +1,7 @@
 #include "cube3D2.h"
 #include "map_tools.h"
 #include "mlx_keycodes.h"
+#include <stdio.h>
 
 void main_menu_window_update(t_app *app)
 {
@@ -10,7 +11,8 @@ void main_menu_window_update(t_app *app)
     app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.default_image->height) / 2;
     if (tex_button_update(app, app->main_menu.play_button))
     {
-        printf("Click!\n");
+        //printf("Click!\n");
+        app->minimap.showed = true;
         mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
         app->input_handler.old_mouse_pos = (t_vec2i){app->frame_buffer.width / 2, app->frame_buffer.height / 2};
         app->game_state = ingame;
@@ -27,7 +29,6 @@ void handle_resize_event(t_app *app)
     if (!resize_frame_buffer(app, width, height))
         app->request_immediate_abort = true;
 }
-
 void handle_mouse_up(int button, void *param)
 {
     t_app *app;
@@ -125,7 +126,6 @@ void window_event_handle(int event, void *param)
     }
     else if (event == MLX_WINDOW_SIZE_CHANGED)
     {
-        printf("bla\n");
         handle_resize_event(app);
         if (app->request_immediate_abort)
             mlx_loop_end(app->ctx);

@@ -13,7 +13,8 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-#include "vector.h"
+#include "constants.h"
+#include <stdint.h>
 
 typedef enum e_direction
 {

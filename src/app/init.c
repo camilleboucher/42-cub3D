@@ -1,4 +1,6 @@
 #include "cube3D2.h"
+#include "vector.h"
+#include <stdlib.h>
 
 bool app_init(t_app *app)
 {
@@ -18,6 +20,7 @@ bool app_init(t_app *app)
     app->frame_buffer.frame_buffer_image = NULL;
     app->request_immediate_abort = false;
     app->input_handler = (t_input_handler){ 0 };
+    app->minimap.showed = false;
     //mlx_set_fps_goal(app->ctx, 30);
     if (!resize_frame_buffer(app, app->info.width, app->info.height))
         return (false);
@@ -28,7 +31,14 @@ void app_destroy(t_app *app)
 {
     free(app->frame_buffer.buffer);
     free(app->frame_buffer.shader_buffer);
-    mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
+    free(app->frame_buffer.minimap_frame_buffer);
+    free(app->frame_buffer.minimap_overlay_frame_buffer);
+    if (app->frame_buffer.frame_buffer_image)
+        mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
+    if (app->frame_buffer.minimap_frame_buffer_image)
+        mlx_destroy_image(app->ctx, app->frame_buffer.minimap_frame_buffer_image);
+    if (app->frame_buffer.minimap_overlay_frame_buffer_image)
+        mlx_destroy_image(app->ctx, app->frame_buffer.minimap_overlay_frame_buffer_image);
     mlx_destroy_window(app->ctx, app->window);
     mlx_destroy_context(app->ctx);
 }

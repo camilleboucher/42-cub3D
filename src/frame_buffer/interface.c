@@ -34,3 +34,12 @@ mlx_color get_pixel_opt(t_region *frame_buffer, unsigned int i)
 {
     return (frame_buffer->buffer[i]);
 }
+
+void clear_region(t_region *region, mlx_color color)
+{
+    unsigned int i;
+
+    i = 0;
+    while ( i < region->width * region->height)
+        set_pixel_opt(region, i++, color);
+}

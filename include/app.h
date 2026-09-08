@@ -6,9 +6,9 @@
 #include "atlas.h"
 #include "mlx.h"
 #include <stdbool.h>
-#include "cub3D.h"
-#include "cube3D2.h"
-#include "menus.h"
+#include "structs.h"
+#include "player.h"
+#include "ui.h"
 
 typedef enum e_game_state {
     ingame,
@@ -28,6 +28,7 @@ typedef struct s_app
     t_player player;
     t_game_state game_state;
     t_main_menu main_menu;
+    t_minimap minimap;
 } t_app;
 
 bool app_init(t_app *app);

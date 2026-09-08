@@ -13,6 +13,9 @@
 #ifndef COMPONENTS_H
 # define COMPONENTS_H
 
+#include "constants.h"
+#include <stdint.h>
+
 typedef struct s_position
 {
 	TYPE_MAP_SIZE	x;
