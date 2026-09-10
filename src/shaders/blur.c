@@ -1,7 +1,7 @@
 #include "cube3D2.h"
 #include "mlx.h"
 
-#define BLUR_RADIUS 16
+#define BLUR_RADIUS 64
 
 void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color, unsigned int size) {
     unsigned int i;

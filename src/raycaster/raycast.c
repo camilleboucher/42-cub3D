@@ -58,7 +58,7 @@ void draw_vertical_line(t_app *app, t_hit_info hit) {
         double stepstep = (((int)app->frame_buffer.height - hit.line_height) / 2.);
         if (stepstep < -scale)
             stepstep = fmod(stepstep, scale);
-        int stop = 64.;
+        int stop = 64;
         if (hit.line_height > app->frame_buffer.height)
         {
             tex_pos += (int)((hit.line_height - app->frame_buffer.height) * step) / 2;

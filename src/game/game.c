@@ -1,6 +1,10 @@
 #include "cube3D2.h"
+#include "input_handler.h"
 #include "map_tools.h"
+#include "mlx.h"
 #include "mlx_keycodes.h"
+#include <stdio.h>
+#include "shaders.h"
 
 void main_menu_window_update(t_app *app)
 {
@@ -81,15 +85,12 @@ void ingame_update(t_app *app) {
     old_average = average;
     frame_count++;
     printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
-    if (is_key_down(&app->input_handler, MLX_KEY_SPACE) && last_time != 0.)
-    {
-        //app->player.pos.x += (time - last_time) * 0.2;
-        app->player.pos.y -= (time - last_time) * 0.4;
-    }
     if (is_key_down(&app->input_handler, MLX_KEY_C)) {
         average = 0.0;
         frame_count = 0;
     }
+    if (last_time == 0.)
+        last_time = time;
 
     raycaster = (t_raycaster){0};
 
@@ -99,13 +100,16 @@ void ingame_update(t_app *app) {
     //clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
 
     mouse_jail(app);
-    player_input(&app->player, &app->input_handler, time - last_time);
+    input_handler_update(&app->input_handler, app->ctx);
     
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+    app->input_handler.total_mouse_pos.x += get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time);
+    //printf("%f\n", get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time));
+    player_input(&app->player, &app->input_handler, time - last_time);
     draw_raycast(app, &raycaster);
-    //apply_blur(app, 32, 2);
+    //apply_blur(app);
     push_frame_buffer_to_screen(app);
     last_time = time;
 }
@@ -163,6 +167,24 @@ void handle_key_up(int key, void *param) {
     input_handler_set_up(&app->input_handler, key);
 }
 
+void handle_controler_down(mlx_controller_event_code event, void *param) {
+    t_app *app;
+
+    app = param;
+    if (event.button == MLX_CONTROLLER_CONNECT)
+    {
+        printf("aaaa\n");
+        if (app->input_handler.controler_count < 4)
+            app->input_handler.controler_count += 1;
+    }
+    if (event.button == MLX_CONTROLLER_DISCONNECT)
+    {
+        printf("bbbb\n");
+        if (app->input_handler.controler_count > 0)
+            app->input_handler.controler_count -= 1;
+    }
+}
+
 void main_loop(t_app *app)
 {
     app->game_state = main_menu;
@@ -173,5 +195,7 @@ void main_loop(t_app *app)
     mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app);
     mlx_on_event(app->ctx, app->window, MLX_KEYDOWN, &handle_key_down, app);
     mlx_on_event(app->ctx, app->window, MLX_KEYUP, &handle_key_up, app);
+    mlx_on_event(app->ctx, app->window, MLX_CONTROLLERDOWN, (void(*)(int, void*))handle_controler_down, app);
+	//mlx_on_event(app->ctx, app->window, MLX_CONTROLLERUP, (void(*)(int, void*))handle_controler_, NULL);
     mlx_loop(app->ctx);
 }
