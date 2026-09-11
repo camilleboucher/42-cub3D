@@ -1,10 +1,23 @@
+#include "app.h"
 #include "cube3D2.h"
+#include "frame_buffer.h"
 #include "input_handler.h"
 #include "map_tools.h"
 #include "mlx.h"
 #include "mlx_keycodes.h"
 #include <stdio.h>
 #include "shaders.h"
+
+void handle_resize_event(t_app *app)
+{
+    int width;
+    int height;
+
+    mlx_get_window_size(app->ctx, app->window, &width, &height);
+    if (!resize_frame_buffer(app, width, height))
+        app->request_immediate_abort = true;
+}
+
 
 void main_menu_window_update(t_app *app)
 {
@@ -17,18 +30,11 @@ void main_menu_window_update(t_app *app)
         printf("Click!\n");
         mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
         app->game_state = ingame;
+        if (app->input_handler.controler_count > 1)
+            handle_resize_event(app);
     }
+    push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
-}
-
-void handle_resize_event(t_app *app)
-{
-    int width;
-    int height;
-
-    mlx_get_window_size(app->ctx, app->window, &width, &height);
-    if (!resize_frame_buffer(app, width, height))
-        app->request_immediate_abort = true;
 }
 
 void handle_mouse_up(int button, void *param)
@@ -73,12 +79,9 @@ void mouse_jail(t_app *app) {
 void ingame_update(t_app *app) {
     t_raycaster raycaster;
 
-    static double a = 1.0;
     static double last_time = 0.;
     static double old_average = 0.0;
     static unsigned int frame_count = 0;
-
-    //printf("%f - %f\n", app->player.pos, app->player.pos.y);
 
     double time = get_time();
     double average = (1. / (time - last_time) + old_average * (double)frame_count) / ((double)frame_count + 1.);
@@ -92,26 +95,30 @@ void ingame_update(t_app *app) {
     if (last_time == 0.)
         last_time = time;
 
-    raycaster = (t_raycaster){0};
-
-    raycaster.camera_pos = app->player.pos;
-    raycaster.camera_dir.x = cos(app->player.angle);
-    raycaster.camera_dir.y = sin(app->player.angle);
-    //clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
-
     mouse_jail(app);
     input_handler_update(&app->input_handler, app->ctx);
-    
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     app->input_handler.total_mouse_pos.x += get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time);
-    //printf("%f\n", get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time));
-    player_input(&app->player, &app->input_handler, time - last_time);
-    draw_raycast(app, &raycaster);
-    //apply_blur(app);
-    push_frame_buffer_to_screen(app);
+
+
+    unsigned int player_index;
+    player_index = 0;
+    while (player_index < app->input_handler.controler_count)
+    {
+        raycaster = (t_raycaster){0};
+        raycaster.camera_pos = app->players[player_index].pos;
+        raycaster.camera_dir.x = cos(app->players[player_index].angle);
+        raycaster.camera_dir.y = sin(app->players[player_index].angle);
+        player_input(&app->players[player_index], &app->input_handler, time - last_time, player_index);
+        draw_raycast(app, &raycaster);
+        //apply_blur(app);
+        push_buffer_to_screen_image(app, player_index);
+        player_index++;
+    }
     last_time = time;
+    push_frame_buffer_to_screen(app);
 }
 
 void window_event_handle(int event, void *param)
@@ -176,12 +183,16 @@ void handle_controler_down(mlx_controller_event_code event, void *param) {
         printf("aaaa\n");
         if (app->input_handler.controler_count < 4)
             app->input_handler.controler_count += 1;
+        if (app->game_state == ingame)
+            handle_resize_event(app);
     }
     if (event.button == MLX_CONTROLLER_DISCONNECT)
     {
         printf("bbbb\n");
         if (app->input_handler.controler_count > 0)
             app->input_handler.controler_count -= 1;
+        if (app->game_state == ingame)
+            handle_resize_event(app);
     }
 }
 

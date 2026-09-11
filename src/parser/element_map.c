@@ -120,18 +120,21 @@ static bool		save_player(char *s, int *i, t_app *app, t_error *error)
 	dir = s[*i];
 	if (!(dir == 'N' || dir == 'S' || dir == 'E' || dir == 'W'))
 		return (false);
-	if (app->player.pos.x || app->player.pos.y)
+	if (app->players[0].pos.x || app->players[0].pos.y)
 		*error |= ERR_DUPLICATE_PLAYER;
 	else if (dir == 'E')
-		app->player.angle = 0;
+		app->players[0].angle = 0;
 	else if (dir == 'N')
-		app->player.angle = M_PI_2;
+		app->players[0].angle = M_PI_2;
 	else if (dir == 'W')
-		app->player.angle = M_PI;
+		app->players[0].angle = M_PI;
 	else if (dir == 'S')
-		app->player.angle = -M_PI_2;
+		app->players[0].angle = -M_PI_2;
 	app->map.cell[*i + app->map.height * MAP_SIZE_MAX_VALS] = C_FLOOR;
-	app->player.pos = (t_vec2f){*i, app->map.height};
+	app->players[0].pos = (t_vec2f){*i, app->map.height};
+	app->players[1].pos = (t_vec2f){*i, app->map.height};
+	app->players[2].pos = (t_vec2f){*i, app->map.height};
+	app->players[3].pos = (t_vec2f){*i, app->map.height};
 	(*i)++;
 	return (true);
 }

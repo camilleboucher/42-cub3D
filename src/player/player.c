@@ -10,7 +10,7 @@
 #define PLAYER_SPEED_DECREASE 8.
 #define PLAYER_FORCE 15.
 
-void player_input(t_player *player, t_input_handler *input_handler, double delta_time) {
+void player_input(t_player *player, t_input_handler *input_handler, double delta_time, unsigned int index) {
     bool keyboard_control;
     player->forward.x = cos(player->angle);
     player->forward.y = sin(player->angle);
@@ -19,8 +19,8 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     player->right.y = cos(player->angle);
     t_vec2f move = {0., 0.};
     keyboard_control = false;
-    move = vec2f_add(move, vec2f_mul(player->forward, -get_controler_left_vector(input_handler, 0).y));
-    move = vec2f_add(move, vec2f_mul(player->right, get_controler_left_vector(input_handler, 0).x));
+    move = vec2f_add(move, vec2f_mul(player->forward, -get_controler_left_vector(input_handler, index).y));
+    move = vec2f_add(move, vec2f_mul(player->right, get_controler_left_vector(input_handler, index).x));
 
 
     if (is_key_down(input_handler, MLX_KEY_W)) {
@@ -64,7 +64,8 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
 
     player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
 
-    player->angle = input_handler->total_mouse_pos.x / 200.;
+    //player->angle = input_handler->total_mouse_pos.x / 200.;
+    player->angle += get_controler_right_vector(input_handler, index).x * delta_time * 2.5;
     if (player->angle > M_PI)
         player->angle -= M_PI * 2.;
     if (player->angle < -M_PI)

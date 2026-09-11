@@ -1,3 +1,4 @@
+#include "app.h"
 #include "cube3D2.h"
 
 bool app_init(t_app *app)
@@ -15,8 +16,9 @@ bool app_init(t_app *app)
         return (false);
     app->frame_buffer.buffer = NULL;
     app->frame_buffer.shader_buffer = NULL;
-    app->frame_buffer.frame_buffer_image = NULL;
+    app->frame_buffer.screen_image = NULL;
     app->request_immediate_abort = false;
+    app->game_state = main_menu;
     app->input_handler = (t_input_handler){ 0 };
     //mlx_set_fps_goal(app->ctx, 30);
     if (!resize_frame_buffer(app, app->info.width, app->info.height))
@@ -28,7 +30,7 @@ void app_destroy(t_app *app)
 {
     free(app->frame_buffer.buffer);
     free(app->frame_buffer.shader_buffer);
-    mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
+    mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
     mlx_destroy_window(app->ctx, app->window);
     mlx_destroy_context(app->ctx);
 }

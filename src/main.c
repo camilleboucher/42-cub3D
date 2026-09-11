@@ -65,9 +65,9 @@ static void load_map(t_app *app, char *map_path)
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
-	init_game(&app->player, &app->map);
+	init_game(app->players, &app->map);
 	parsing(fd, app);
-	print_map_player(&app->map, &app->player); // WARN: TMP
+	print_map_player(&app->map, &app->players[0]); // WARN: TMP
 	// TODO: FAIRE UN MOD CLEANER
 	free(app->map.path_textures[0]);
 	free(app->map.path_textures[1]);
@@ -106,9 +106,12 @@ static int open_map(char *path)
 	return (fd);
 }
 
-static void init_game(t_player *player, t_map *map)
+static void init_game(t_player *players, t_map *map)
 {
-	player->pos = (t_vec2f){0};
+	players[0].pos = (t_vec2f){0};
+	players[0].pos = (t_vec2f){0};
+	players[0].pos = (t_vec2f){0};
+	players[0].pos = (t_vec2f){0};
 	ft_memset(map->cell, C_VOID, sizeof(map->cell));
 	map->height = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));

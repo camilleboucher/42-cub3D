@@ -25,7 +25,7 @@ typedef struct s_app
     bool request_immediate_abort;
     t_image_atlas image_atlas;
     t_map map;
-    t_player player;
+    t_player players[4];
     t_game_state game_state;
     t_main_menu main_menu;
 } t_app;
