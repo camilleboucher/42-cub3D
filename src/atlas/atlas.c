@@ -9,7 +9,8 @@ void free_all_images(t_app *app) {
     while (i < app->image_atlas.image_amount)
     {
         if (app->image_atlas.images[i])
-            free(app->image_atlas.images[i++]);
+            free(app->image_atlas.images[i]);
+        i++;
     }
 }
 
@@ -58,29 +59,27 @@ t_region *load_image(t_app *app, char *path)
 }
 
 bool atlas_load_buttons(t_app *app) {
-    unsigned int i;
-
-    i = 0;
-    app->image_atlas.images[i] = load_image(app, "assets/play_button.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.image_amount = 0;
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/play_button.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[i] = load_image(app, "assets/play_button_hover.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/play_button_hover.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[i] = load_image(app, "assets/stone.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/stone.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[i] = load_image(app, "assets/west.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/west.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[i] = load_image(app, "assets/east.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/east.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[i] = load_image(app, "assets/north.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/north.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[i] = load_image(app, "assets/south.png");
-    if (!app->image_atlas.images[i++])
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/south.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
     return (true);
 }

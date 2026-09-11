@@ -1,5 +1,5 @@
 CC := cc
-CFLAGS := -Wall -Wextra -g -O3 -march=native -Wno-unused-result #TODO: -Werror
+CFLAGS := -Wall -Wextra -g -O3 -march=native -Wno-unused-result -fsanitize=address #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
 ifeq ($(FSANITIZE), true)
