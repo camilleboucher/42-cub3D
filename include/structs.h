@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 18:40:24 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/31 14:32:17 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+#include "vector.h"
 
 typedef enum e_direction
 {
@@ -40,17 +42,5 @@ typedef struct s_map
 	uint8_t			floor_rgb[3];
 	uint8_t			ceiling_rgb[3];
 }	t_map;
-
-typedef struct s_player
-{
-	t_position	pos;
-	float		angle;
-}	t_player;
-
-typedef struct s_game
-{
-	t_player	player;
-	t_map		map;
-}	t_game;
 
 #endif
