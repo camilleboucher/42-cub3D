@@ -158,6 +158,8 @@ void handle_key_down(int key, void *param) {
 
     app = param;
     input_handler_set_down(&app->input_handler, key);
+    if (key == MLX_KEY_ESCAPE)
+        mlx_loop_end(app->ctx);
 }
 
 void handle_key_up(int key, void *param) {
