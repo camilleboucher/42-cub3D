@@ -25,6 +25,10 @@ int main(int argc, char *argv[])
 		app_destroy(&app);
 		return (1);
 	}
+	free(app.map.path_textures[0]);
+	free(app.map.path_textures[1]);
+	free(app.map.path_textures[2]);
+	free(app.map.path_textures[3]);
 	main_loop(&app);
 	free_all_images(&app);
 	app_destroy(&app);
@@ -67,12 +71,16 @@ static void load_map(t_app *app, char *map_path)
 	fd = open_map(map_path);
 	init_game(app->players, &app->map);
 	parsing(fd, app);
+	app->map.ceil_color = (mlx_color){ .r=app->map.ceiling_rgb[0], .g=app->map.ceiling_rgb[1], .b=app->map.ceiling_rgb[2], .a=0xFF };
+	app->map.floor_color = (mlx_color){ .r=app->map.floor_rgb[0], .g=app->map.floor_rgb[1], .b=app->map.floor_rgb[2], .a=0xFF };
 	print_map_player(&app->map, &app->players[0]); // WARN: TMP
 	// TODO: FAIRE UN MOD CLEANER
-	free(app->map.path_textures[0]);
+
+	// Why is is freed now ?
+	/*free(app->map.path_textures[0]);
 	free(app->map.path_textures[1]);
 	free(app->map.path_textures[2]);
-	free(app->map.path_textures[3]);
+	free(app->map.path_textures[3]);*/
 }
 
 static void check_file_extension(char *path, char *ext, int ext_size)

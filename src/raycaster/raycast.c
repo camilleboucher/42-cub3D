@@ -40,7 +40,7 @@ void draw_vertical_line(t_app *app, t_hit_info hit) {
     unsigned int y = 0;
     unsigned int fb_row = hit.screen_x * app->frame_buffer.buffer->height;
     while (y < draw_start)
-        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0x0000FFFF });
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, app->map.ceil_color);
     unsigned int tex_row = hit.tex_x * app->image_atlas.images[3 + hit.side]->height;
     if (step >= 2.) {
         double tex_pos = (draw_start - app->frame_buffer.height / 2. + hit.line_height / 2.) * step;
@@ -84,7 +84,7 @@ void draw_vertical_line(t_app *app, t_hit_info hit) {
         }
     }
     while (y < app->frame_buffer.height)
-        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, (mlx_color){ .rgba = 0xFF0000FF});
+        set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, app->map.floor_color);
 }
 
 double dabs(double a) {
