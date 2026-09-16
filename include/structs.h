@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/31 14:32:17 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/09/15 17:04:28 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STRUCTS_H
 
 #include "vector.h"
+#include "mlx.h"
 
 typedef enum e_direction
 {
@@ -41,6 +42,8 @@ typedef struct s_map
 	char			*path_textures[4];
 	uint8_t			floor_rgb[3];
 	uint8_t			ceiling_rgb[3];
+	mlx_color		floor_color;
+	mlx_color		ceil_color;
 }	t_map;
 
 #endif
