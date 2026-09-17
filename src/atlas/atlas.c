@@ -78,7 +78,31 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[3]);
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[2]);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/two.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/three.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one_hover.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/two_hover.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/three_hover.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four_hover.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/how_many_players.png");
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
     return (true);
