@@ -101,9 +101,9 @@ bool tex_button_update(t_app *app, t_tex_button button)
 {
     bool clicked;
 
-    button.is_hover = point_to_box_collision(button.pos, button.size, app->input_handler.mouse_pos) 
-        && get_pixel(button.default_image, app->input_handler.mouse_pos.x - button.pos.x,
-            app->input_handler.mouse_pos.y - button.pos.y).a != 0;
+    button.is_hover = point_to_box_collision(button.pos, button.size, app->input_handler.mouse_pos)
+        && get_pixel(button.default_image, (app->input_handler.mouse_pos.x - button.pos.x) * button.default_image->width / button.size.x,
+            (app->input_handler.mouse_pos.y - button.pos.y) * button.default_image->height / button.size.y).a != 0;
     tex_button_draw(app, button);
     clicked = button.is_hover && app->input_handler.registered_click;
     app->input_handler.registered_click = false;
