@@ -106,7 +106,8 @@ bool tex_button_update(t_app *app, t_tex_button button)
             (app->input_handler.mouse_pos.y - button.pos.y) * button.default_image->height / button.size.y).a != 0;
     tex_button_draw(app, button);
     clicked = button.is_hover && app->input_handler.registered_click;
-    app->input_handler.registered_click = false;
+    if (clicked)
+        app->input_handler.registered_click = false;
     return (clicked);
 }
 
