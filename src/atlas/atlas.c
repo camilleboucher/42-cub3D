@@ -78,6 +78,9 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[3]);
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[2]);
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one.png");
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);

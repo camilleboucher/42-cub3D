@@ -10,6 +10,7 @@
 #include "ui.h"
 #include "vector.h"
 
+
 void handle_resize_event(t_app *app)
 {
     int width;
@@ -25,8 +26,8 @@ void main_menu_window_update(t_app *app)
 {
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
     // apply_blur(app, a / 2 % 20 + 1, 5);
-    app->main_menu.play_button.pos.x = ((int)app->frame_buffer.width - (int)app->main_menu.play_button.default_image->width) / 2;
-    app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.default_image->height) / 2;
+    app->main_menu.play_button.pos.x = ((int)app->frame_buffer.width - (int)app->main_menu.play_button.size.x) / 2;
+    app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.size.y) / 2;
     if (tex_button_update(app, app->main_menu.play_button))
         app->game_state = player_count_select;
     push_buffer_to_screen_image(app, 0);
@@ -153,7 +154,7 @@ void player_count_menu_window_update(t_app *app)
 {
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
     // apply_blur(app, a / 2 % 20 + 1, 5);
-    draw_image_strech(app, (t_vec2i){((int)app->frame_buffer.buffer->width - 619) / 2, ((int)app->frame_buffer.buffer->height - 311) / 2 - 250}, (t_vec2i){619, 311}, app->image_atlas.images[14]);
+    draw_image_strech(app, (t_vec2i){((int)app->frame_buffer.buffer->width - 619) / 2, ((int)app->frame_buffer.buffer->height - 311) / 2 - 250}, (t_vec2i){619, 311}, app->image_atlas.images[15]);
     app->player_count_menu.one_button.pos.x = ((int)app->frame_buffer.width) / 2 - 50 - app->player_count_menu.one_button.size.x;
     app->player_count_menu.one_button.pos.y = ((int)app->frame_buffer.height) / 2 - 50 - app->player_count_menu.one_button.size.y + 200;
 
@@ -172,17 +173,17 @@ void player_count_menu_window_update(t_app *app)
     if (tex_button_update(app, app->player_count_menu.three_button))
         {app->input_handler.player_count = 3; start_game(app);}
     if (tex_button_update(app, app->player_count_menu.four_button))
-        {app->input_handler.player_count = 4; start_game(app);}
+        {app->input_handler.player_count = 4; start_game(app);printf("ca\n");}
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
 }
 
 void init_player_count_menu(t_app *app)
 {
-    app->player_count_menu.one_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[6], app->image_atlas.images[10]);
-    app->player_count_menu.two_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[7], app->image_atlas.images[11]);
-    app->player_count_menu.three_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
-    app->player_count_menu.four_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
+    app->player_count_menu.one_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[7], app->image_atlas.images[11]);
+    app->player_count_menu.two_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
+    app->player_count_menu.three_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
+    app->player_count_menu.four_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[10], app->image_atlas.images[14]);
 }
 
 void game_update(void *param) {
