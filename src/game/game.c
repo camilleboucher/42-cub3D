@@ -111,6 +111,8 @@ void ingame_update(t_app *app) {
         player_input(&app->players[player_index], &app->input_handler, time - last_time, player_index);
         draw_raycast(app, &raycaster);
         //apply_blur(app);
+        /*if (vec2f_lenght(app->players->speed) > 0.1)
+            apply_blur(app, vec2f_lenght(app->players[player_index].speed) * 10);*/
         push_buffer_to_screen_image(app, player_index);
         player_index++;
     }
