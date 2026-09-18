@@ -145,9 +145,9 @@ void init_main_menu(t_app *app)
 
 void start_game(t_app *app) {
     mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
-    if (app->input_handler.controler_count > 1)
-        handle_resize_event(app);
     app->game_state = ingame;
+    if (app->input_handler.player_count > 1)
+        handle_resize_event(app);
 }
 
 void player_count_menu_window_update(t_app *app)
@@ -173,7 +173,7 @@ void player_count_menu_window_update(t_app *app)
     if (tex_button_update(app, app->player_count_menu.three_button))
         {app->input_handler.player_count = 3; start_game(app);}
     if (tex_button_update(app, app->player_count_menu.four_button))
-        {app->input_handler.player_count = 4; start_game(app);printf("ca\n");}
+        {app->input_handler.player_count = 4; start_game(app);}
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
 }
