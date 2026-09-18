@@ -7,6 +7,8 @@
 #include "mlx_keycodes.h"
 #include <stdio.h>
 #include "shaders.h"
+#include "ui.h"
+#include "vector.h"
 
 void handle_resize_event(t_app *app)
 {
@@ -29,7 +31,7 @@ void main_menu_window_update(t_app *app)
     {
         printf("Click!\n");
         mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
-        app->game_state = ingame;
+        app->game_state = player_count_select;
         if (app->input_handler.controler_count > 1)
             handle_resize_event(app);
     }
@@ -146,6 +148,42 @@ void init_main_menu(t_app *app)
     app->main_menu.play_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
 }
 
+void player_count_menu_window_update(t_app *app)
+{
+    clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
+    // apply_blur(app, a / 2 % 20 + 1, 5);
+    draw_image_strech(app, (t_vec2i){((int)app->frame_buffer.buffer->width - 619) / 2, ((int)app->frame_buffer.buffer->height - 311) / 2 - 250}, (t_vec2i){619, 311}, app->image_atlas.images[14]);
+    app->player_count_menu.one_button.pos.x = ((int)app->frame_buffer.width) / 2 - 50 - app->player_count_menu.one_button.size.x;
+    app->player_count_menu.one_button.pos.y = ((int)app->frame_buffer.height) / 2 - 50 - app->player_count_menu.one_button.size.y + 200;
+
+    app->player_count_menu.two_button.pos.x = ((int)app->frame_buffer.width) / 2 + 50;
+    app->player_count_menu.two_button.pos.y = ((int)app->frame_buffer.height) / 2 - 50 - app->player_count_menu.one_button.size.y + 200;
+
+    app->player_count_menu.three_button.pos.x = ((int)app->frame_buffer.width) / 2 - 50 - app->player_count_menu.one_button.size.x;
+    app->player_count_menu.three_button.pos.y = ((int)app->frame_buffer.height) / 2 + 50 + 200;
+
+    app->player_count_menu.four_button.pos.x = ((int)app->frame_buffer.width) / 2 + 50;
+    app->player_count_menu.four_button.pos.y = ((int)app->frame_buffer.height) / 2 + 50 + 200;
+    if (tex_button_update(app, app->player_count_menu.one_button))
+        ; // TODO
+    if (tex_button_update(app, app->player_count_menu.two_button))
+        ; // TODO
+    if (tex_button_update(app, app->player_count_menu.three_button))
+        ; // TODO
+    if (tex_button_update(app, app->player_count_menu.four_button))
+        ; // TODO
+    push_buffer_to_screen_image(app, 0);
+    push_frame_buffer_to_screen(app);
+}
+
+void init_player_count_menu(t_app *app)
+{
+    app->player_count_menu.one_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[6], app->image_atlas.images[10]);
+    app->player_count_menu.two_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[7], app->image_atlas.images[11]);
+    app->player_count_menu.three_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
+    app->player_count_menu.four_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
+}
+
 void game_update(void *param) {
     t_app *app;
 
@@ -158,6 +196,8 @@ void game_update(void *param) {
     }
     else if (app->game_state == main_menu)
         main_menu_window_update(app);
+    else if (app->game_state == player_count_select)
+        player_count_menu_window_update(app);
 }
 
 void handle_key_down(int key, void *param) {
@@ -203,6 +243,7 @@ void main_loop(t_app *app)
     app->game_state = main_menu;
 
     init_main_menu(app);
+    init_player_count_menu(app);
     mlx_add_loop_hook(app->ctx, &game_update, app);
     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &window_event_handle, app);
     mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app);

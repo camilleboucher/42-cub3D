@@ -12,6 +12,7 @@
 
 typedef enum e_game_state {
     ingame,
+    player_count_select,
     main_menu,
 } t_game_state;
 
@@ -28,6 +29,7 @@ typedef struct s_app
     t_player players[4];
     t_game_state game_state;
     t_main_menu main_menu;
+    t_player_count_menu player_count_menu;
 } t_app;
 
 bool app_init(t_app *app);

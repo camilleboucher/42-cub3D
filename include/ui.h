@@ -24,9 +24,17 @@ typedef struct s_main_menu
     t_tex_button play_button;
 } t_main_menu;
 
+typedef struct s_player_count_menu
+{
+    t_tex_button one_button;
+    t_tex_button two_button;
+    t_tex_button three_button;
+    t_tex_button four_button;
+} t_player_count_menu;
 
 
 bool tex_button_update(t_app *app, t_tex_button button);
 t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image);
+void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image);
 
 #endif

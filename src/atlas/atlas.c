@@ -102,7 +102,7 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four_hover.png");
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/how_many_players.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/how_many_players_sign.png");
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
     return (true);
