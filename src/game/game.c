@@ -28,13 +28,7 @@ void main_menu_window_update(t_app *app)
     app->main_menu.play_button.pos.x = ((int)app->frame_buffer.width - (int)app->main_menu.play_button.default_image->width) / 2;
     app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.default_image->height) / 2;
     if (tex_button_update(app, app->main_menu.play_button))
-    {
-        printf("Click!\n");
-        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
         app->game_state = player_count_select;
-        if (app->input_handler.controler_count > 1)
-            handle_resize_event(app);
-    }
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
 }
@@ -107,7 +101,7 @@ void ingame_update(t_app *app) {
 
     unsigned int player_index;
     player_index = 0;
-    while (player_index < app->input_handler.controler_count)
+    while (player_index < app->input_handler.player_count)
     {
         raycaster = (t_raycaster){0};
         raycaster.camera_pos = app->players[player_index].pos;
@@ -148,6 +142,13 @@ void init_main_menu(t_app *app)
     app->main_menu.play_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
 }
 
+void start_game(t_app *app) {
+    mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
+    if (app->input_handler.controler_count > 1)
+        handle_resize_event(app);
+    app->game_state = ingame;
+}
+
 void player_count_menu_window_update(t_app *app)
 {
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
@@ -165,13 +166,13 @@ void player_count_menu_window_update(t_app *app)
     app->player_count_menu.four_button.pos.x = ((int)app->frame_buffer.width) / 2 + 50;
     app->player_count_menu.four_button.pos.y = ((int)app->frame_buffer.height) / 2 + 50 + 200;
     if (tex_button_update(app, app->player_count_menu.one_button))
-        ; // TODO
+        {app->input_handler.player_count = 1; start_game(app);}
     if (tex_button_update(app, app->player_count_menu.two_button))
-        ; // TODO
+        {app->input_handler.player_count = 2; start_game(app);}
     if (tex_button_update(app, app->player_count_menu.three_button))
-        ; // TODO
+        {app->input_handler.player_count = 3; start_game(app);}
     if (tex_button_update(app, app->player_count_menu.four_button))
-        ; // TODO
+        {app->input_handler.player_count = 4; start_game(app);}
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
 }

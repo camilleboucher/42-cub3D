@@ -11,6 +11,7 @@ typedef struct s_input_handler {
   bool registered_click;
   int keys[255];
   t_vec2i old_mouse_pos;
+  unsigned int player_count;
   unsigned int controler_count;
   t_vec2f controler_vectors_left[4];
   t_vec2f controler_vectors_right[4];
