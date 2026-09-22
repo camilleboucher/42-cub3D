@@ -105,10 +105,46 @@ bool tex_button_update(t_app *app, t_tex_button button)
         && get_pixel(button.default_image, (app->input_handler.mouse_pos.x - button.pos.x) * button.default_image->width / button.size.x,
             (app->input_handler.mouse_pos.y - button.pos.y) * button.default_image->height / button.size.y).a != 0;
     tex_button_draw(app, button);
-    clicked = button.is_hover && app->input_handler.registered_click;
+    clicked = button.is_hover && app->input_handler.registered_click && !app->input_handler.mouse_is_busy;
     if (clicked)
         app->input_handler.registered_click = false;
     return (clicked);
+}
+
+bool grab_card_update(t_app *app, t_grab_card *card, double delta_time)
+{
+    bool clicked;
+
+    t_vec2i pos;
+
+    pos = (t_vec2i){card->pos.x, card->pos.y};
+    card->is_hover = point_to_box_collision(pos, card->size, app->input_handler.mouse_pos)
+        && get_pixel(card->default_image, (app->input_handler.mouse_pos.x - card->pos.x) * card->default_image->width / card->size.x,
+            (app->input_handler.mouse_pos.y - card->pos.y) * card->default_image->height / card->size.y).a != 0;
+    draw_image_strech(app, pos, card->size, card->default_image);
+    if (!app->input_handler.mouse_is_busy && !card->is_grab && card->is_hover && app->input_handler.mouse_down)
+    {
+        app->input_handler.mouse_is_busy = true;
+        card->is_grab = true;
+        card->mouse_rel_pos.x = app->input_handler.mouse_pos.x - card->pos.x;
+        card->mouse_rel_pos.y = app->input_handler.mouse_pos.y - card->pos.y;
+        app->input_handler.registered_click = false;
+    }
+    if (!app->input_handler.mouse_down)
+    {
+        app->input_handler.mouse_is_busy = false;
+        card->is_grab = false;
+    }
+    if (card->is_grab) {
+        card->pos.x = app->input_handler.mouse_pos.x - card->mouse_rel_pos.x;
+        card->pos.y = app->input_handler.mouse_pos.y - card->mouse_rel_pos.y;
+    } else {
+        t_vec2f home_vector;
+        home_vector = vec2f_mul(vec2f_normalize(vec2f_sub(card->origin, card->pos)), 1500 * delta_time);
+        if (vec2f_lenght(home_vector) > vec2f_dist(card->origin, card->pos))
+            home_vector = vec2f_sub(card->origin, card->pos);
+        card->pos = vec2f_add(card->pos, home_vector);
+    }
 }
 
 t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image)
@@ -122,4 +158,17 @@ t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_imag
     button.default_image = default_image;
     button.hover_image = hover_image;
     return (button);
+}
+
+t_grab_card grab_card_create(t_vec2f pos, t_vec2i size, t_region *default_image)
+{
+    t_grab_card card;
+
+    card = (t_grab_card){0};
+    card.is_grab = false;
+    card.pos = pos;
+    card.origin = pos;
+    card.size = size;
+    card.default_image = default_image;
+    return (card);
 }

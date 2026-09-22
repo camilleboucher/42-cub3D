@@ -78,7 +78,7 @@ void push_buffer_to_screen_image(t_app *app, unsigned int sub_screen_index)
     offset = (t_vec2i){0, 0};
     if (app->input_handler.controler_count > 1)
         offset = (t_vec2i){(sub_screen_index % 2) * app->frame_buffer.width, (sub_screen_index / 2) * app->frame_buffer.height};
-    printf("%d %d\n", offset.x, offset.y);
+    //printf("%d %d\n", offset.x, offset.y);
     mlx_set_image_region(app->ctx, app->frame_buffer.screen_image, offset.y, offset.x, 
         app->frame_buffer.buffer->height, app->frame_buffer.buffer->width, 
         app->frame_buffer.buffer->buffer);

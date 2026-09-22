@@ -40,7 +40,21 @@ void handle_mouse_up(int button, void *param)
 
     app = param;
     if (button == 1)
+    {
         app->input_handler.registered_click = true;
+        app->input_handler.mouse_down = false;
+    }
+}
+
+void handle_mouse_down(int button, void *param)
+{
+    t_app *app;
+
+    app = param;
+    if (button == 1)
+    {
+        app->input_handler.mouse_down = true;
+    }
 }
 
 void mouse_jail(t_app *app) {
@@ -169,13 +183,13 @@ void player_count_menu_window_update(t_app *app)
     app->player_count_menu.four_button.pos.x = ((int)app->frame_buffer.width) / 2 + 50;
     app->player_count_menu.four_button.pos.y = ((int)app->frame_buffer.height) / 2 + 50 + 200;
     if (tex_button_update(app, app->player_count_menu.one_button))
-        {app->input_handler.player_count = 1; start_game(app);}
+        {app->input_handler.player_count = 1; app->game_state = input_select;}
     if (tex_button_update(app, app->player_count_menu.two_button))
-        {app->input_handler.player_count = 2; start_game(app);}
+        {app->input_handler.player_count = 2; app->game_state = input_select;}
     if (tex_button_update(app, app->player_count_menu.three_button))
-        {app->input_handler.player_count = 3; start_game(app);}
+        {app->input_handler.player_count = 3; app->game_state = input_select;}
     if (tex_button_update(app, app->player_count_menu.four_button))
-        {app->input_handler.player_count = 4; start_game(app);}
+        {app->input_handler.player_count = 4; app->game_state = input_select;}
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
 }
@@ -186,6 +200,30 @@ void init_player_count_menu(t_app *app)
     app->player_count_menu.two_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
     app->player_count_menu.three_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
     app->player_count_menu.four_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[10], app->image_atlas.images[14]);
+}
+
+void init_input_select_menu(t_app *app)
+{
+    app->input_select_menu.one_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[7]);
+    app->input_select_menu.two_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8]);
+    app->input_select_menu.three_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9]);
+    app->input_select_menu.four_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[10]);
+}
+
+void input_select_menu_window_update(t_app *app)
+{
+    static double last_time = 0.;
+
+    double time = get_time();
+    clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
+
+    grab_card_update(app, &app->input_select_menu.one_card, time - last_time);
+    grab_card_update(app, &app->input_select_menu.two_card, time - last_time);
+    grab_card_update(app, &app->input_select_menu.three_card, time - last_time);
+    grab_card_update(app, &app->input_select_menu.four_card, time - last_time);
+    push_buffer_to_screen_image(app, 0);
+    push_frame_buffer_to_screen(app);
+    last_time = time;
 }
 
 void game_update(void *param) {
@@ -202,6 +240,8 @@ void game_update(void *param) {
         main_menu_window_update(app);
     else if (app->game_state == player_count_select)
         player_count_menu_window_update(app);
+    else if (app->game_state == input_select)
+        input_select_menu_window_update(app);
 }
 
 void handle_key_down(int key, void *param) {
@@ -226,7 +266,6 @@ void handle_controler_down(mlx_controller_event_code event, void *param) {
     app = param;
     if (event.button == MLX_CONTROLLER_CONNECT)
     {
-        printf("aaaa\n");
         if (app->input_handler.controler_count < 4)
             app->input_handler.controler_count += 1;
         if (app->game_state == ingame)
@@ -234,7 +273,6 @@ void handle_controler_down(mlx_controller_event_code event, void *param) {
     }
     if (event.button == MLX_CONTROLLER_DISCONNECT)
     {
-        printf("bbbb\n");
         if (app->input_handler.controler_count > 0)
             app->input_handler.controler_count -= 1;
         if (app->game_state == ingame)
@@ -248,9 +286,11 @@ void main_loop(t_app *app)
 
     init_main_menu(app);
     init_player_count_menu(app);
+    init_input_select_menu(app);
     mlx_add_loop_hook(app->ctx, &game_update, app);
     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &window_event_handle, app);
     mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app);
+    mlx_on_event(app->ctx, app->window, MLX_MOUSEDOWN, &handle_mouse_down, app);
     mlx_on_event(app->ctx, app->window, MLX_KEYDOWN, &handle_key_down, app);
     mlx_on_event(app->ctx, app->window, MLX_KEYUP, &handle_key_up, app);
     mlx_on_event(app->ctx, app->window, MLX_CONTROLLERDOWN, (void(*)(int, void*))handle_controler_down, app);

@@ -15,6 +15,8 @@ typedef struct s_input_handler {
   unsigned int controler_count;
   t_vec2f controler_vectors_left[4];
   t_vec2f controler_vectors_right[4];
+  bool mouse_down;
+  bool mouse_is_busy;
 } t_input_handler;
 
 void input_handler_set_down(t_input_handler *handler, int key);
