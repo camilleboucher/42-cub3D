@@ -3,51 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   element_map.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 18:08:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/27 17:59:44 by yben-dje         ###   ########.fr       */
+/*   Created: 2026/09/24 17:19:26 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 18:12:04 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 #include "cube3D2.h"
 
-static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width);
-static t_error	save_line(char *s, char *cell, t_app *app, t_map *map);
-static bool		is_char_valid_place(char *s, int x, int y, char *cell);
+static t_error	verifs_openmap(char *cell, int x, int y, int map_width);
+static bool		is_char_valid_place(t_map *map, char *s, int x, int y);
 static bool		save_player(char *s, int *i, t_app *app, t_error *error);
 
-t_error	get_map_line(t_app *app, t_map *map, char *s, t_step *step)
-{
-	t_error	error;
-
-	if (*step == SKIP_NEW_LINES)
-	{
-		if (*s == '\n')
-			return (ERR_NONE);
-		*step = GET_MAP;
-	}
-	else if (*s == '\n')
-		return (ERR_EMPTY_LINE);
-	if (map->height == MAP_SIZE_MAX_VALS)
-		return (ERR_MAP_OVERFLOW);
-	else if (map->height == 0)
-		error = save_first_line(s, map->cell, &map->width);
-	else
-		error = save_line(s, map->cell, app, map);
-	map->height++;
-	return (error);
-}
-
-static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width)
+t_error	save_first_line(char *s, char *cell)
 {
 	t_error	error;
 	int		i;
 
 	error = ERR_NONE;
 	i = 0;
-	while (s[i] && s[i] != '\n') //WARN: s[i] utile ? pour protection si fin de fichier ?
+	while (s[i] && s[i] != '\n')
 	{
 		if (i == MAP_SIZE_MAX_VALS)
 			return (error | ERR_MAP_OVERFLOW);
@@ -58,12 +35,10 @@ static t_error	save_first_line(char *s, char *cell, TYPE_MAP_SIZE *width)
 		cell[i] = s[i];
 		i++;
 	}
-	i--;
-	*width = i;
 	return (error);
 }
 
-static t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
+t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
 {
 	t_error	error;
 	int		i;
@@ -71,32 +46,44 @@ static t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
 
 	error = ERR_NONE;
 	i = 0;
-	y = map->height * MAP_SIZE_MAX_VALS;
+	y = map->height * map->width;
 	while (s[i] && s[i] != '\n')
 	{
-		if (i > MAP_SIZE_MAX_VALS)
+		if (i == MAP_SIZE_MAX_VALS)
 			return (error | ERR_MAP_OVERFLOW);
-		else if (!is_char_valid_place(s, i, y, cell))
+		else if (!is_char_valid_place(map, s, i, y))
 			error |= ERR_OPEN_MAP;
 		else if (save_player(s, &i, app, &error))
 			continue ;
 		else if (!(s[i] == C_VOID || s[i] == C_FLOOR || s[i] == C_WALL
-			|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
+				|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
 			error |= ERR_INVALID_C;
 		cell[i + y] = s[i];
 		i++;
 	}
-	i--;
-	if (i > map->width)
-		map->width = i;
+	error |= verifs_openmap(map->cell, i, y, map->width);
 	return (error);
 }
 
-static bool		is_char_valid_place(char *s, int x, int y, char *cell)
+static t_error	verifs_openmap(char *cell, int x, int y, int map_width)
+{
+	while (x < map_width)
+	{
+		if (cell[x + y] == C_VOID)
+		{
+			if (cell[x + y - map_width] == C_FLOOR)
+				return (ERR_OPEN_MAP);
+		}
+		x++;
+	}
+	return (ERR_NONE);
+}
+
+static bool	is_char_valid_place(t_map *map, char *s, int x, int y)
 {
 	if (s[x] == C_VOID)
 	{
-		if (cell[x + y - MAP_SIZE_MAX_VALS] == C_FLOOR)
+		if (map->cell[x + y - map->width] == C_FLOOR)
 			return (false);
 	}
 	else if (s[x] == C_FLOOR)
@@ -107,13 +94,13 @@ static bool		is_char_valid_place(char *s, int x, int y, char *cell)
 			return (false);
 		else if (s[x - 1] == C_VOID
 			|| s[x + 1] == C_VOID
-			|| cell[x + y - MAP_SIZE_MAX_VALS] == C_VOID)
+			|| map->cell[x + y - map->width] == C_VOID)
 			return (false);
 	}
 	return (true);
 }
 
-static bool		save_player(char *s, int *i, t_app *app, t_error *error)
+static bool	save_player(char *s, int *i, t_app *app, t_error *error)
 {
 	char	dir;
 
@@ -130,8 +117,8 @@ static bool		save_player(char *s, int *i, t_app *app, t_error *error)
 		app->player.angle = M_PI;
 	else if (dir == 'S')
 		app->player.angle = -M_PI_2;
-	app->map.cell[*i + app->map.height * MAP_SIZE_MAX_VALS] = C_FLOOR;
-	app->player.pos = (t_vec2f){*i, app->map.height};
+	app->map.cell[*i + app->map.height * app->map.width] = C_FLOOR;
+	app->player.pos = (t_vec2f){(*i), app->map.height};
 	(*i)++;
 	return (true);
 }

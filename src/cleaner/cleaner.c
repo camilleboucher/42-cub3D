@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   components.h                                       :+:      :+:    :+:   */
+/*   cleaner.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 17:08:47 by aiga             ###   ########.fr       */
+/*   Created: 2026/09/24 15:54:39 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 17:18:14 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMPONENTS_H
-# define COMPONENTS_H
+#include "cub3D.h"
 
-typedef struct s_position
+void	clean_game(t_app *app)
 {
-	TYPE_MAP_SIZE	x;
-	TYPE_MAP_SIZE	y;
-}	t_position;
+	clean_map(&app->map);
+}
 
-#endif
+void	clean_map(t_map *map)
+{
+	free(map->cell);
+	free(map->path_textures[0]);
+	free(map->path_textures[1]);
+	free(map->path_textures[2]);
+	free(map->path_textures[3]);
+}
