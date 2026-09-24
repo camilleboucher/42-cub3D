@@ -5,11 +5,11 @@ void draw_rect(t_app *app, t_vec2i pos, t_vec2i size, mlx_color color)
     int x;
     int y;
 
-    x = 0;
-    while (x < size.x)
+    x = pos.x;
+    while (x < size.x + pos.x)
     {
-        y = 0;
-        while (y < size.y)
+        y = pos.y;
+        while (y < size.y + pos.y)
         {
             set_pixel(app->frame_buffer.buffer, x, y, color);
             y++;
@@ -89,6 +89,10 @@ bool point_to_box_collision(t_vec2i box_pos, t_vec2i box_size, t_vec2i point_pos
     return (point_pos.x > box_pos.x && point_pos.x < box_pos.x + box_size.x && point_pos.y > box_pos.y && point_pos.y < box_pos.y + box_size.y);
 }
 
+bool box_to_box_collision(t_vec2i pos1, t_vec2i size1, t_vec2i pos2, t_vec2i size2) {
+    return (pos1.x + size1.x >= pos2.x && pos1.x <= pos2.x + size2.x && pos1.y + size1.y >= pos2.y && pos1.y <= pos2.y + size2.y);
+}
+
 void tex_button_draw(t_app *app, t_tex_button button)
 {
     if (button.is_hover)
@@ -111,10 +115,10 @@ bool tex_button_update(t_app *app, t_tex_button button)
     return (clicked);
 }
 
-bool grab_card_update(t_app *app, t_grab_card *card, double delta_time)
+// Supports up to 4 slots. I don't care, it'll be used only one time.
+void grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4], double delta_time)
 {
     bool clicked;
-
     t_vec2i pos;
 
     pos = (t_vec2i){card->pos.x, card->pos.y};
@@ -140,11 +144,25 @@ bool grab_card_update(t_app *app, t_grab_card *card, double delta_time)
         card->pos.y = app->input_handler.mouse_pos.y - card->mouse_rel_pos.y;
     } else {
         t_vec2f home_vector;
-        home_vector = vec2f_mul(vec2f_normalize(vec2f_sub(card->origin, card->pos)), 1500 * delta_time);
-        if (vec2f_lenght(home_vector) > vec2f_dist(card->origin, card->pos))
-            home_vector = vec2f_sub(card->origin, card->pos);
+        home_vector = vec2f_mul(vec2f_normalize(vec2f_sub(card->target, card->pos)), 1500 * delta_time);
+        if (vec2f_lenght(home_vector) > vec2f_dist(card->target, card->pos))
+            home_vector = vec2f_sub(card->target, card->pos);
         card->pos = vec2f_add(card->pos, home_vector);
     }
+
+    unsigned int i = 0;
+    bool in_slot;
+    in_slot = false;
+    while (i++ < 4)
+    {
+        if (box_to_box_collision(slots[i - 1].pos, slots[i - 1].size, (t_vec2i){card->pos.x, card->pos.y}, card->size))
+        {
+            card->target = (t_vec2f){slots[i - 1].pos.x, slots[i - 1].pos.y};
+            in_slot = true;
+        }
+    }
+    if (!in_slot)
+        card->target = card->origin;
 }
 
 t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image)
@@ -168,7 +186,17 @@ t_grab_card grab_card_create(t_vec2f pos, t_vec2i size, t_region *default_image)
     card.is_grab = false;
     card.pos = pos;
     card.origin = pos;
+    card.target = pos;
     card.size = size;
     card.default_image = default_image;
     return (card);
+}
+
+t_card_slot card_slot_create(t_app *app, t_vec2i pos, t_vec2i size, unsigned int id) {
+    t_card_slot slot;
+
+    slot.pos = pos;
+    slot.size = size;
+    slot.id = id;
+    return (slot);
 }

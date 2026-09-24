@@ -204,10 +204,14 @@ void init_player_count_menu(t_app *app)
 
 void init_input_select_menu(t_app *app)
 {
-    app->input_select_menu.one_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[7]);
-    app->input_select_menu.two_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8]);
-    app->input_select_menu.three_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9]);
-    app->input_select_menu.four_card = grab_card_create((t_vec2f){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[10]);
+    app->input_select_menu.one_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.two_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.three_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.four_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){100, 100}, (t_vec2i){192, 192}, 0);
+    app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){600, 100}, (t_vec2i){192, 192}, 1);
+    app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){100, 600}, (t_vec2i){192, 192}, 2);
+    app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){600, 600}, (t_vec2i){192, 192}, 3);
 }
 
 void input_select_menu_window_update(t_app *app)
@@ -217,10 +221,16 @@ void input_select_menu_window_update(t_app *app)
     double time = get_time();
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
 
-    grab_card_update(app, &app->input_select_menu.one_card, time - last_time);
-    grab_card_update(app, &app->input_select_menu.two_card, time - last_time);
-    grab_card_update(app, &app->input_select_menu.three_card, time - last_time);
-    grab_card_update(app, &app->input_select_menu.four_card, time - last_time);
+    for (int i = 0; i < 4; i++) {
+        t_card_slot slot = app->input_select_menu.card_slots[i];
+        draw_rect(app, slot.pos, slot.size, (mlx_color){ .rgba=0xFF0000FF });
+    }
+
+    grab_card_update(app, &app->input_select_menu.one_card, app->input_select_menu.card_slots, time - last_time);
+    grab_card_update(app, &app->input_select_menu.two_card, app->input_select_menu.card_slots, time - last_time);
+    grab_card_update(app, &app->input_select_menu.three_card, app->input_select_menu.card_slots, time - last_time);
+    grab_card_update(app, &app->input_select_menu.four_card, app->input_select_menu.card_slots, time - last_time);
+
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
     last_time = time;
