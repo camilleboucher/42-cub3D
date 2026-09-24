@@ -5,16 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 18:08:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 16:27:28 by cboucher         ###   ########.fr       */
+/*   Created: 2026/09/24 17:19:26 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 18:12:04 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "cube3D2.h"
 
 static t_error	verifs_openmap(char *cell, int x, int y, int map_width);
 static bool		is_char_valid_place(t_map *map, char *s, int x, int y);
-static bool		save_player(char *s, int *i, t_game *game, t_error *error);
+static bool		save_player(char *s, int *i, t_app *app, t_error *error);
 
 t_error	save_first_line(char *s, char *cell)
 {
@@ -37,7 +38,7 @@ t_error	save_first_line(char *s, char *cell)
 	return (error);
 }
 
-t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
+t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
 {
 	t_error	error;
 	int		i;
@@ -52,7 +53,7 @@ t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 			return (error | ERR_MAP_OVERFLOW);
 		else if (!is_char_valid_place(map, s, i, y))
 			error |= ERR_OPEN_MAP;
-		else if (save_player(s, &i, game, &error))
+		else if (save_player(s, &i, app, &error))
 			continue ;
 		else if (!(s[i] == C_VOID || s[i] == C_FLOOR || s[i] == C_WALL
 				|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
@@ -99,25 +100,25 @@ static bool	is_char_valid_place(t_map *map, char *s, int x, int y)
 	return (true);
 }
 
-static bool	save_player(char *s, int *i, t_game *game, t_error *error)
+static bool	save_player(char *s, int *i, t_app *app, t_error *error)
 {
 	char	dir;
 
 	dir = s[*i];
 	if (!(dir == 'N' || dir == 'S' || dir == 'E' || dir == 'W'))
 		return (false);
-	if (game->player.pos.x || game->player.pos.y)
+	if (app->player.pos.x || app->player.pos.y)
 		*error |= ERR_DUPLICATE_PLAYER;
 	else if (dir == 'E')
-		game->player.angle = 0;
+		app->player.angle = 0;
 	else if (dir == 'N')
-		game->player.angle = M_PI_2;
+		app->player.angle = M_PI_2;
 	else if (dir == 'W')
-		game->player.angle = M_PI;
+		app->player.angle = M_PI;
 	else if (dir == 'S')
-		game->player.angle = -M_PI_2;
-	game->map.cell[*i + game->map.height * game->map.width] = C_FLOOR;
-	game->player.pos = (t_vec2i){(*i), game->map.height};
+		app->player.angle = -M_PI_2;
+	app->map.cell[*i + app->map.height * app->map.width] = C_FLOOR;
+	app->player.pos = (t_vec2f){(*i), app->map.height};
 	(*i)++;
 	return (true);
 }

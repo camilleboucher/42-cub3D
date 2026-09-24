@@ -5,13 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 18:40:24 by aiga             ###   ########.fr       */
+/*   Created: 2026/09/24 17:12:31 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 18:11:24 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+#include "vector.h"
+#include "mlx.h"
 
 typedef enum e_direction
 {
@@ -39,18 +42,8 @@ typedef struct s_map
 	char		*path_textures[4];
 	uint8_t		floor_rgb[3];
 	uint8_t		ceiling_rgb[3];
+	mlx_color	floor_color;
+	mlx_color	ceil_color;
 }	t_map;
-
-typedef struct s_player
-{
-	t_vec2i	pos;
-	float	angle;
-}	t_player;
-
-typedef struct s_game
-{
-	t_player	player;
-	t_map		map;
-}	t_game;
 
 #endif

@@ -6,18 +6,18 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 16:04:06 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/09/24 17:31:48 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-static t_error	get_map_line(t_game *game, t_map *map, char *s);
+static t_error	get_map_line(t_app *app, t_map *map, char *s);
 static t_error	last_line_verification(t_map *map);
-static t_error	last_verification(t_game *game, t_error error);
+static t_error	last_verification(t_app *app, t_error error);
 static void		parser_cleaner(uint64_t eflag, t_map *map, t_list **map_lines);
 
-void	parsing_map(t_game *game, t_map *map, t_list *map_head, t_error error)
+void	parsing_map(t_app *app, t_map *map, t_list *map_head, t_error error)
 {
 	t_list	*map_line;
 
@@ -33,7 +33,7 @@ void	parsing_map(t_game *game, t_map *map, t_list *map_head, t_error error)
 			map->height = 0;
 			while (map_line && !(error & MASK_ERRS_CRITICALS))
 			{
-				error |= get_map_line(game, map, map_line->content);
+				error |= get_map_line(app, map, map_line->content);
 				map_line = map_line->next;
 			}
 			if (!(error & MASK_ERRS_CRITICALS))
@@ -42,11 +42,11 @@ void	parsing_map(t_game *game, t_map *map, t_list *map_head, t_error error)
 	}
 	else
 		error |= ERR_MISSING_MAP;
-	error |= last_verification(game, error);
-	parser_cleaner(error, &game->map, &map_head);
+	error |= last_verification(app, error);
+	parser_cleaner(error, &app->map, &map_head);
 }
 
-static t_error	get_map_line(t_game *game, t_map *map, char *s)
+static t_error	get_map_line(t_app *app, t_map *map, char *s)
 {
 	t_error	error;
 
@@ -55,7 +55,7 @@ static t_error	get_map_line(t_game *game, t_map *map, char *s)
 	else if (map->height == 0)
 		error = save_first_line(s, map->cell);
 	else
-		error = save_line(s, map->cell, game, map);
+		error = save_line(s, map->cell, app, map);
 	map->height++;
 	return (error);
 }
@@ -76,20 +76,20 @@ static t_error	last_line_verification(t_map *map)
 	return (ERR_NONE);
 }
 
-static t_error	last_verification(t_game *game, t_error error)
+static t_error	last_verification(t_app *app, t_error error)
 {
 	int	i;
 
 	i = 0;
 	while (i < 4)
 	{
-		if (!game->map.path_textures[i])
+		if (!app->map.path_textures[i])
 			error |= ERR_MISSING_INFO;
 		i++;
 	}
 	if (error & MASK_ERRS_CRITICALS || error & ERR_MISSING_MAP)
 		return (error);
-	if (!game->player.pos.x || !game->player.pos.y)
+	if (!app->player.pos.x || !app->player.pos.y)
 		error |= ERR_MISSING_PLAYER;
 	return (error);
 }

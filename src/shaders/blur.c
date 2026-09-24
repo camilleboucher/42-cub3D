@@ -1,63 +1,66 @@
 #include "cube3D2.h"
+#include "mlx.h"
 
-void blur_pixel(t_app *app, t_vec2i coords, int distance, int steps)
-{
-    t_vec2i neighbor_coords;
-    unsigned int color[3];
-    mlx_color other_color;
-    unsigned int total_color;
+#define BLUR_RADIUS 64
 
-    color[0] = 0;
-    color[1] = 0;
-    color[2] = 0;
-    total_color = 0;
-    neighbor_coords.x = coords.x - distance;
-    if (neighbor_coords.x < 0)
-        neighbor_coords.x = 0;
-    while (neighbor_coords.x < coords.x + distance)
-    {
-        if (neighbor_coords.x >= (int)app->frame_buffer.width)
-            break;
-        neighbor_coords.y = coords.y - distance;
-        if (neighbor_coords.y < 0)
-            neighbor_coords.y = 0;
-        while (neighbor_coords.y < coords.y + distance)
-        {
-            if (neighbor_coords.y >= (int)app->frame_buffer.height)
-                break;
-            other_color = get_pixel(app->frame_buffer.buffer, neighbor_coords.x, neighbor_coords.y);
-            color[0] += other_color.r;
-            color[1] += other_color.g;
-            color[2] += other_color.b;
-            total_color++;
-            neighbor_coords.y += steps;
-        }
-        neighbor_coords.x += steps;
-    }
-    set_pixel(app->frame_buffer.shader_buffer, coords.x, coords.y, (mlx_color){.r = color[0] / total_color, .g = color[1] / total_color, .b = color[2] / total_color, .a = 0xFF});
+void clear_buffer(mlx_color *buffer, long sum[3], mlx_color color, unsigned int size) {
+    unsigned int i;
+
+    sum[0] = size * (long)color.r;
+    sum[1] = size * (long)color.g;
+    sum[2] = size * (long)color.b;
+    i = 0;
+    while (i < size)
+        buffer[i++] = color;
 }
 
-void apply_blur(t_app *app, int distance, int quality)
+void apply_blur(t_app *app)
 {
-    t_vec2i coords;
-    t_region *temp_swap;
-    int steps;
+    mlx_color buffer[BLUR_RADIUS];
 
-    steps = distance / quality;
-    if (steps < 1)
-        steps = 1;
-    coords.x = 0;
-    while (coords.x < (int)app->frame_buffer.width)
+    unsigned int row = 0;
+    while (row < app->frame_buffer.width * app->frame_buffer.height)
     {
-        coords.y = 0;
-        while (coords.y < (int)app->frame_buffer.height)
+        long sum[3] = {0};
+        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.buffer, row), BLUR_RADIUS);
+        int y = 0;
+        while (y < app->frame_buffer.height)
         {
-            blur_pixel(app, coords, distance, steps);
-            coords.y++;
+            sum[0] -= buffer[y % BLUR_RADIUS].r;
+            sum[1] -= buffer[y % BLUR_RADIUS].g;
+            sum[2] -= buffer[y % BLUR_RADIUS].b;
+            mlx_color color = get_pixel_opt(app->frame_buffer.buffer, row + y);
+            sum[0] += color.r;
+            sum[1] += color.g;
+            sum[2] += color.b;
+            buffer[y % BLUR_RADIUS] = color;
+            set_pixel_opt(app->frame_buffer.shader_buffer, row + y, (mlx_color){.r = sum[0] / BLUR_RADIUS, .g = sum[1] / BLUR_RADIUS, .b = sum[2] / BLUR_RADIUS, .a = 255});
+            y++;
         }
-        coords.x++;
+        row += app->frame_buffer.height;
     }
-    temp_swap = app->frame_buffer.shader_buffer;
-    app->frame_buffer.shader_buffer = app->frame_buffer.buffer;
-    app->frame_buffer.buffer = temp_swap;
+
+    unsigned int y = 0;
+    while (y < app->frame_buffer.height)
+    {
+        long sum[3] = {0};
+        clear_buffer(buffer, sum, get_pixel_opt(app->frame_buffer.shader_buffer, y), BLUR_RADIUS);
+        int x = 0;
+        int row = 0;
+        while (x < app->frame_buffer.width)
+        {
+            sum[0] -= buffer[x % BLUR_RADIUS].r;
+            sum[1] -= buffer[x % BLUR_RADIUS].g;
+            sum[2] -= buffer[x % BLUR_RADIUS].b;
+            mlx_color color = get_pixel_opt(app->frame_buffer.shader_buffer, row + y);
+            sum[0] += color.r;
+            sum[1] += color.g;
+            sum[2] += color.b;
+            buffer[x % BLUR_RADIUS] = color;
+            set_pixel_opt(app->frame_buffer.buffer, row + y, (mlx_color){.r = sum[0] / BLUR_RADIUS, .g = sum[1] / BLUR_RADIUS, .b = sum[2] / BLUR_RADIUS, .a = 255});
+            x++;
+            row += app->frame_buffer.height;
+        }
+        y++;
+    }
 }

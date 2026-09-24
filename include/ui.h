@@ -5,10 +5,10 @@ typedef struct s_tex_button
 {
     t_vec2i pos;
     t_vec2i size;
-    char *text;
     bool is_hover;
     bool is_down;
-    t_region *image;
+    t_region *default_image;
+    t_region *hover_image;
 } t_tex_button;
 
 typedef struct s_label
@@ -19,7 +19,14 @@ typedef struct s_label
     mlx_color color;
 } t_label;
 
+typedef struct s_main_menu
+{
+    t_tex_button play_button;
+} t_main_menu;
+
+
 
 bool tex_button_update(t_app *app, t_tex_button button);
+t_tex_button tex_button_create(t_vec2i pos, t_vec2i size, t_region *default_image, t_region *hover_image);
 
 #endif

@@ -5,19 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 16:12:54 by cboucher         ###   ########.fr       */
+/*   Created: 2026/09/24 17:32:10 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 17:34:28 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "cube3D2.h"
 
 static t_error	backup_map_line(t_map *map, t_list *map_lines,
 					char *s, t_step *step);
 static t_error	skip_new_lines(t_step *step, char **s);
 static int		strlen_map_line(char *s);
 
-void	parsing(int fd, t_game *game, t_step step)
+void	parsing(int fd, t_app *app, t_step step)
 {
 	char	*s;
 	t_error	error;
@@ -33,16 +34,16 @@ void	parsing(int fd, t_game *game, t_step step)
 		if (step == GET_INFOS)
 		{
 			if (s[0] != '\n')
-				step = !get_info(&game->map, s, &error);
+				step = !get_info(&app->map, s, &error);
 			free(s);
 		}
 		else if (error & MASK_ERRS_CRITICALS)
 			free(s);
 		else
-			error |= backup_map_line(&game->map, map_lines, s, &step);
+			error |= backup_map_line(&app->map, map_lines, s, &step);
 	}
 	close(fd);
-	parsing_map(game, &game->map, map_lines, error);
+	parsing_map(app, &app->map, map_lines, error);
 }
 
 static t_error	backup_map_line(t_map *map, t_list *map_lines,

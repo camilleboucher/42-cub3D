@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 15:25:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 16:28:46 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/09/24 18:03:52 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,39 @@
 #include "menus.h"
 
 #include "cub3D.h"
+#include "vector.h"
 
-static void	start(char *map_path);
-static void	check_file_extension(char *path, char *ext, int ext_size);
-static int	open_map(char *path);
-static void	init_game(t_player *player, t_map *map);
+static void load_map(t_app *app, char *map_path);
+static void check_file_extension(char *path, char *ext, int ext_size);
+static int open_map(char *path);
+static void init_game(t_player *player, t_map *map);
 
-int main(int argc, char *argv[]) {
-    //struct s_app app;
+int main(int argc, char *argv[])
+{
+	struct s_app app;
 
-    if (argc != 2)
+	if (argc != 2)
 		error_exit(ERR_NO_ARG);
-	start(argv[1]);
 
-    //app = (struct s_app){ 0 };
+	app = (struct s_app){0};
 
-    //app_init(&app);
-
-    //open_main_menu(&app);
-
-    //app_destroy(&app);
+	app_init(&app);
+	load_map(&app, argv[1]);
+	if (!atlas_load_buttons(&app))
+	{
+		app_destroy(&app);
+		return (1);
+	}
+	main_loop(&app);
+	free_all_images(&app);
+	clean_game(&app);
+	app_destroy(&app);
 }
 
-/*
-void	print_map_player(t_map *map, t_player *player) //WARN: TMP
+void print_map_player(t_map *map, t_player *player) //INFO: temporaire pour debug
 {
-	int	x;
-	int	y;
+	int x;
+	int y;
 
 	x = 0;
 	y = 0;
@@ -63,27 +69,28 @@ void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 		}
 	}
 	printf("\n\nPLAYER:\n=======\n");
-	printf("X: %d\n", player->pos.x);
-	printf("Y: %d\n", player->pos.y);
+	printf("X: %f\n", player->pos.x);
+	printf("Y: %f\n", player->pos.y);
 	printf("Angle: %f\n", player->angle);
 	printf("%d\n", map->cell[461]);
-}*/
+}
 
-static void	start(char *map_path)
+static void load_map(t_app *app, char *map_path)
 {
-	t_game		game;
-	int		fd;
+	int fd;
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
-	init_game(&game.player, &game.map);
-	parsing(fd, &game, GET_INFOS);
-	clean_game(&game);
+	init_game(&app->player, &app->map);
+	parsing(fd, app, GET_INFOS);
+	app->map.ceil_color = (mlx_color){ .r=app->map.ceiling_rgb[0], .g=app->map.ceiling_rgb[1], .b=app->map.ceiling_rgb[2], .a=0xFF };
+	app->map.floor_color = (mlx_color){ .r=app->map.floor_rgb[0], .g=app->map.floor_rgb[1], .b=app->map.floor_rgb[2], .a=0xFF };
+	print_map_player(&app->map, &app->player); //INFO: temporaire pour debug
 }
 
-static void	check_file_extension(char *path, char *ext, int ext_size)
+static void check_file_extension(char *path, char *ext, int ext_size)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (path[i])
@@ -102,9 +109,9 @@ static void	check_file_extension(char *path, char *ext, int ext_size)
 	}
 }
 
-static int	open_map(char *path)
+static int open_map(char *path)
 {
-	int	fd;
+	int fd;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1 || read(fd, NULL, 0) == -1)
@@ -112,9 +119,9 @@ static int	open_map(char *path)
 	return (fd);
 }
 
-static void	init_game(t_player *player, t_map *map)
+static void init_game(t_player *player, t_map *map)
 {
-	player->pos = (t_vec2i){0};
+	player->pos = (t_vec2f){0};
 	map->height = 0;
 	map->width = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));
