@@ -1,8 +1,0 @@
-*.a
-*.o
-*.out
-.build/
-build/
-MacroLibX/
-cub3d
-compile_flags.txt
