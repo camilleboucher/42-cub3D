@@ -6,14 +6,14 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/21 19:42:22 by aiga             ###   ########.fr       */
+/*   Updated: 2026/09/24 16:12:54 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
 static t_error	backup_map_line(t_map *map, t_list *map_lines,
-	char *s, t_step *step);
+					char *s, t_step *step);
 static t_error	skip_new_lines(t_step *step, char **s);
 static int		strlen_map_line(char *s);
 
@@ -27,9 +27,9 @@ void	parsing(int fd, t_game *game, t_step step)
 	map_lines = ft_lstnew(NULL);
 	while (1)
 	{
-		s = get_next_line(fd, false);//WARN: ya un monde où mon gnl leak + TESTER avec CTRL+D injection fin de fichier
+		s = get_next_line(fd, false);
 		if (!s)
-			break;
+			break ;
 		if (step == GET_INFOS)
 		{
 			if (s[0] != '\n')
@@ -42,7 +42,7 @@ void	parsing(int fd, t_game *game, t_step step)
 			error |= backup_map_line(&game->map, map_lines, s, &step);
 	}
 	close(fd);
-	parsing_map(game, &game->map, map_lines, error); //TODO: Avoir un gnl protege si errsys pour free la stash
+	parsing_map(game, &game->map, map_lines, error);
 }
 
 static t_error	backup_map_line(t_map *map, t_list *map_lines,

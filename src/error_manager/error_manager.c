@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:23:59 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/21 21:47:30 by aiga             ###   ########.fr       */
+/*   Updated: 2026/09/24 16:28:18 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	error_exit(uint64_t eflag)
 		parsing_error_map_data(eflag);
 	if (eflag & ERR_SYS)
 		printf("%s\n%s\n", MSG_ERROR, strerror(errno));
-	printf("last:%zu\n", eflag);
 	exit(get_exit_code(eflag));
 }
 
@@ -56,7 +55,8 @@ static void	parsing_error_map_data(uint64_t eflag)
 	if (eflag & ERR_EMPTY_LINE)
 		printf("%s\n", MSG_EMPTY_LINE);
 	if (eflag & ERR_MAP_OVERFLOW)
-		printf("%s%d%s\n", MSG_MAP_OVERFLOW_1, MAP_SIZE_MAX_VALS, MSG_MAP_OVERFLOW_2);
+		printf("%s%d%s\n", MSG_MAP_OVERFLOW_1,
+			MAP_SIZE_MAX_VALS, MSG_MAP_OVERFLOW_2);
 	if (eflag & ERR_OPEN_MAP)
 		printf("%s\n", MSG_OPEN_MAP);
 	if (eflag & ERR_INVALID_C)
@@ -71,7 +71,9 @@ static void	parsing_error_map_data(uint64_t eflag)
 
 static uint8_t	get_exit_code(uint64_t eflag)
 {
-	//TODO:
-	(void)eflag;
+	if (eflag & ERR_SYS)
+		return (1);
+	else if (eflag & MASK_ERRS_PARSER)
+		return (3);
 	return (2);
 }

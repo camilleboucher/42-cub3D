@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/21 21:48:13 by aiga             ###   ########.fr       */
+/*   Updated: 2026/09/24 16:04:06 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ static t_error	last_line_verification(t_map *map);
 static t_error	last_verification(t_game *game, t_error error);
 static void		parser_cleaner(uint64_t eflag, t_map *map, t_list **map_lines);
 
-
 void	parsing_map(t_game *game, t_map *map, t_list *map_head, t_error error)
 {
 	t_list	*map_line;
 
-	if(map_head->content)
+	if (map_head->content)
 	{
 		map_line = map_head;
 		map->cell = malloc(sizeof(char) * (map->height * map->width));

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/24 15:25:55 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 16:28:46 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "app.h"
 #include "menus.h"
 
@@ -7,7 +19,6 @@ static void	start(char *map_path);
 static void	check_file_extension(char *path, char *ext, int ext_size);
 static int	open_map(char *path);
 static void	init_game(t_player *player, t_map *map);
-
 
 int main(int argc, char *argv[]) {
     //struct s_app app;
@@ -25,6 +36,7 @@ int main(int argc, char *argv[]) {
     //app_destroy(&app);
 }
 
+/*
 void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 {
 	int	x;
@@ -55,7 +67,7 @@ void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 	printf("Y: %d\n", player->pos.y);
 	printf("Angle: %f\n", player->angle);
 	printf("%d\n", map->cell[461]);
-}
+}*/
 
 static void	start(char *map_path)
 {
@@ -66,7 +78,6 @@ static void	start(char *map_path)
 	fd = open_map(map_path);
 	init_game(&game.player, &game.map);
 	parsing(fd, &game, GET_INFOS);
-	print_map_player(&game.map, &game.player);//WARN: TMP
 	clean_game(&game);
 }
 

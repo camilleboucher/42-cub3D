@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 17:54:47 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:13:53 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/09/24 16:07:28 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,23 @@ static bool	set_info_direction(t_map *map, t_direction direction,
 		*path_texture_dir = ft_strdup(s);
 		if (!*path_texture_dir)
 			return (*error |= ERR_SYS);
+		if (!**path_texture_dir)
+			return (*error |= ERR_MISSING_INFO);
 		(*path_texture_dir)[ft_strlen(*path_texture_dir) - 1] = '\0';
 	}
 	else if (direction == FLOOR)
 		*error = (*error | set_info_color(map->floor_rgb, direction, s, *error))
 			& ~ERR_NO_RGB_FLOOR;
 	else
-		*error = (*error | set_info_color(map->ceiling_rgb, direction, s, *error))
-			& ~ERR_NO_RGB_CEILING;
+		*error = (*error | set_info_color(map->ceiling_rgb,
+					direction, s, *error)) & ~ERR_NO_RGB_CEILING;
 	if (check_complete_infos(map->path_textures, error))
 		return (false);
 	return (*error);
 }
 
-static t_error		set_info_color(uint8_t *color, t_direction direction,
-						char *s, t_error eflag)
+static t_error	set_info_color(uint8_t *color, t_direction direction,
+					char *s, t_error eflag)
 {
 	t_error	error;
 	char	**rgb;
@@ -120,6 +122,6 @@ static t_error		set_info_color(uint8_t *color, t_direction direction,
 static bool	check_complete_infos(char **path_textures, t_error *error)
 {
 	return ((*error & MASK_ERRS_NO_RGBS) == 0
-		 && path_textures[NORTH] && path_textures[SOUTH]
-		 && path_textures[WEST] && path_textures[EAST]);
+		&& path_textures[NORTH] && path_textures[SOUTH]
+		&& path_textures[WEST] && path_textures[EAST]);
 }

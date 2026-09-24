@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:09:17 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/21 21:48:58 by aiga             ###   ########.fr       */
+/*   Updated: 2026/09/24 15:28:35 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ typedef enum e_error
 }	t_error;
 
 # define MASK_ERRS_BAD_INFOS 0x41F8
-# define MASK_ERRS_PARSER 0x1FFFC //TODO: A Mettre a jour si ajout
+# define MASK_ERRS_PARSER 0x1FFFC
 # define MASK_ERRS_NO_RGBS 0xC0
-# define MASK_ERRS_CRITICALS 0x1409 //TODO: A Mettre a jour si ajout
+# define MASK_ERRS_CRITICALS 0x1409
 
 # define MSG_USAGE "\x1b[38:5:213mUsage:\x1b[0m "
 # define MSG_ERROR "\x1b[38:5:196mError\x1b[0m"
@@ -72,7 +72,7 @@ typedef enum e_error
 
 # define MSG_DUPLICATE_PLAYER "- A player is already set."
 
-# define MSG_MISSING_INFO "- A map info is missing!"
+# define MSG_MISSING_INFO "- A map info is missing or is bad!"
 
 # define MSG_MISSING_MAP "- No map data found!"
 

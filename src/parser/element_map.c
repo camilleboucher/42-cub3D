@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 18:08:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/21 19:21:26 by aiga             ###   ########.fr       */
+/*   Updated: 2026/09/24 16:27:28 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 		else if (save_player(s, &i, game, &error))
 			continue ;
 		else if (!(s[i] == C_VOID || s[i] == C_FLOOR || s[i] == C_WALL
-			|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
+				|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
 			error |= ERR_INVALID_C;
 		cell[i + y] = s[i];
 		i++;
@@ -78,7 +78,7 @@ static t_error	verifs_openmap(char *cell, int x, int y, int map_width)
 	return (ERR_NONE);
 }
 
-static bool		is_char_valid_place(t_map *map, char *s, int x, int y)
+static bool	is_char_valid_place(t_map *map, char *s, int x, int y)
 {
 	if (s[x] == C_VOID)
 	{
@@ -99,7 +99,7 @@ static bool		is_char_valid_place(t_map *map, char *s, int x, int y)
 	return (true);
 }
 
-static bool		save_player(char *s, int *i, t_game *game, t_error *error)
+static bool	save_player(char *s, int *i, t_game *game, t_error *error)
 {
 	char	dir;
 
@@ -117,7 +117,7 @@ static bool		save_player(char *s, int *i, t_game *game, t_error *error)
 	else if (dir == 'S')
 		game->player.angle = -M_PI_2;
 	game->map.cell[*i + game->map.height * game->map.width] = C_FLOOR;
-	game->player.pos = (t_vec2i){*i, game->map.height};
+	game->player.pos = (t_vec2i){(*i), game->map.height};
 	(*i)++;
 	return (true);
 }
