@@ -36,7 +36,7 @@ void	parsing(int fd, t_game *game, t_step step)
 				step = !get_info(&game->map, s, &error);
 			free(s);
 		}
-		else if (error & MASK_ERR_CRITICAL_BUGS)
+		else if (error & MASK_ERRS_CRITICALS)
 			free(s);
 		else
 			error |= backup_map_line(&game->map, map_lines, s, &step);

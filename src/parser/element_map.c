@@ -48,7 +48,7 @@ t_error	save_line(char *s, char *cell, t_game *game, t_map *map)
 	y = map->height * map->width;
 	while (s[i] && s[i] != '\n')
 	{
-		if (i > MAP_SIZE_MAX_VALS)
+		if (i == MAP_SIZE_MAX_VALS)
 			return (error | ERR_MAP_OVERFLOW);
 		else if (!is_char_valid_place(map, s, i, y))
 			error |= ERR_OPEN_MAP;

@@ -102,10 +102,10 @@ static t_error		set_info_color(uint8_t *color, t_direction direction,
 	if (!rgb)
 		return (ERR_SYS);
 	i = 0;
-	error = ERR_NONE;
-	while (i <= B)
+	error = check_split_rgb8(rgb, s);
+	while (i < 3)
 	{
-		if (!is_rgb8(rgb[i]))
+		if (error || !is_rgb8(rgb[i]))
 		{
 			error = ERR_NOT_RGB8;
 			break ;
@@ -119,7 +119,7 @@ static t_error		set_info_color(uint8_t *color, t_direction direction,
 
 static bool	check_complete_infos(char **path_textures, t_error *error)
 {
-	return ((*error & MASK_ERR_NO_RGBS) == 0
+	return ((*error & MASK_ERRS_NO_RGBS) == 0
 		 && path_textures[NORTH] && path_textures[SOUTH]
 		 && path_textures[WEST] && path_textures[EAST]);
 }

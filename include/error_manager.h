@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 16:09:17 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 23:29:45 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/21 21:48:58 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,16 @@ typedef enum e_error
 	ERR_MAP_OVERFLOW = 1u << 10,
 	ERR_OPEN_MAP = 1u << 11,
 	ERR_INVALID_C = 1u << 12,
-	ERR_DUPLICATE_PLAYER = 1u << 13
+	ERR_DUPLICATE_PLAYER = 1u << 13,
+	ERR_MISSING_INFO = 1u << 14,
+	ERR_MISSING_MAP = 1u << 15,
+	ERR_MISSING_PLAYER = 1u << 16
 }	t_error;
 
-# define MASK_ERR_PARSER 0x3FFC //TODO: A Mettre a jour si ajout
-# define MASK_ERR_NO_RGBS 0xC0
-# define MASK_ERR_CRITICAL_BUGS 1401 //TODO: A Mettre a jour si ajout
+# define MASK_ERRS_BAD_INFOS 0x41F8
+# define MASK_ERRS_PARSER 0x1FFFC //TODO: A Mettre a jour si ajout
+# define MASK_ERRS_NO_RGBS 0xC0
+# define MASK_ERRS_CRITICALS 0x1409 //TODO: A Mettre a jour si ajout
 
 # define MSG_USAGE "\x1b[38:5:213mUsage:\x1b[0m "
 # define MSG_ERROR "\x1b[38:5:196mError\x1b[0m"
@@ -46,7 +50,7 @@ typedef enum e_error
 # define MSG_WRONG_PATH "- The specified path is not a .cub map."
 
 # define MSG_WRONG_INFO_START_1 "- Incorrect ID encountered at a line start."
-# define MSG_WRONG_INFO_START_2 " Only NO, SO, WE, EA, F and C are accepted."
+# define MSG_WRONG_INFO_START_2 " Maybe an info is missing before map data."
 
 # define MSG_MISSING_SPACE "- Missing space even though it was expected."
 
@@ -57,7 +61,7 @@ typedef enum e_error
 
 # define MSG_NOT_RGB8 "- A color is not RGB 8 bits (0-255)."
 
-# define MSG_EMPTY_LINE "- Empty lines are not allowed in the map's lines."
+# define MSG_EMPTY_LINE "- Empty lines are not allowed in map lines."
 
 # define MSG_MAP_OVERFLOW_1 "- The map is exceeding "
 # define MSG_MAP_OVERFLOW_2 " characters (width and/or height)."
@@ -67,6 +71,12 @@ typedef enum e_error
 # define MSG_INVALID_C "- A character in the map's data is not a valid one."
 
 # define MSG_DUPLICATE_PLAYER "- A player is already set."
+
+# define MSG_MISSING_INFO "- A map info is missing!"
+
+# define MSG_MISSING_MAP "- No map data found!"
+
+# define MSG_MISSING_PLAYER "- No player found!"
 
 void	error_exit(uint64_t eflag);
 

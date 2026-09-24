@@ -37,6 +37,8 @@ void	print_map_player(t_map *map, t_player *player) //WARN: TMP
 	printf("SO:	%s\n", map->path_textures[1]);
 	printf("WE:	%s\n", map->path_textures[2]);
 	printf("EA:	%s\n\n", map->path_textures[3]);
+	printf("F:	%d,%d,%d\n", map->floor_rgb[0], map->floor_rgb[1], map->floor_rgb[2]);
+	printf("C:	%d,%d,%d\n\n", map->ceiling_rgb[0], map->ceiling_rgb[1], map->ceiling_rgb[2]);
 	while (y < map->height)
 	{
 		write(1, map->cell + x + y * map->width, 1);

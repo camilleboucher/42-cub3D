@@ -1,7 +1,15 @@
 TODO :
-- 1 ) PARSING:tester toutes les erreurs de parsing pottentiels :
-	- A ) si la ligne se fini il faut quand meme continuer jusqua map->width pour voir si 0 au dessus de rien (check map invalid/			dup_player_AND_open_map.cub par exemple)
-- 2 ) changer map statique en dynamique
+- crash writeofsize 1 (setinfodirection strdup malloc ligne 77) si map info orientation et rien apres (\n ou fin de fichier) ou si un espace ou que des espaces
+- get_exit_code
+- better gnl and not leaking
+
+
+
+
+2h
+
+
+
 
 PRISE DE NOTE :
 

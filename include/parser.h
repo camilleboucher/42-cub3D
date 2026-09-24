@@ -25,6 +25,7 @@ void	parsing(int fd, t_game *game, t_step step);
 
 // parser_utils.c
 char	*skip_spaces(char *s);
+t_error	check_split_rgb8(char **rgb, char *s);
 bool	is_rgb8(char *s);
 
 // element_infos.c

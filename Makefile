@@ -1,5 +1,6 @@
 CC := cc
-CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result #TODO: -Werror
+#CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result #TODO: -Werror
+CFLAGS := -Wall -Wextra -g -Wno-unused-result #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
 ifeq ($(FSANITIZE), true)

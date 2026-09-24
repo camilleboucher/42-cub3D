@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 14:21:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/21 19:41:19 by aiga             ###   ########.fr       */
+/*   Updated: 2026/08/21 21:48:13 by aiga             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static t_error	get_map_line(t_game *game, t_map *map, char *s);
 static t_error	last_line_verification(t_map *map);
+static t_error	last_verification(t_game *game, t_error error);
 static void		parser_cleaner(uint64_t eflag, t_map *map, t_list **map_lines);
 
 
@@ -21,22 +22,28 @@ void	parsing_map(t_game *game, t_map *map, t_list *map_head, t_error error)
 {
 	t_list	*map_line;
 
-	map_line = map_head;
-	map->cell = malloc(sizeof(char) * (map->height * map->width));
-	if (!map->cell)
-		error |= ERR_SYS;
-	else
+	if(map_head->content)
 	{
-		ft_memset(map->cell, C_VOID, map->height * map->width);
-		map->height = 0;
-		while (map_line && !(error & MASK_ERR_CRITICAL_BUGS))
+		map_line = map_head;
+		map->cell = malloc(sizeof(char) * (map->height * map->width));
+		if (!map->cell)
+			error |= ERR_SYS;
+		else
 		{
-			error |= get_map_line(game, map, map_line->content);
-			map_line = map_line->next;
+			ft_memset(map->cell, C_VOID, map->height * map->width);
+			map->height = 0;
+			while (map_line && !(error & MASK_ERRS_CRITICALS))
+			{
+				error |= get_map_line(game, map, map_line->content);
+				map_line = map_line->next;
+			}
+			if (!(error & MASK_ERRS_CRITICALS))
+				error |= last_line_verification(map);
 		}
-		if (!(error & MASK_ERR_CRITICAL_BUGS))
-			error |= last_line_verification(map);
 	}
+	else
+		error |= ERR_MISSING_MAP;
+	error |= last_verification(game, error);
 	parser_cleaner(error, &game->map, &map_head);
 }
 
@@ -68,6 +75,24 @@ static t_error	last_line_verification(t_map *map)
 		i++;
 	}
 	return (ERR_NONE);
+}
+
+static t_error	last_verification(t_game *game, t_error error)
+{
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (!game->map.path_textures[i])
+			error |= ERR_MISSING_INFO;
+		i++;
+	}
+	if (error & MASK_ERRS_CRITICALS || error & ERR_MISSING_MAP)
+		return (error);
+	if (!game->player.pos.x || !game->player.pos.y)
+		error |= ERR_MISSING_PLAYER;
+	return (error);
 }
 
 static void	parser_cleaner(uint64_t eflag, t_map *map, t_list **map_lines)

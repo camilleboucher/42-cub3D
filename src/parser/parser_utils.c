@@ -19,18 +19,37 @@ char	*skip_spaces(char *s)
 	return (s);
 }
 
+t_error	check_split_rgb8(char **strs, char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!strs || !ft_isdigit(s[ft_strlen(s) - 1]))
+		return (ERR_NOT_RGB8);
+	while (strs[i])
+		i++;
+	if (i == 3)
+		return (ERR_NONE);
+	return (ERR_NOT_RGB8);
+}
+
 bool	is_rgb8(char *s)
 {
-	int	size;
+	int	i;
+	int	val;
 
-	size = ft_strlen(s);
-	if (size > 3)
+	if (!s || !*s)
 		return (false);
-	while (*s)
+	i = 0;
+	val = 0;
+	while (s[i])
 	{
-		if (!ft_isdigit(*s))
+		if (!ft_isdigit(s[i]))
 			return (false);
-		s++;
+		val = val * 10 + (int)(s[i] - '0');
+		if (val > 255)
+			return (false);
+		i++;
 	}
 	return (true);
 }
