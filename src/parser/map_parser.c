@@ -13,8 +13,8 @@
 #include "cub3D.h"
 
 static t_error	get_map_line(t_app *app, t_map *map, char *s);
-static t_error	last_line_verification(t_map *map);
-static t_error	last_verification(t_app *app, t_error error);
+static t_error	last_line_check_openmap(t_map *map);
+static t_error	checks_extracted_parsing_datas(t_app *app, t_error error);
 static void		parser_cleaner(uint64_t eflag, t_map *map, t_list **map_lines);
 
 void	parsing_map(t_app *app, t_map *map, t_list *map_head, t_error error)
@@ -37,12 +37,12 @@ void	parsing_map(t_app *app, t_map *map, t_list *map_head, t_error error)
 				map_line = map_line->next;
 			}
 			if (!(error & MASK_ERRS_CRITICALS))
-				error |= last_line_verification(map);
+				error |= last_line_check_openmap(map);
 		}
 	}
 	else
 		error |= ERR_MISSING_MAP;
-	error |= last_verification(app, error);
+	error |= checks_extracted_parsing_datas(app, error);
 	parser_cleaner(error, &app->map, &map_head);
 }
 
@@ -60,7 +60,7 @@ static t_error	get_map_line(t_app *app, t_map *map, char *s)
 	return (error);
 }
 
-static t_error	last_line_verification(t_map *map)
+static t_error	last_line_check_openmap(t_map *map)
 {
 	int	i;
 	int	y;
@@ -76,7 +76,7 @@ static t_error	last_line_verification(t_map *map)
 	return (ERR_NONE);
 }
 
-static t_error	last_verification(t_app *app, t_error error)
+static t_error	checks_extracted_parsing_datas(t_app *app, t_error error)
 {
 	int	i;
 

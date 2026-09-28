@@ -66,6 +66,8 @@ static bool	set_info_direction(t_map *map, t_direction direction,
 {
 	char	**path_texture_dir;
 
+	if (!*s)
+		return (*error |= ERR_MISSING_INFO);
 	if (direction <= EAST)
 	{
 		path_texture_dir = &map->path_textures[direction];
@@ -74,8 +76,6 @@ static bool	set_info_direction(t_map *map, t_direction direction,
 		*path_texture_dir = ft_strdup(s);
 		if (!*path_texture_dir)
 			return (*error |= ERR_SYS);
-		if (!**path_texture_dir)
-			return (*error |= ERR_MISSING_INFO);
 		(*path_texture_dir)[ft_strlen(*path_texture_dir) - 1] = '\0';
 	}
 	else if (direction == FLOOR)

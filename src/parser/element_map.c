@@ -13,7 +13,7 @@
 #include "cub3D.h"
 #include "cube3D2.h"
 
-static t_error	verifs_openmap(char *cell, int x, int y, int map_width);
+static t_error	checks_openmap(char *cell, int x, int y, int map_width);
 static bool		is_char_valid_place(t_map *map, char *s, int x, int y);
 static bool		save_player(char *s, int *i, t_app *app, t_error *error);
 
@@ -61,11 +61,11 @@ t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
 		cell[i + y] = s[i];
 		i++;
 	}
-	error |= verifs_openmap(map->cell, i, y, map->width);
+	error |= checks_openmap(map->cell, i, y, map->width);
 	return (error);
 }
 
-static t_error	verifs_openmap(char *cell, int x, int y, int map_width)
+static t_error	checks_openmap(char *cell, int x, int y, int map_width)
 {
 	while (x < map_width)
 	{
