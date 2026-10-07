@@ -1,9 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_handler.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:09:59 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:10:11 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef INPUT_HANDLER_H
 #define INPUT_HANDLER_H
-
-#include "mlx.h"
-#include "vector.h"
-#include <stdbool.h>
 
 typedef struct s_input_handler {
   t_vec2i mouse_pos;

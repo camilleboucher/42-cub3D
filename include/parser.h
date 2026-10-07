@@ -6,14 +6,12 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 17:12:50 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 17:27:55 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:36:11 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
-
-#include "cube3D2.h"
 
 typedef enum e_step
 {

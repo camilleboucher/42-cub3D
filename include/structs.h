@@ -6,15 +6,12 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 17:12:31 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 18:11:24 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:11:30 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
-
-#include "vector.h"
-#include "mlx.h"
 
 typedef enum e_direction
 {

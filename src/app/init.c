@@ -1,4 +1,16 @@
-#include "cube3D2.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 13:53:15 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:28:45 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 bool app_init(t_app *app)
 {
@@ -22,13 +34,4 @@ bool app_init(t_app *app)
     if (!resize_frame_buffer(app, app->info.width, app->info.height))
         return (false);
     return (true);
-}
-
-void app_destroy(t_app *app)
-{
-    free(app->frame_buffer.buffer);
-    free(app->frame_buffer.shader_buffer);
-    mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
-    mlx_destroy_window(app->ctx, app->window);
-    mlx_destroy_context(app->ctx);
 }

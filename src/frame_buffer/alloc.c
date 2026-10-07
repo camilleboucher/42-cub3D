@@ -1,4 +1,16 @@
-#include "cube3D2.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   alloc.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:15:16 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:29:15 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 static bool allocate_buffers(t_app *app, t_region **buffer, t_region **shader_buffer, mlx_image *frame_buffer_image)
 {

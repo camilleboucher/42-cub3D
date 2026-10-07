@@ -6,12 +6,11 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 17:32:10 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 17:34:28 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:30:21 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "cube3D2.h"
 
 static t_error	backup_map_line(t_map *map, t_list *map_lines,
 					char *s, t_step *step);

@@ -6,20 +6,16 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 15:25:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 18:03:52 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:03:06 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "app.h"
-#include "menus.h"
-
 #include "cub3D.h"
-#include "vector.h"
 
-static void load_map(t_app *app, char *map_path);
-static void check_file_extension(char *path, char *ext, int ext_size);
-static int open_map(char *path);
-static void init_game(t_player *player, t_map *map);
+static void	load_map(t_app *app, char *map_path);
+static void	check_file_extension(char *path, char *ext, int ext_size);
+static int	open_map(char *path);
+static void	init_parser(t_player *player, t_map *map);
 
 int main(int argc, char *argv[])
 {
@@ -27,11 +23,9 @@ int main(int argc, char *argv[])
 
 	if (argc != 2)
 		error_exit(ERR_NO_ARG);
-
 	app = (struct s_app){0};
-
-	app_init(&app);
 	load_map(&app, argv[1]);
+	app_init(&app);
 	if (!atlas_load_buttons(&app))
 	{
 		app_destroy(&app);
@@ -39,7 +33,6 @@ int main(int argc, char *argv[])
 	}
 	main_loop(&app);
 	free_all_images(&app);
-	clean_game(&app);
 	app_destroy(&app);
 }
 
@@ -81,7 +74,7 @@ static void load_map(t_app *app, char *map_path)
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
-	init_game(&app->player, &app->map);
+	init_parser(&app->player, &app->map);
 	parsing(fd, app, GET_INFOS);
 	app->map.ceil_color = (mlx_color){ .r=app->map.ceiling_rgb[0], .g=app->map.ceiling_rgb[1], .b=app->map.ceiling_rgb[2], .a=0xFF };
 	app->map.floor_color = (mlx_color){ .r=app->map.floor_rgb[0], .g=app->map.floor_rgb[1], .b=app->map.floor_rgb[2], .a=0xFF };
@@ -119,7 +112,7 @@ static int open_map(char *path)
 	return (fd);
 }
 
-static void init_game(t_player *player, t_map *map)
+static void init_parser(t_player *player, t_map *map)
 {
 	player->pos = (t_vec2f){0};
 	map->height = 0;

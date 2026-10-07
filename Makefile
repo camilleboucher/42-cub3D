@@ -1,14 +1,16 @@
 CC := cc
-#CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result #TODO: -Werror
-#CFLAGS := -Wall -Wextra -g -Wno-unused-result #TODO: -Werror
-CFLAGS := -Wall -Wextra -g -O3 -march=native -Wno-unused-result -fsanitize=address #TODO: -Werror
+CFLAGS := -Wall -Wextra -O3 -march=native -Wno-unused-result #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
 ifeq ($(FSANITIZE), true)
 	CFLAGS += -fsanitize=address
 endif
 
-NAME := cube
+ifeq ($(DEBUG), true)
+	CFLAGS += -g
+endif
+
+NAME := cub3D
 
 OUTPUT_DIR := output
 
