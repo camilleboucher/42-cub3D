@@ -6,13 +6,13 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:30:28 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 16:08:27 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cube3D.h"
 
-void player_input(t_player *player, t_input_handler *input_handler, double delta_time) {
+void player_input(t_player *player, t_input_handler *input_handler, double delta_time, t_map *map) {
     bool keyboard_control;
     player->forward.x = cos(player->angle);
     player->forward.y = sin(player->angle);
@@ -63,7 +63,7 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     }
 
     //printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
-
+	check_collision();//TODO:
     player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
 
     player->angle = input_handler->total_mouse_pos.x / 200.;
@@ -71,5 +71,4 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
         player->angle -= M_PI * 2.;
     if (player->angle < -M_PI)
         player->angle += M_PI * 2.;
-    
 }

@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:15:33 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:29:23 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 16:07:17 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void ingame_update(t_app *app) {
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     app->input_handler.total_mouse_pos.x += get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time);
     //printf("%f\n", get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time));
-    player_input(&app->player, &app->input_handler, time - last_time);
+    player_input(&app->player, &app->input_handler, time - last_time, &app->map);
     draw_raycast(app, &raycaster);
     //apply_blur(app);
     push_frame_buffer_to_screen(app);
