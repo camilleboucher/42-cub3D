@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/24 15:25:55 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 18:03:52 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "app.h"
 #include "menus.h"
 
@@ -25,16 +37,13 @@ int main(int argc, char *argv[])
 		app_destroy(&app);
 		return (1);
 	}
-	free(app.map.path_textures[0]);
-	free(app.map.path_textures[1]);
-	free(app.map.path_textures[2]);
-	free(app.map.path_textures[3]);
 	main_loop(&app);
 	free_all_images(&app);
+	clean_game(&app);
 	app_destroy(&app);
 }
 
-void print_map_player(t_map *map, t_player *player)
+void print_map_player(t_map *map, t_player *player) //INFO: temporaire pour debug
 {
 	int x;
 	int y;
@@ -46,11 +55,13 @@ void print_map_player(t_map *map, t_player *player)
 	printf("SO:	%s\n", map->path_textures[1]);
 	printf("WE:	%s\n", map->path_textures[2]);
 	printf("EA:	%s\n\n", map->path_textures[3]);
-	while (y != map->height)
+	printf("F:	%d,%d,%d\n", map->floor_rgb[0], map->floor_rgb[1], map->floor_rgb[2]);
+	printf("C:	%d,%d,%d\n\n", map->ceiling_rgb[0], map->ceiling_rgb[1], map->ceiling_rgb[2]);
+	while (y < map->height)
 	{
-		write(1, map->cell + x + y * MAP_SIZE_MAX_VALS, 1);
+		write(1, map->cell + x + y * map->width, 1);
 		x++;
-		if (x > map->width)
+		if (x == map->width)
 		{
 			x = 0;
 			y++;
@@ -61,6 +72,7 @@ void print_map_player(t_map *map, t_player *player)
 	printf("X: %f\n", player->pos.x);
 	printf("Y: %f\n", player->pos.y);
 	printf("Angle: %f\n", player->angle);
+	printf("%d\n", map->cell[461]);
 }
 
 static void load_map(t_app *app, char *map_path)
@@ -70,17 +82,10 @@ static void load_map(t_app *app, char *map_path)
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
 	init_game(&app->player, &app->map);
-	parsing(fd, app);
+	parsing(fd, app, GET_INFOS);
 	app->map.ceil_color = (mlx_color){ .r=app->map.ceiling_rgb[0], .g=app->map.ceiling_rgb[1], .b=app->map.ceiling_rgb[2], .a=0xFF };
 	app->map.floor_color = (mlx_color){ .r=app->map.floor_rgb[0], .g=app->map.floor_rgb[1], .b=app->map.floor_rgb[2], .a=0xFF };
-	print_map_player(&app->map, &app->player); // WARN: TMP
-	// TODO: FAIRE UN MOD CLEANER
-
-	// Why is is freed now ?
-	/*free(app->map.path_textures[0]);
-	free(app->map.path_textures[1]);
-	free(app->map.path_textures[2]);
-	free(app->map.path_textures[3]);*/
+	print_map_player(&app->map, &app->player); //INFO: temporaire pour debug
 }
 
 static void check_file_extension(char *path, char *ext, int ext_size)
@@ -117,8 +122,8 @@ static int open_map(char *path)
 static void init_game(t_player *player, t_map *map)
 {
 	player->pos = (t_vec2f){0};
-	ft_memset(map->cell, C_VOID, sizeof(map->cell));
 	map->height = 0;
+	map->width = 0;
 	ft_memset(map->path_textures, 0, sizeof(map->path_textures));
 	ft_memset(map->floor_rgb, 0, sizeof(map->floor_rgb));
 	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));

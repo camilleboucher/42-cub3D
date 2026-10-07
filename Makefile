@@ -1,4 +1,6 @@
 CC := cc
+#CFLAGS := -Wall -Wextra -g -O3 -Wno-unused-result #TODO: -Werror
+#CFLAGS := -Wall -Wextra -g -Wno-unused-result #TODO: -Werror
 CFLAGS := -Wall -Wextra -g -O3 -march=native -Wno-unused-result -fsanitize=address #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
@@ -24,8 +26,11 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/error_manager/error_manager.c \
 	   $(SRC_DIR)/parser/parser.c \
+	   $(SRC_DIR)/parser/map_parser.c \
 	   $(SRC_DIR)/parser/element_infos.c \
 	   $(SRC_DIR)/parser/element_map.c \
+	   $(SRC_DIR)/parser/parser_utils.c \
+	   $(SRC_DIR)/cleaner/cleaner.c \
 	   $(SRC_DIR)/map_tools/getters.c \
 	   $(SRC_DIR)/game/game.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
@@ -41,7 +46,7 @@ $(NAME): $(OUTPUT_DIR) $(OBJ) MacroLibX/libmlx.so libft/libft.a
 	$(CC) $(OBJ) MacroLibX/libmlx.so libft/libft.a $(CFLAGS) $(LDFLAGS) -o $@ libft/libft.a
 
 $(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/player $(OUTPUT_DIR)/input_handler $(OUTPUT_DIR)/time_tools $(OUTPUT_DIR)/game $(OUTPUT_DIR)/gui $(OUTPUT_DIR)/vector2 $(OUTPUT_DIR)/app $(OUTPUT_DIR)/menus $(OUTPUT_DIR)/atlas $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/shaders $(OUTPUT_DIR)/parser $(OUTPUT_DIR)/error_manager $(OUTPUT_DIR)/map_tools $(OUTPUT_DIR)/raycaster
+	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/player $(OUTPUT_DIR)/input_handler $(OUTPUT_DIR)/time_tools $(OUTPUT_DIR)/game $(OUTPUT_DIR)/gui $(OUTPUT_DIR)/vector2 $(OUTPUT_DIR)/app $(OUTPUT_DIR)/menus $(OUTPUT_DIR)/atlas $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/shaders $(OUTPUT_DIR)/parser $(OUTPUT_DIR)/error_manager $(OUTPUT_DIR)/cleaner $(OUTPUT_DIR)/map_tools $(OUTPUT_DIR)/raycaster
 
 $(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES)

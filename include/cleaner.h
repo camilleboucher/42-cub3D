@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   constants.h                                        :+:      :+:    :+:   */
+/*   cleaner.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/22 16:03:01 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:12:31 by cboucher         ###   ########.fr       */
+/*   Created: 2026/09/24 15:29:14 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 17:15:22 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONSTANTS_H
-# define CONSTANTS_H
+#ifndef CLEANER_H
+# define CLEANER_H
 
-// MAP's CONSTANTS :
-// =================
-# define MAP_SIZE_MAX_VALS 256
-
-# define C_VOID ' '
-# define C_FLOOR '0'
-# define C_WALL '1'
+void	clean_game(t_app *app);
+void	clean_map(t_map *map);
 
 #endif

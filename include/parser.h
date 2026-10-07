@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/24 14:21:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/24 18:32:13 by yben-dje         ###   ########.fr       */
+/*   Created: 2026/09/24 17:12:50 by cboucher          #+#    #+#             */
+/*   Updated: 2026/09/24 17:27:55 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,21 @@ typedef enum e_step
 }	t_step;
 
 // parser.c
-void	parsing(int fd, t_app *app);
+void	parsing(int fd, t_app *app, t_step step);
+
+// parser_utils.c
 char	*skip_spaces(char *s);
+t_error	check_split_rgb8(char **rgb, char *s);
 bool	is_rgb8(char *s);
 
 // element_infos.c
 bool	get_info(t_map *map, char *s, t_error *error);
 
+// map_parser.c
+void	parsing_map(t_app *game, t_map *map, t_list *map_head, t_error error);
+
 // element_map.c
-t_error	get_map_line(t_app *app, t_map *map, char *s, t_step *step);
+t_error	save_first_line(char *s, char *cell);
+t_error	save_line(char *s, char *cell, t_app *app, t_map *map);
 
 #endif
