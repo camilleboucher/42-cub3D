@@ -1,25 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   animated_sprite.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 13:56:54 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:05:55 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ANIMATED_SPRITE_H
 #define ANIMATED_SPRITE_H
 
-#include "frame_buffer.h"
-
-typedef struct s_animated_sprite {
-    t_region *frames;
-    unsigned int frame_count;
-    float frame_time;
-    unsigned int frame_index;
-    bool playing;
+typedef struct s_animated_sprite
+{
+	t_region		*frames;
+	unsigned int	frame_count;
+	float			frame_time;
+	unsigned int	frame_index;
+	bool			playing;
 } t_animated_sprite;
 
-t_animated_sprite animated_sprite_from_region(t_region *frames, unsigned int frame_count, float frame_time, bool playing) {
-    t_animated_sprite sprite;
-
-    sprite.frames = frames;
-    sprite.frame_count = frame_count;
-    sprite.frame_time = frame_time;
-    sprite.frame_index = 0;
-    sprite.playing = playing;
-    return (sprite);
+t_animated_sprite animated_sprite_from_region(t_region *frames, 
+	unsigned int frame_count, float frame_time, bool playing)
+{
+	t_animated_sprite sprite;
+	sprite.frames = frames;
+	sprite.frame_count = frame_count;
+	sprite.frame_time = frame_time;
+	sprite.frame_index = 0;
+	sprite.playing = playing;
+	return (sprite);
 }
 
 mlx_color *animated_sprite_get_buffer_start(t_animated_sprite *sprite, unsigned int *frame_width) {

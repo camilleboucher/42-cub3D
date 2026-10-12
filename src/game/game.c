@@ -1,10 +1,16 @@
-#include "cube3D2.h"
-#include "input_handler.h"
-#include "map_tools.h"
-#include "mlx.h"
-#include "mlx_keycodes.h"
-#include <stdio.h>
-#include "shaders.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:15:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:29:23 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 void main_menu_window_update(t_app *app)
 {

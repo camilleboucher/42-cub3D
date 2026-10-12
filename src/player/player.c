@@ -1,14 +1,16 @@
-#include <mlx_keycodes.h>
-#include "player.h"
-#include <math.h>
-#include <stdio.h>
-#include "input_handler.h"
-#include "mlx_extended.h"
-#include "vector.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   player.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:30:28 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define PLAYER_MAX_SPEED 4.
-#define PLAYER_SPEED_DECREASE 8.
-#define PLAYER_FORCE 15.
+#include "cub3D.h"
 
 void player_input(t_player *player, t_input_handler *input_handler, double delta_time) {
     bool keyboard_control;

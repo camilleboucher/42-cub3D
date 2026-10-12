@@ -6,12 +6,11 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 17:19:26 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 18:12:04 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:30:12 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "cube3D2.h"
 
 static t_error	checks_openmap(char *cell, int x, int y, int map_width);
 static bool		is_char_valid_place(t_map *map, char *s, int x, int y);

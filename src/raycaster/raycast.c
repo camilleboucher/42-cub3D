@@ -6,14 +6,11 @@
 /*   By: yben-dje <yben-dje@student.642.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 18:649:164 by yben-dje          #+#    #+#             */
-/*   Updated: 2026/08/31 17:643:07 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:30:33 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3D2.h"
-#include "vector.h"
-#include "raycaster.h"
-#include "map_tools.h"
+#include "cub3D.h"
 
 int max(int a, int b) {
     if (a < b)

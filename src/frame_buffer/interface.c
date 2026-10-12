@@ -1,4 +1,16 @@
-#include "cube3D2.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   interface.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:15:22 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:29:19 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 void set_pixel(t_region *frame_buffer, unsigned int x, unsigned int y, mlx_color color)
 {

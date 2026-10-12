@@ -12,11 +12,6 @@
 
 #include "cub3D.h"
 
-void	clean_game(t_app *app)
-{
-	clean_map(&app->map);
-}
-
 void	clean_map(t_map *map)
 {
 	free(map->cell);
@@ -24,4 +19,14 @@ void	clean_map(t_map *map)
 	free(map->path_textures[1]);
 	free(map->path_textures[2]);
 	free(map->path_textures[3]);
+}
+
+void app_destroy(t_app *app)
+{
+	clean_map(&app->map);
+    free(app->frame_buffer.buffer);
+    free(app->frame_buffer.shader_buffer);
+    mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);
+    mlx_destroy_window(app->ctx, app->window);
+    mlx_destroy_context(app->ctx);
 }

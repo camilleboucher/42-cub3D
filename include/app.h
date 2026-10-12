@@ -1,14 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   app.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:05:07 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:06:01 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef APP_H
 #define APP_H
-
-#include "input_handler.h"
-#include "frame_buffer.h"
-#include "atlas.h"
-#include "mlx.h"
-#include <stdbool.h>
-#include "cub3D.h"
-#include "cube3D2.h"
-#include "menus.h"
 
 typedef enum e_game_state {
     ingame,
@@ -31,7 +34,5 @@ typedef struct s_app
 } t_app;
 
 bool app_init(t_app *app);
-
-void app_destroy(t_app *app);
 
 #endif
