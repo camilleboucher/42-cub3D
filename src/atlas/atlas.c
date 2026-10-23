@@ -60,61 +60,64 @@ t_region *load_image(t_app *app, char *path)
 
 bool atlas_load_buttons(t_app *app) {
     app->image_atlas.image_amount = 0;
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/play_button.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/play_button.png"); // 0
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/play_button_hover.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/play_button_hover.png"); // 1
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/stone.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/stone.png"); // 2
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[1]);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[1]); // 3
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[0]);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[0]); // 4
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[3]);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[3]); // 5
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[2]);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[2]); // 6
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one.png"); // 7
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/two.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/two.png"); // 8
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/three.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/three.png"); // 9
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four.png"); // 10
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one_hover.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/one_hover.png"); // 11
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/two_hover.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/two_hover.png"); // 12
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/three_hover.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/three_hover.png"); // 13
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four_hover.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/four_hover.png"); // 14
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/how_many_players_sign.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/how_many_players_sign.png"); // 15
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/controler.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/controler.png"); // 16
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/keyboard_mouse.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/keyboard_mouse.png"); // 17
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
-    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/keyboard.png");
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/keyboard.png"); // 18
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/input_slot.png"); // 19
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
     return (true);
