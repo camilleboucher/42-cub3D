@@ -64,8 +64,10 @@ void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image)
     mlx_color color;
     t_vec2i out_size;
     t_vec2i start_pos;
-
-    if (pos.x > (int)app->frame_buffer.buffer->width || pos.y > (int)app->frame_buffer.buffer->height || pos.x + size.x < 0 || pos.y + size.y < 0)
+    
+    pos.x += (app->frame_buffer.width - (int)size.x) / 2;
+    pos.y += (app->frame_buffer.height - (int)size.y) / 2;
+    if (pos.x > (int)app->frame_buffer.buffer->width / 2 || pos.y > (int)app->frame_buffer.buffer->height / 2 || pos.x + size.x < -(int)app->frame_buffer.buffer->width / 2 || pos.y + size.y < -(int)app->frame_buffer.buffer->width / 2)
         return;
     out_size = get_out_size(app, pos, size);
     start_pos = get_start_pos(pos);

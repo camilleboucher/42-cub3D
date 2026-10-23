@@ -26,8 +26,6 @@ void main_menu_window_update(t_app *app)
 {
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
     // apply_blur(app, a / 2 % 20 + 1, 5);
-    app->main_menu.play_button.pos.x = ((int)app->frame_buffer.width - (int)app->main_menu.play_button.size.x) / 2;
-    app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.size.y) / 2;
     if (tex_button_update(app, app->main_menu.play_button))
         app->game_state = player_count_select;
     push_buffer_to_screen_image(app, 0);
@@ -156,7 +154,7 @@ void window_event_handle(int event, void *param)
 
 void init_main_menu(t_app *app)
 {
-    app->main_menu.play_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
+    app->main_menu.play_button = tex_button_create((t_vec2i){0, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
 }
 
 void start_game(t_app *app) {
@@ -223,7 +221,7 @@ void input_select_menu_window_update(t_app *app)
 
     for (int i = 0; i < 4; i++) {
         t_card_slot slot = app->input_select_menu.card_slots[i];
-        draw_rect(app, slot.pos, slot.size, (mlx_color){ .rgba=0xFF0000FF });
+        draw_image_strech(app, (t_vec2i){slot.pos.x - 371, slot.pos.y - 59}, (t_vec2i){621, 311}, app->image_atlas.images[19]);
     }
 
     grab_card_update(app, &app->input_select_menu.one_card, app->input_select_menu.card_slots, time - last_time);
@@ -276,15 +274,15 @@ void handle_controler_down(mlx_controller_event_code event, void *param) {
     app = param;
     if (event.button == MLX_CONTROLLER_CONNECT)
     {
-        if (app->input_handler.controler_count < 4)
-            app->input_handler.controler_count += 1;
+        if (app->input_handler.controller_count < 4)
+            app->input_handler.controller_count += 1;
         if (app->game_state == ingame)
             handle_resize_event(app);
     }
     if (event.button == MLX_CONTROLLER_DISCONNECT)
     {
-        if (app->input_handler.controler_count > 0)
-            app->input_handler.controler_count -= 1;
+        if (app->input_handler.controller_count > 0)
+            app->input_handler.controller_count -= 1;
         if (app->game_state == ingame)
             handle_resize_event(app);
     }

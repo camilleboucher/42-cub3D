@@ -50,17 +50,17 @@ bool resize_frame_buffer(t_app *app, unsigned int width, unsigned height)
 {
     app->frame_buffer.screen_width = width;
     app->frame_buffer.screen_height = height;
-    if (app->game_state != ingame || app->input_handler.controler_count == 1)
+    if (app->game_state != ingame || app->input_handler.player_count == 1)
     {
         app->frame_buffer.width = width;
         app->frame_buffer.height = height;
     }
-    else if (app->input_handler.controler_count == 2)
+    else if (app->input_handler.player_count == 2)
     {
         app->frame_buffer.width = width / 2;
         app->frame_buffer.height = height;
     }
-    else if (app->input_handler.controler_count == 3 || app->input_handler.controler_count == 4)
+    else if (app->input_handler.player_count == 3 || app->input_handler.player_count == 4)
     {
         app->frame_buffer.width = width / 2;
         app->frame_buffer.height = height / 2;
@@ -76,7 +76,7 @@ void push_buffer_to_screen_image(t_app *app, unsigned int sub_screen_index)
     t_vec2i offset;
 
     offset = (t_vec2i){0, 0};
-    if (app->input_handler.controler_count > 1)
+    if (app->input_handler.player_count > 1)
         offset = (t_vec2i){(sub_screen_index % 2) * app->frame_buffer.width, (sub_screen_index / 2) * app->frame_buffer.height};
     //printf("%d %d\n", offset.x, offset.y);
     mlx_set_image_region(app->ctx, app->frame_buffer.screen_image, offset.y, offset.x, 
