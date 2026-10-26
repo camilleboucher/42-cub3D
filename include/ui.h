@@ -21,6 +21,7 @@ typedef struct s_grab_card
 	bool			is_grab;
 	t_region		*default_image;
 	t_vec2i			mouse_rel_pos;
+	int				device_id;
 }					t_grab_card;
 
 typedef struct s_card_slot
@@ -28,6 +29,7 @@ typedef struct s_card_slot
 	t_vec2i			pos;
 	t_vec2i			size;
 	unsigned int	id;
+	bool			hide;
 }					t_card_slot;
 
 typedef struct s_label
@@ -58,6 +60,7 @@ typedef struct s_input_select_menu
 	t_grab_card		three_card;
 	t_grab_card		four_card;
 	t_card_slot		card_slots[4];
+	int				controler_ids[4];
 }					t_input_select_menu;
 
 bool				tex_button_update(t_app *app, t_tex_button button);
@@ -70,10 +73,9 @@ void				draw_rect(t_app *app, t_vec2i pos, t_vec2i size,
 
 void				grab_card_update(t_app *app, t_grab_card *card,
 						t_card_slot slots[4], double delta_time);
-t_grab_card			grab_card_create(t_vec2f pos, t_vec2i size,
-						t_region *default_image);
+t_grab_card			grab_card_create(t_vec2f pos, t_vec2i size, int device_id);
 
 t_card_slot			card_slot_create(t_app *app, t_vec2i pos, t_vec2i size,
-						unsigned int id);
+						int id);
 
 #endif

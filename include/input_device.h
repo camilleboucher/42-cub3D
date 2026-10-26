@@ -1,3 +1,6 @@
+#ifndef INPUT_DEVICE_H
+#define INPUT_DEVICE_H
+
 #include "vector.h"
 #include <stdbool.h>
 
@@ -19,4 +22,6 @@ typedef struct s_input_device
     int             controller_slot;
 }					t_input_device;
 
-void				device_notify(t_app *app, t_input_device *device);
+void				device_notify(t_app *app, int device_id);
+
+#endif
