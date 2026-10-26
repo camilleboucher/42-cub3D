@@ -65,9 +65,9 @@ void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image)
     t_vec2i out_size;
     t_vec2i start_pos;
     
-    pos.x += (app->frame_buffer.width - (int)size.x) / 2;
-    pos.y += (app->frame_buffer.height - (int)size.y) / 2;
-    if (pos.x > (int)app->frame_buffer.buffer->width / 2 || pos.y > (int)app->frame_buffer.buffer->height / 2 || pos.x + size.x < -(int)app->frame_buffer.buffer->width / 2 || pos.y + size.y < -(int)app->frame_buffer.buffer->width / 2)
+    pos.x += ((int)app->frame_buffer.width - (int)size.x) / 2;
+    pos.y += ((int)app->frame_buffer.height - (int)size.y) / 2;
+    if (pos.x > (int)app->frame_buffer.buffer->width || pos.y > (int)app->frame_buffer.buffer->height || pos.x + size.x < 0 || pos.y + size.y < 0)
         return;
     out_size = get_out_size(app, pos, size);
     start_pos = get_start_pos(pos);
@@ -86,8 +86,10 @@ void draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size, t_region *image)
     }
 }
 
-bool point_to_box_collision(t_vec2i box_pos, t_vec2i box_size, t_vec2i point_pos)
+bool point_to_box_collision(t_app *app, t_vec2i box_pos, t_vec2i box_size, t_vec2i point_pos)
 {
+    point_pos.x -= (app->frame_buffer.width - box_size.x) / 2;
+    point_pos.y -= (app->frame_buffer.height - box_size.y) / 2;
     return (point_pos.x > box_pos.x && point_pos.x < box_pos.x + box_size.x && point_pos.y > box_pos.y && point_pos.y < box_pos.y + box_size.y);
 }
 
@@ -103,13 +105,21 @@ void tex_button_draw(t_app *app, t_tex_button button)
         draw_image_strech(app, button.pos, button.size, button.default_image);
 }
 
+bool mouse_perfect_collision(t_app *app, t_vec2i pos, t_vec2i size, t_region *image) {
+    if (!point_to_box_collision(app, pos, size, app->input_handler.mouse_pos))
+        return (false);
+    mlx_color pixel = get_pixel(image, (app->input_handler.mouse_pos.x - pos.x - (int)app->frame_buffer.width / 2) * (int)image->width / size.x + (int)image->width / 2,
+            (app->input_handler.mouse_pos.y - pos.y - ((int)app->frame_buffer.height) / 2) * (int)image->height / size.y + (int)image->height / 2);
+    if (pixel.a != 0)
+        return (true);
+    return (false);
+}
+
 bool tex_button_update(t_app *app, t_tex_button button)
 {
     bool clicked;
 
-    button.is_hover = point_to_box_collision(button.pos, button.size, app->input_handler.mouse_pos)
-        && get_pixel(button.default_image, (app->input_handler.mouse_pos.x - button.pos.x) * button.default_image->width / button.size.x,
-            (app->input_handler.mouse_pos.y - button.pos.y) * button.default_image->height / button.size.y).a != 0;
+    button.is_hover = mouse_perfect_collision(app, button.pos, button.size, button.default_image);
     tex_button_draw(app, button);
     clicked = button.is_hover && app->input_handler.registered_click && !app->input_handler.mouse_is_busy;
     if (clicked)
@@ -124,9 +134,7 @@ void grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4], doubl
     t_vec2i pos;
 
     pos = (t_vec2i){card->pos.x, card->pos.y};
-    card->is_hover = point_to_box_collision(pos, card->size, app->input_handler.mouse_pos)
-        && get_pixel(card->default_image, (app->input_handler.mouse_pos.x - card->pos.x) * card->default_image->width / card->size.x,
-            (app->input_handler.mouse_pos.y - card->pos.y) * card->default_image->height / card->size.y).a != 0;
+    card->is_hover = mouse_perfect_collision(app, pos, card->size, card->default_image);
     draw_image_strech(app, pos, card->size, card->default_image);
     if (!app->input_handler.mouse_is_busy && !card->is_grab && card->is_hover && app->input_handler.mouse_down)
     {

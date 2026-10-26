@@ -168,18 +168,7 @@ void player_count_menu_window_update(t_app *app)
 {
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
     // apply_blur(app, a / 2 % 20 + 1, 5);
-    draw_image_strech(app, (t_vec2i){((int)app->frame_buffer.buffer->width - 619) / 2, ((int)app->frame_buffer.buffer->height - 311) / 2 - 250}, (t_vec2i){619, 311}, app->image_atlas.images[15]);
-    app->player_count_menu.one_button.pos.x = ((int)app->frame_buffer.width) / 2 - 50 - app->player_count_menu.one_button.size.x;
-    app->player_count_menu.one_button.pos.y = ((int)app->frame_buffer.height) / 2 - 50 - app->player_count_menu.one_button.size.y + 200;
-
-    app->player_count_menu.two_button.pos.x = ((int)app->frame_buffer.width) / 2 + 50;
-    app->player_count_menu.two_button.pos.y = ((int)app->frame_buffer.height) / 2 - 50 - app->player_count_menu.one_button.size.y + 200;
-
-    app->player_count_menu.three_button.pos.x = ((int)app->frame_buffer.width) / 2 - 50 - app->player_count_menu.one_button.size.x;
-    app->player_count_menu.three_button.pos.y = ((int)app->frame_buffer.height) / 2 + 50 + 200;
-
-    app->player_count_menu.four_button.pos.x = ((int)app->frame_buffer.width) / 2 + 50;
-    app->player_count_menu.four_button.pos.y = ((int)app->frame_buffer.height) / 2 + 50 + 200;
+    draw_image_strech(app, (t_vec2i){0, -200}, (t_vec2i){619, 311}, app->image_atlas.images[15]);
     if (tex_button_update(app, app->player_count_menu.one_button))
         {app->input_handler.player_count = 1; app->game_state = input_select;}
     if (tex_button_update(app, app->player_count_menu.two_button))
@@ -194,22 +183,22 @@ void player_count_menu_window_update(t_app *app)
 
 void init_player_count_menu(t_app *app)
 {
-    app->player_count_menu.one_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[7], app->image_atlas.images[11]);
-    app->player_count_menu.two_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
-    app->player_count_menu.three_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
-    app->player_count_menu.four_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){260, 200}, app->image_atlas.images[10], app->image_atlas.images[14]);
+    app->player_count_menu.one_button = tex_button_create((t_vec2i){-150, 50}, (t_vec2i){260, 200}, app->image_atlas.images[7], app->image_atlas.images[11]);
+    app->player_count_menu.two_button = tex_button_create((t_vec2i){150, 50}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
+    app->player_count_menu.three_button = tex_button_create((t_vec2i){-150, 300}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
+    app->player_count_menu.four_button = tex_button_create((t_vec2i){150, 300}, (t_vec2i){260, 200}, app->image_atlas.images[10], app->image_atlas.images[14]);
 }
 
 void init_input_select_menu(t_app *app)
 {
-    app->input_select_menu.one_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
-    app->input_select_menu.two_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
-    app->input_select_menu.three_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
-    app->input_select_menu.four_card = grab_card_create((t_vec2f){350, 350}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
-    app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){100, 100}, (t_vec2i){192, 192}, 0);
-    app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){600, 100}, (t_vec2i){192, 192}, 1);
-    app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){100, 600}, (t_vec2i){192, 192}, 2);
-    app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){600, 600}, (t_vec2i){192, 192}, 3);
+    app->input_select_menu.one_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.two_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.three_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.four_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, app->image_atlas.images[16]);
+    app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){-300, -200}, (t_vec2i){192, 192}, 0);
+    app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){300, -200}, (t_vec2i){192, 192}, 1);
+    app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){-300, 200}, (t_vec2i){192, 192}, 2);
+    app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){300, 200}, (t_vec2i){192, 192}, 3);
 }
 
 void input_select_menu_window_update(t_app *app)
@@ -221,7 +210,7 @@ void input_select_menu_window_update(t_app *app)
 
     for (int i = 0; i < 4; i++) {
         t_card_slot slot = app->input_select_menu.card_slots[i];
-        draw_image_strech(app, (t_vec2i){slot.pos.x - 371, slot.pos.y - 59}, (t_vec2i){621, 311}, app->image_atlas.images[19]);
+        draw_image_strech(app, (t_vec2i){slot.pos.x + 1, slot.pos.y - 4}, (t_vec2i){342, 320}, app->image_atlas.images[19]);
     }
 
     grab_card_update(app, &app->input_select_menu.one_card, app->input_select_menu.card_slots, time - last_time);
