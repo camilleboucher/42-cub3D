@@ -166,10 +166,13 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
         else
             wall_x = raycaster->camera_pos.x + perp_wall_dist * ray_dir.x;
         
+        // TODO: This is a temporary workaround
+        if (perp_wall_dist < 1e-6)
+            perp_wall_dist = 1e-6;
         hit.line_height = app->frame_buffer.height / perp_wall_dist;
         wall_x -= floorf(wall_x);
-                
-        hit.tex_x = ((1. - 1e-6) - wall_x )* 64.;
+
+        hit.tex_x = ((1. - 1e-6) - wall_x ) * 64.;
         if (side == 0 && ray_dir.x > 0) hit.tex_x = 64 - hit.tex_x - 1;
         if (side == 1 && ray_dir.y < 0) hit.tex_x = 64 - hit.tex_x - 1;
         
