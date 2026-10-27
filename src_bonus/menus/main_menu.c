@@ -1,0 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_menu.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:18:53 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:29:37 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// #include "cub3D.h"
+
+// void main_menu_window_update(void *param)
+// {
+//     t_app *app;
+
+//     app = param;
+//     if (app->request_immediate_abort)
+//         return;
+//     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
+//     // apply_blur(app, a / 2 % 20 + 1, 5);
+//     mlx_mouse_get_pos(app->ctx, &app->input_handler.mouse_pos.x, &app->input_handler.mouse_pos.y);
+//     app->main_menu.play_button.pos.x = ((int)app->frame_buffer.width - (int)app->main_menu.play_button.default_image->width) / 2;
+//     app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.default_image->height) / 2;
+//     if (tex_button_update(app, app->main_menu.play_button))
+//         printf("Click!\n");
+//     push_frame_buffer_to_screen(app);
+// }
+
+// void handle_resize_event(t_app *app)
+// {
+//     int width;
+//     int height;
+
+//     mlx_get_window_size(app->ctx, app->window, &width, &height);
+//     if (!resize_frame_buffer(app, width, height))
+//         app->request_immediate_abort = true;
+// }
+
+// void handle_mouse_up(int button, void *param)
+// {
+//     t_app *app;
+
+//     app = param;
+//     if (button == 1)
+//         app->input_handler.registered_click = true;
+// }
+
+// void window_event_handle(int event, void *param)
+// {
+//     t_app *app;
+
+//     app = param;
+//     if (app->request_immediate_abort)
+//         return;
+//     if (event == 0)
+//     {
+//         mlx_loop_end(app->ctx);
+//     }
+//     else if (event == 8)
+//     {
+//         handle_resize_event(app);
+//         if (app->request_immediate_abort)
+//             mlx_loop_end(app->ctx);
+//     }
+// }
+
+// void init_main_menu(t_app *app)
+// {
+//     app->main_menu.play_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
+// }
+
+// void main_loop(t_app *app)
+// {
+//     init_main_menu(app);
+//     mlx_add_loop_hook(app->ctx, &main_menu_window_update, app);
+//     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &window_event_handle, app);
+//     mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app);
+//     mlx_loop(app->ctx);
+// }
