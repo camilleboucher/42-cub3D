@@ -20,6 +20,7 @@
 # define C_VOID ' '
 # define C_FLOOR '0'
 # define C_WALL '1'
+# define C_DOOR '2'
 
 # define PLAYER_MAX_SPEED 4.
 # define PLAYER_SPEED_DECREASE 8.

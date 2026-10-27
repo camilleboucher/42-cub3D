@@ -81,7 +81,7 @@ static t_error	checks_extracted_parsing_datas(t_app *app, t_error error)
 	int	i;
 
 	i = 0;
-	while (i < 4)
+	while (i < 5)
 	{
 		if (!app->map.path_textures[i])
 			error |= ERR_MISSING_INFO;

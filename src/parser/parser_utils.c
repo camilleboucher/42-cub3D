@@ -53,3 +53,16 @@ bool	is_rgb8(char *s)
 	}
 	return (true);
 }
+
+char	get_id(char c)
+{
+	if (c == C_VOID)
+		return (0);
+	if (c == C_WALL)
+		return (1);
+	if (c == C_FLOOR)
+		return (2);
+	if (c == C_DOOR)
+		return (3);
+	return (-128);
+}

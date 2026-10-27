@@ -26,7 +26,7 @@ bool	get_info(t_map *map, char *s, t_error *error)
 	direction = get_info_direction(s, ft_strlen(s));
 	if (direction == NO_DIRECTION)
 		return (*error |= ERR_WRONG_INFO_START);
-	else if (direction > EAST)
+	else if (direction > DOOR)
 		s++;
 	else
 		s += 2;
@@ -50,6 +50,8 @@ static t_direction	get_info_direction(char *s, int size)
 			return (WEST);
 		else if (ft_strncmp(s, "EA", 2) == 0)
 			return (EAST);
+		else if (ft_strncmp(s, "DO", 2) == 0)
+			return (DOOR);
 	}
 	if (size >= 1)
 	{
@@ -68,7 +70,7 @@ static bool	set_info_direction(t_map *map, t_direction direction,
 
 	if (!*s)
 		return (*error |= ERR_MISSING_INFO);
-	if (direction <= EAST)
+	if (direction <= DOOR)
 	{
 		path_texture_dir = &map->path_textures[direction];
 		if (*path_texture_dir)
@@ -123,5 +125,6 @@ static bool	check_complete_infos(char **path_textures, t_error *error)
 {
 	return ((*error & MASK_ERRS_NO_RGBS) == 0
 		&& path_textures[NORTH] && path_textures[SOUTH]
-		&& path_textures[WEST] && path_textures[EAST]);
+		&& path_textures[WEST] && path_textures[EAST]
+		&& path_textures[DOOR]);
 }

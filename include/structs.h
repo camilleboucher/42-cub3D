@@ -19,6 +19,7 @@ typedef enum e_direction
 	SOUTH,
 	WEST,
 	EAST,
+	DOOR,
 	FLOOR,
 	CEILING,
 	NO_DIRECTION
@@ -36,7 +37,7 @@ typedef struct s_map
 	char		*cell;
 	uint16_t	width;
 	uint16_t	height;
-	char		*path_textures[4];
+	char		*path_textures[5];
 	uint8_t		floor_rgb[3];
 	uint8_t		ceiling_rgb[3];
 	mlx_color	floor_color;

@@ -151,7 +151,7 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
                 map_pos.y += step.y;
                 side = 1;
             }
-            if (map_get(&app->map, map_pos.x, map_pos.y) != '0')
+            if (map_get(&app->map, map_pos.x, map_pos.y) != 2)
                 break;
         } 
         if(side == 0)
