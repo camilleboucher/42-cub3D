@@ -24,6 +24,7 @@ typedef struct s_hit_info
     int line_height;
     int tex_x;
     int side;
+    t_region *image;
 } t_hit_info;
 
 void draw_vertical_line(t_app *app, t_hit_info hit) {
@@ -38,13 +39,13 @@ void draw_vertical_line(t_app *app, t_hit_info hit) {
     unsigned int fb_row = hit.screen_x * app->frame_buffer.buffer->height;
     while (y < draw_start)
         set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, app->map.ceil_color);
-    unsigned int tex_row = hit.tex_x * app->image_atlas.images[3 + hit.side]->height;
+    unsigned int tex_row = hit.tex_x * hit.image->height;
     if (step >= 2.) {
         double tex_pos = (draw_start - app->frame_buffer.height / 2. + hit.line_height / 2.) * step;
         while (y < draw_end)
         {
             tex_pos += step;
-            mlx_color color = get_pixel_opt(app->image_atlas.images[3 + hit.side], tex_row + ((unsigned int)tex_pos & (64 - 1)));
+            mlx_color color = get_pixel_opt(hit.image, tex_row + ((unsigned int)tex_pos & (64 - 1)));
             set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, color);
         }
     }
@@ -65,15 +66,13 @@ void draw_vertical_line(t_app *app, t_hit_info hit) {
         while (tex_pos < stop)
         {
             stepstep += scale;
-            mlx_color color = get_pixel_opt(app->image_atlas.images[3 + hit.side], tex_row + ((unsigned int)tex_pos & (64 - 1)));
-            while (y < stepstep - 1e-6) {
-                set_pixel_opt(app->frame_buffer.buffer, fb_row + y, color);
-                y++;
-            }
+            mlx_color color = get_pixel_opt(hit.image, tex_row + ((unsigned int)tex_pos & (64 - 1)));
+            while (y < stepstep - 1e-6)
+                set_pixel_opt(app->frame_buffer.buffer, fb_row + y++, color);
             tex_pos++;
         }
         if (tex_pos < 64 && stepstep + scale >= app->frame_buffer.height - 1) {
-            mlx_color color = get_pixel_opt(app->image_atlas.images[3 + hit.side], tex_row + ((unsigned int)tex_pos & (64 - 1)));
+            mlx_color color = get_pixel_opt(hit.image, tex_row + ((unsigned int)tex_pos & (64 - 1)));
             while (y < app->frame_buffer.height) {
                 set_pixel_opt(app->frame_buffer.buffer, fb_row + y, color);
                 y++;
@@ -154,22 +153,23 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
             }
             if (map_get(&app->map, map_pos.x, map_pos.y) != '0')
                 break;
-        }
+        } 
         if(side == 0)
             perp_wall_dist = side_dist.x - delta_dist.x;
         else
             perp_wall_dist = side_dist.y - delta_dist.y;        
-
+        if (perp_wall_dist < 0)
+            return;
         double wall_x;
         if (side == 0)
             wall_x = raycaster->camera_pos.y + perp_wall_dist * ray_dir.y;
         else
             wall_x = raycaster->camera_pos.x + perp_wall_dist * ray_dir.x;
         
-        hit.line_height = app->frame_buffer.height / perp_wall_dist;
+        hit.line_height = (int)app->frame_buffer.height / perp_wall_dist;
         wall_x -= floorf(wall_x);
-                
-        hit.tex_x = ((1. - 1e-6) - wall_x )* 64.;
+
+        hit.tex_x = ((1. - 1e-6) - wall_x ) * 64.;
         if (side == 0 && ray_dir.x > 0) hit.tex_x = 64 - hit.tex_x - 1;
         if (side == 1 && ray_dir.y < 0) hit.tex_x = 64 - hit.tex_x - 1;
         
@@ -186,7 +186,7 @@ void draw_raycast(t_app *app, t_raycaster *raycaster) {
             else
                 hit.side = 3;
         }
-
+        hit.image = app->image_atlas.images[3 + hit.side];
         draw_vertical_line(app, hit);
         x++;
     }

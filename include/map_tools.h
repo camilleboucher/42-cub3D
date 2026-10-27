@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   map_tools.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:10:02 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:10:09 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/26 19:39:51 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_TOOLS_H
 #define MAP_TOOLS_H
 
-char map_get(t_map *map, unsigned int x, unsigned int y);
+char map_get(t_map *map, int x, int y);
 
 #endif
