@@ -62,5 +62,7 @@ char	get_id(char c)
 		return (1);
 	if (c == C_FLOOR)
 		return (2);
+	if (c == C_DOOR)
+		return (3);
 	return (-128);
 }

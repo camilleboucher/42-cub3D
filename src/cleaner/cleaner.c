@@ -19,6 +19,7 @@ void	clean_map(t_map *map)
 	free(map->path_textures[1]);
 	free(map->path_textures[2]);
 	free(map->path_textures[3]);
+	free(map->path_textures[4]);
 }
 
 void app_destroy(t_app *app)

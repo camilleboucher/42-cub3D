@@ -12,14 +12,21 @@
 
 #include "cub3D.h"
 
-bool	has_collision(t_map *map, t_vec2f test_pos)
+bool	is_solid(char cell)
 {
-	if (map_get(map, test_pos.x - PLAYER_BOX, test_pos.y + PLAYER_BOX) == C_WALL
-	|| map_get(map, test_pos.x - PLAYER_BOX, test_pos.y - PLAYER_BOX) == C_WALL
-	|| map_get(map, test_pos.x + PLAYER_BOX, test_pos.y - PLAYER_BOX) == C_WALL
-	|| map_get(map, test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX) == C_WALL)
+	if (cell == 1)
+		return (true);
+	if (cell >= 3 && cell <= 5)
 		return (true);
 	return (false);
+}
+
+bool	has_collision(t_map *map, t_vec2f test_pos)
+{
+	return (is_solid(map_get(map, test_pos.x - PLAYER_BOX,test_pos.y + PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x - PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
 }
 
 void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
