@@ -22,6 +22,14 @@
 # define C_WALL '1'
 # define C_DOOR '2'
 
+# define ID_VOID 0
+# define ID_WALL 1
+# define ID_FLOOR 2
+# define ID_DOOR_CLOSED 3
+# define ID_DOOR_ALMOST_CLOSED 4
+# define ID_DOOR_ALMOST_OPENED 5
+# define ID_DOOR_OPENED 6
+
 # define PLAYER_MAX_SPEED 4.
 # define PLAYER_SPEED_DECREASE 8.
 # define PLAYER_FORCE 15.

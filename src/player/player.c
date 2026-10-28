@@ -14,9 +14,9 @@
 
 bool	is_solid(char cell)
 {
-	if (cell == 1)
+	if (cell == ID_WALL)
 		return (true);
-	if (cell >= 3 && cell <= 5)
+	if (cell >= ID_DOOR_CLOSED && cell <= ID_DOOR_ALMOST_OPENED)
 		return (true);
 	return (false);
 }
