@@ -120,7 +120,7 @@ static bool	save_player(char *s, int *i, t_app *app, t_error *error)
 	else if (dir == 'S')
 		app->player.angle = -M_PI_2;
 	app->map.cell[*i + app->map.height * app->map.width] = get_id(C_FLOOR);
-	app->player.pos = (t_vec2f){(*i), app->map.height};
+	app->player.pos = (t_vec2f){(*i) + .5, app->map.height + .5};
 	(*i)++;
 	return (true);
 }
