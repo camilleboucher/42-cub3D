@@ -29,10 +29,12 @@ typedef struct s_app
     t_image_atlas image_atlas;
     t_map map;
     t_player player;
+	t_objects	objects;
     t_game_state game_state;
     t_main_menu main_menu;
 } t_app;
 
-bool app_init(t_app *app);
+void	init_parser(t_player *player, t_map *map);
+bool	window_init(t_app *app);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 15:54:39 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/24 17:18:14 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:27:57 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,15 @@ void	clean_map(t_map *map)
 	free(map->path_textures[4]);
 }
 
+void	objects_destroy(t_objects *objects)
+{
+	free(objects->door);
+}
+
 void app_destroy(t_app *app)
 {
 	clean_map(&app->map);
+	objects_destroy(&app->objects);
     free(app->frame_buffer.buffer);
     free(app->frame_buffer.shader_buffer);
     mlx_destroy_image(app->ctx, app->frame_buffer.frame_buffer_image);

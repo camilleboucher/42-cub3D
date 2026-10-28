@@ -1,0 +1,14 @@
+NO ./assets/north.png
+SO ./assets/south.png
+WE ./assets/west.png
+EA ./assets/east.png
+DO ./assets/door.png
+
+F 220,100,0
+C 225,30,0
+
+11111
+10001
+11211
+10N01
+11111
