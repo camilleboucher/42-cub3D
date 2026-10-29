@@ -41,6 +41,11 @@ typedef struct s_hit_info
 	unsigned int	y;
 	unsigned int	fb_row;
 	unsigned int	tex_row;
+
+	int				tex_pos;
+	double			scale;
+	double			stepstep;
+
 }					t_hit_info;
 
 void	screen_to_texture_line(t_app *app, t_hit_info *hit)
@@ -59,47 +64,49 @@ void	screen_to_texture_line(t_app *app, t_hit_info *hit)
 	}
 }
 
-void	texture_to_screen_line(t_app *app, t_hit_info *hit)
-{
-	int			tex_pos;
-	double		scale;
-	double		stepstep;
-	int			stop;
+void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop) {
 	mlx_color	color;
-
-	tex_pos = 0;
-	scale = 1. / hit->step;
-	stepstep = (((int)app->frame_buffer.height - hit->line_height) / 2.);
-	if (stepstep < -scale)
-		stepstep = fmod(stepstep, scale);
-	stop = 64;
-	if (hit->line_height > app->frame_buffer.height)
+	while (hit->tex_pos < stop)
 	{
-		tex_pos += (int)((hit->line_height - app->frame_buffer.height)
-				* hit->step) / 2;
-		stop -= (int)((hit->line_height - app->frame_buffer.height) * hit->step)
-			/ 2;
-		stop -= max((stepstep + scale * (stop - tex_pos))
-				- (app->frame_buffer.height - 1), 0) / scale;
-	}
-	while (tex_pos < stop)
-	{
-		stepstep += scale;
+		hit->stepstep += hit->scale;
 		color = get_pixel_opt(hit->image, hit->tex_row
-				+ ((unsigned int)tex_pos & (64 - 1)));
-		while (hit->y < stepstep - 1e-6)
+				+ ((unsigned int)hit->tex_pos & (64 - 1)));
+		while (hit->y < hit->stepstep - 1e-6)
 			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
 				color);
-		tex_pos++;
+		hit->tex_pos++;
 	}
-	if (tex_pos < 64 && stepstep + scale >= app->frame_buffer.height - 1)
+	if (hit->tex_pos < 64 && hit->stepstep + hit->scale >= app->frame_buffer.height - 1)
 	{
 		color = get_pixel_opt(hit->image, hit->tex_row
-				+ ((unsigned int)tex_pos & (64 - 1)));
+				+ ((unsigned int)hit->tex_pos & (64 - 1)));
 		while (hit->y < app->frame_buffer.height)
 			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
 				color);
 	}
+}
+
+void	texture_to_screen_line(t_app *app, t_hit_info *hit)
+{
+	int			stop;
+	mlx_color	color;
+
+	hit->tex_pos = 0;
+	hit->scale = 1. / hit->step;
+	hit->stepstep = (((int)app->frame_buffer.height - hit->line_height) / 2.);
+	if (hit->stepstep < -hit->scale)
+		hit->stepstep = fmod(hit->stepstep, hit->scale);
+	stop = 64;
+	if (hit->line_height > app->frame_buffer.height)
+	{
+		hit->tex_pos += (int)((hit->line_height - app->frame_buffer.height)
+				* hit->step) / 2;
+		stop -= (int)((hit->line_height - app->frame_buffer.height) * hit->step)
+			/ 2;
+		stop -= max((hit->stepstep + hit->scale * (stop - hit->tex_pos))
+				- (app->frame_buffer.height - 1), 0) / hit->scale;
+	}
+	texture_to_screen_fill(app, hit, stop);
 }
 
 void	draw_vertical_line(t_app *app, t_hit_info *hit)
