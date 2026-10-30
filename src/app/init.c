@@ -22,8 +22,10 @@ void init_parser(t_player *player, t_map *map)
 	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));
 }
 
-bool window_init(t_app *app)
+bool app_init(t_app *app)
 {
+	app->time.now = 0.;
+	app->time.last = 0.;
     app->ctx = mlx_init();
     if (app->ctx == MLX_NULL_HANDLE)
         return (false);
@@ -45,5 +47,3 @@ bool window_init(t_app *app)
         return (false);
     return (true);
 }
-
-

@@ -18,6 +18,13 @@ typedef enum e_game_state {
     main_menu,
 } t_game_state;
 
+typedef struct s_time
+{
+	double	now;
+	double	last;
+	double	delta;
+}	t_time;
+
 typedef struct s_app
 {
     mlx_context ctx;
@@ -32,9 +39,10 @@ typedef struct s_app
 	t_objects	objects;
     t_game_state game_state;
     t_main_menu main_menu;
+    t_time	time;
 } t_app;
 
 void	init_parser(t_player *player, t_map *map);
-bool	window_init(t_app *app);
+bool	app_init(t_app *app);
 
 #endif

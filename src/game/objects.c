@@ -58,3 +58,23 @@ static bool	create_doors(t_app *app, int count_doors)
 	}
 	return (true);
 }
+
+int	get_door_id(int cell, int nb_doors, t_app *app)
+{
+	while (nb_doors)
+	{
+		nb_doors--;
+		if (app->objects.door[nb_doors].cell == cell)
+			return (nb_doors);
+	}
+	return (-1);
+}
+
+void	update_doors(t_app *app, int nb_doors)
+{
+	while (nb_doors)
+	{
+		nb_doors--;
+		//TODO:if (app->objects.door[i].opening) faire toute la logique de progress += deltatime / DOOR_SPEED
+	}
+}

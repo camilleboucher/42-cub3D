@@ -13,6 +13,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <cub3D.h>
+
 typedef struct s_door
 {
 	int		cell;
@@ -28,6 +30,8 @@ typedef struct s_objects
 
 //objects.c
 bool	create_objects(t_app *app);
+int		get_door_id(int cell, int nb_doors, t_app *app);
+void	update_doors(t_app *app, int nb_doors);
 
 //game.c
 void	main_loop(t_app *app);

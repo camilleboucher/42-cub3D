@@ -34,4 +34,7 @@
 # define PLAYER_SPEED_DECREASE 8.
 # define PLAYER_FORCE 15.
 # define PLAYER_BOX .1
+
+# define DOOR_SPEED 2
+
 #endif
