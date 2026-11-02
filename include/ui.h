@@ -1,6 +1,7 @@
 #ifndef UI_H
 # define UI_H
 
+#include <stdbool.h>
 typedef struct s_tex_button
 {
 	t_vec2i			pos;
@@ -22,6 +23,8 @@ typedef struct s_grab_card
 	t_region		*default_image;
 	t_vec2i			mouse_rel_pos;
 	int				device_id;
+	int             docked_slot_index;
+	bool            hide;
 }					t_grab_card;
 
 typedef struct s_card_slot
@@ -30,6 +33,7 @@ typedef struct s_card_slot
 	t_vec2i			size;
 	unsigned int	id;
 	bool			hide;
+	int             docked_card_id;
 }					t_card_slot;
 
 typedef struct s_label
@@ -55,12 +59,10 @@ typedef struct s_player_count_menu
 
 typedef struct s_input_select_menu
 {
-	t_grab_card		one_card;
-	t_grab_card		two_card;
-	t_grab_card		three_card;
-	t_grab_card		four_card;
+	t_grab_card		cards[6];
 	t_card_slot		card_slots[4];
 	int				controler_ids[4];
+	t_tex_button        valid_button;
 }					t_input_select_menu;
 
 bool				tex_button_update(t_app *app, t_tex_button button);

@@ -151,10 +151,12 @@ void	grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4],
 {
 	bool			clicked;
 	t_vec2i			pos;
-		t_vec2f home_vector;
+	t_vec2f home_vector;
 	unsigned int	i;
 	bool			in_slot;
 
+	if (card->hide)
+	    return ;
 	pos = (t_vec2i){card->pos.x, card->pos.y};
 	card->is_hover = mouse_perfect_collision(app, pos, card->size,
 			card->default_image);
@@ -189,17 +191,26 @@ void	grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4],
 	}
 	i = 0;
 	in_slot = false;
-	while (i++ < 4)
+	while (i < 4)
 	{
-		if (!slots[i - 1].hide && box_to_box_collision(slots[i - 1].pos, slots[i
-				- 1].size, (t_vec2i){card->pos.x, card->pos.y}, card->size))
+		if (!slots[i].hide && (slots[i].docked_card_id == -1 || slots[i].docked_card_id == card->device_id) && box_to_box_collision(slots[i].pos, slots[i].size, (t_vec2i){card->pos.x, card->pos.y}, card->size))
 		{
-			card->target = (t_vec2f){slots[i - 1].pos.x, slots[i - 1].pos.y};
+			card->target = (t_vec2f){slots[i].pos.x, slots[i].pos.y};
 			in_slot = true;
+			slots[i].docked_card_id = card->device_id;
+			card->docked_slot_index = i;
 		}
+		i++;
 	}
 	if (!in_slot)
+	{
 		card->target = card->origin;
+		if (card->docked_slot_index >= 0)
+		{
+		    slots[card->docked_slot_index].docked_card_id = -1;
+		    card->docked_slot_index = -1;
+		}
+	}
 }
 
 t_tex_button	tex_button_create(t_vec2i pos, t_vec2i size,
@@ -227,6 +238,7 @@ t_grab_card	grab_card_create(t_vec2f pos, t_vec2i size, int device_id)
 	card.target = pos;
 	card.size = size;
 	card.device_id = device_id;
+	card.hide = true;
 	return (card);
 }
 
@@ -238,5 +250,6 @@ t_card_slot	card_slot_create(t_app *app, t_vec2i pos, t_vec2i size, int id)
 	slot.size = size;
 	slot.id = id;
 	slot.hide = false;
+	slot.docked_card_id = -1;
 	return (slot);
 }

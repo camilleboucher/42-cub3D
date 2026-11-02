@@ -8,6 +8,8 @@ void	device_notify(t_app *app, int device_id)
 
 	if (device_id >= 0 && device_id < app->input_handler.controller_count)
 		device = &app->input_handler.devices[device_id];
+	else
+        return ;
 	if (device->controller_slot >= 0 && device->active)
 	{
 		printf("Notifying controller %d.\n", device->controller_slot);

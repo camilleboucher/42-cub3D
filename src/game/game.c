@@ -175,20 +175,22 @@ void set_card_image(t_app *app, t_grab_card *card) {
 
 void init_input_select_menu(t_app *app)
 {
-    app->input_select_menu.one_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, 0);
-    app->input_select_menu.two_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, 1);
-    app->input_select_menu.three_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, 2);
-    app->input_select_menu.four_card = grab_card_create((t_vec2f){0, 0}, (t_vec2i){192, 192}, 3);
+    int i = 0;
+    unsigned int devices_count = 2 + app->input_handler.controller_count;
+    while (i < 2 + app->input_handler.controller_count)
+    {
+        app->input_select_menu.cards[i] = grab_card_create((t_vec2f){-(int)devices_count * 100 + 192 / 2 + 200 * i + (200 - 192) / 2, 0}, (t_vec2i){192, 192}, i);
+        set_card_image(app, &app->input_select_menu.cards[i]);
+        app->input_select_menu.cards[i].hide = false;
+        i++;
+    }
+
     app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){-300, -200}, (t_vec2i){192, 192}, 0);
     app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){300, -200}, (t_vec2i){192, 192}, 1);
     app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){-300, 200}, (t_vec2i){192, 192}, 2);
     app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){300, 200}, (t_vec2i){192, 192}, 3);
-    set_card_image(app, &app->input_select_menu.one_card);
-    set_card_image(app, &app->input_select_menu.two_card);
-    set_card_image(app, &app->input_select_menu.three_card);
-    set_card_image(app, &app->input_select_menu.four_card);
     printf("pc: %d\n", app->input_handler.player_count);
-    
+
     if (app->input_handler.player_count < 2)
         app->input_select_menu.card_slots[1].hide = true;
     if (app->input_handler.player_count < 3)
@@ -234,18 +236,27 @@ void input_select_menu_window_update(t_app *app)
         if (!slot.hide)
             draw_image_strech(app, (t_vec2i){slot.pos.x + 1, slot.pos.y - 4}, (t_vec2i){342, 320}, app->image_atlas.images[19]);
     }
-
-    if (app->input_select_menu.one_card.device_id > -10)
-        grab_card_update(app, &app->input_select_menu.one_card, app->input_select_menu.card_slots, time - last_time);
-    if (app->input_select_menu.two_card.device_id > -10)
-        grab_card_update(app, &app->input_select_menu.two_card, app->input_select_menu.card_slots, time - last_time);
-    if (app->input_select_menu.three_card.device_id > -10)
-        grab_card_update(app, &app->input_select_menu.three_card, app->input_select_menu.card_slots, time - last_time);
-    if (app->input_select_menu.four_card.device_id > -10)
-        grab_card_update(app, &app->input_select_menu.four_card, app->input_select_menu.card_slots, time - last_time);
-
+    unsigned int i = 0;
+    while (i < 2 + app->input_handler.controller_count)
+    {
+        if (!app->input_select_menu.cards[i].hide)
+        {
+            grab_card_update(app, &app->input_select_menu.cards[i], app->input_select_menu.card_slots, time - last_time);
+        }
+        i++;
+    }
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
+
+    for (int i = 0; i < 4; i++)
+    {
+		if (!app->input_select_menu.card_slots[i].hide)
+		{
+			printf("%d \n", app->input_select_menu.card_slots[i].docked_card_id);
+
+		}
+	}
+
     last_time = time;
 }
 
@@ -313,7 +324,7 @@ void handle_controler_down(mlx_controller_event_code event, void *param) {
 void main_loop(t_app *app)
 {
     app->game_state = main_menu;
-
+    init_devices(&app->input_handler);
     init_main_menu(app);
     init_player_count_menu(app);
     mlx_add_loop_hook(app->ctx, &game_update, app);

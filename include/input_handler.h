@@ -14,7 +14,7 @@ typedef struct s_input_handler {
   t_vec2i old_mouse_pos;
   unsigned int player_count;
   unsigned int controller_count;
-  t_input_device devices[4];
+  t_input_device devices[6];
   bool mouse_down;
   bool mouse_is_busy;
 } t_input_handler;
@@ -30,5 +30,7 @@ t_vec2f get_controler_left_vector(t_input_handler *handler, unsigned int control
 t_vec2f get_controler_right_vector(t_input_handler *handler, unsigned int controller_index);
 
 void input_handler_update(t_input_handler *handler, mlx_context ctx);
+
+void init_devices(t_input_handler *handler);
 
 #endif

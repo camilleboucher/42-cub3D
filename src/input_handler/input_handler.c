@@ -1,5 +1,7 @@
 #include "input_handler.h"
+#include "input_device.h"
 #include "mlx_extended.h"
+#include "vector.h"
 
 void input_handler_set_down(t_input_handler *handler, int key)
 {
@@ -59,5 +61,26 @@ void input_handler_update(t_input_handler *handler, mlx_context ctx)
             handler->devices[controller_index].right_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTY);
         }
         controller_index++;
+    }
+}
+
+void init_devices(t_input_handler *handler) {
+    handler->devices[0].active = true;
+    handler->devices[0].controller_slot = -1;
+    handler->devices[0].type = device_keyboard;
+    handler->devices[0].left_vector = (t_vec2f){0, 0};
+    handler->devices[0].right_vector = (t_vec2f){0, 0};
+    handler->devices[1].active = true;
+    handler->devices[1].controller_slot = -2;
+    handler->devices[1].type = device_keyboard_and_mouse;
+    handler->devices[1].left_vector = (t_vec2f){0., 0.};
+    handler->devices[1].right_vector = (t_vec2f){0., 0.};
+    unsigned int i = 0;
+    while (i < handler->controller_count) {
+        handler->devices[2 + i].controller_slot = i;
+        handler->devices[2 + i].type = device_controller;
+        handler->devices[2 + i].left_vector = (t_vec2f){0., 0.};
+        handler->devices[2 + i].right_vector = (t_vec2f){0., 0.};
+        i++;
     }
 }
