@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "constants.h"
 #include "cub3D.h"
-#include "map_tools.h"
 
 void main_menu_window_update(t_app *app)
 {
