@@ -13,6 +13,7 @@
 #include "cub3D.h"
 
 static bool	create_doors(t_app *app, int count_doors);
+static char	get_doorframe(double progress);
 
 bool	create_objects(t_app *app)
 {
@@ -70,11 +71,30 @@ int	get_door_id(int cell, int nb_doors, t_app *app)
 	return (-1);
 }
 
-void	update_doors(t_app *app, int nb_doors)
+void	update_doors(t_app *app, t_door *door, int nb_doors)
 {
 	while (nb_doors)
 	{
 		nb_doors--;
-		//TODO:if (app->objects.door[i].opening) faire toute la logique de progress += deltatime / DOOR_SPEED
+		if (door[nb_doors].progress < 1 && door[nb_doors].opening)
+		{
+			door[nb_doors].progress += app->time.delta / DOOR_SPEED;
+			app->map.cell[door[nb_doors].cell] = get_doorframe(door[nb_doors].progress);
+		}
+		else if (door[nb_doors].progress > 0 && !door[nb_doors].opening)
+		{
+			door[nb_doors].progress -= app->time.delta / DOOR_SPEED;
+			app->map.cell[door[nb_doors].cell] = get_doorframe(door[nb_doors].progress);
+		}
 	}
+}
+
+
+ static char	get_doorframe(double progress)
+{
+	const char	frames[] = {3, 4, 5, 6};
+	int			id;
+
+	id = round(progress * (double)(sizeof(frames) / sizeof(char) - 1));
+	return ((char)frames[id]);
 }

@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "game.h"
 #include "cub3D.h"
 
 void main_menu_window_update(t_app *app)
@@ -139,7 +138,7 @@ void ingame_update(t_app *app) {
     //printf("%f\n", get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time));
     player_input(&app->player, &app->input_handler, app->time.delta, &app->map);
 	action_input(app);
-	update_doors(app, app->objects.nb_doors);
+	update_doors(app, app->objects.door, app->objects.nb_doors);
     draw_raycast(app, &raycaster);
     //apply_blur(app);
     push_frame_buffer_to_screen(app);

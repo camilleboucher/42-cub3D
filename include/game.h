@@ -13,25 +13,11 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <cub3D.h>
-
-typedef struct s_door
-{
-	int		cell;
-	bool	opening;
-	double	progress;
-}	t_door;
-
-typedef struct s_objects
-{
-	int		nb_doors;
-	t_door	*door;
-}	t_objects;
-
+# include "cub3D.h"
 //objects.c
 bool	create_objects(t_app *app);
 int		get_door_id(int cell, int nb_doors, t_app *app);
-void	update_doors(t_app *app, int nb_doors);
+void	update_doors(t_app *app, t_door *door, int nb_doors);
 
 //game.c
 void	main_loop(t_app *app);
