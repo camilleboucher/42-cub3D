@@ -50,15 +50,16 @@ void input_handler_update(t_input_handler *handler, mlx_context ctx)
 {
     unsigned int controller_index;
 
+    //handler->devices[0].left_vector.x
     controller_index = 0;
-    while (controller_index < handler->player_count)
+    while (controller_index < handler->controller_count)
     {
-        if (handler->devices[controller_index].active && handler->devices[controller_index].type == device_controller)
+        if (handler->devices[controller_index + 2].active && handler->devices[controller_index + 2].type == device_controller)
         {
-            handler->devices[controller_index].left_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTX);
-            handler->devices[controller_index].left_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTY);
-            handler->devices[controller_index].right_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTX);
-            handler->devices[controller_index].right_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTY);
+            handler->devices[controller_index + 2].left_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTX);
+            handler->devices[controller_index + 2].left_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTY);
+            handler->devices[controller_index + 2].right_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTX);
+            handler->devices[controller_index + 2].right_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTY);
         }
         controller_index++;
     }
@@ -77,6 +78,7 @@ void init_devices(t_input_handler *handler) {
     handler->devices[1].right_vector = (t_vec2f){0., 0.};
     unsigned int i = 0;
     while (i < handler->controller_count) {
+        handler->devices[2 + i].active = true;
         handler->devices[2 + i].controller_slot = i;
         handler->devices[2 + i].type = device_controller;
         handler->devices[2 + i].left_vector = (t_vec2f){0., 0.};

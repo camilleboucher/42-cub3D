@@ -57,30 +57,30 @@ void handle_mouse_down(int button, void *param)
 
 void mouse_jail(t_app *app) {
     t_vec2i mouse_box;
-    mouse_box.x = app->frame_buffer.width / 4;
-    mouse_box.y = app->frame_buffer.height / 4;
-    if (app->input_handler.mouse_pos.x > app->frame_buffer.width / 2 + mouse_box.x)
+    mouse_box.x = app->frame_buffer.screen_width / 4;
+    mouse_box.y = app->frame_buffer.screen_height / 4;
+    if (app->input_handler.mouse_pos.x > app->frame_buffer.screen_width / 2 + mouse_box.x)
     {
-        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2 - mouse_box.x, app->input_handler.mouse_pos.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2 - mouse_box.x, app->input_handler.mouse_pos.y};
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.screen_width / 2 - mouse_box.x, app->input_handler.mouse_pos.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.screen_width / 2 - mouse_box.x, app->input_handler.mouse_pos.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
-    if (app->input_handler.mouse_pos.x < app->frame_buffer.width / 2 - mouse_box.x)
+    if (app->input_handler.mouse_pos.x < app->frame_buffer.screen_width / 2 - mouse_box.x)
     {
-        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2 + mouse_box.x, app->input_handler.mouse_pos.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2 + mouse_box.x, app->input_handler.mouse_pos.y};
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.screen_width / 2 + mouse_box.x, app->input_handler.mouse_pos.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.screen_width / 2 + mouse_box.x, app->input_handler.mouse_pos.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
-    if (app->input_handler.mouse_pos.y < app->frame_buffer.height / 2 - mouse_box.y)
+    if (app->input_handler.mouse_pos.y < app->frame_buffer.screen_height / 2 - mouse_box.y)
     {
-        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 + mouse_box.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 + mouse_box.y};
+        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 + mouse_box.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 + mouse_box.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
-    if (app->input_handler.mouse_pos.y > app->frame_buffer.height / 2 + mouse_box.y)
+    if (app->input_handler.mouse_pos.y > app->frame_buffer.screen_height / 2 + mouse_box.y)
     {
-        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 - mouse_box.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 - mouse_box.y};
+        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 - mouse_box.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 - mouse_box.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
 }
@@ -109,8 +109,6 @@ void ingame_update(t_app *app) {
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
-    app->input_handler.total_mouse_pos.x += get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time);
-
 
     unsigned int player_index;
     player_index = 0;
@@ -120,7 +118,7 @@ void ingame_update(t_app *app) {
         raycaster.camera_pos = app->players[player_index].pos;
         raycaster.camera_dir.x = cos(app->players[player_index].angle);
         raycaster.camera_dir.y = sin(app->players[player_index].angle);
-        player_input(&app->players[player_index], &app->input_handler, time - last_time, player_index);
+        player_input(&app->players[player_index], &app->input_handler, time - last_time);
         draw_raycast(app, &raycaster);
         //apply_blur(app);
         /*if (vec2f_lenght(app->players->speed) > 0.1)
@@ -158,6 +156,16 @@ void init_main_menu(t_app *app)
 }
 
 void start_game(t_app *app) {
+    unsigned int i;
+    i = 0;
+    while (i < app->input_handler.player_count)
+    {
+        int card_id = app->input_select_menu.card_slots[i].docked_card_id;
+        app->players[i].device_id = app->input_select_menu.cards[card_id].device_id;
+        i++;
+    }
+    app->input_handler.mouse_pos = (t_vec2i){0, 0};
+    app->input_handler.old_mouse_pos = (t_vec2i){0, 0};
     mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
     app->game_state = ingame;
     if (app->input_handler.player_count > 1)
@@ -185,10 +193,11 @@ void init_input_select_menu(t_app *app)
         i++;
     }
 
-    app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){-300, -200}, (t_vec2i){192, 192}, 0);
-    app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){300, -200}, (t_vec2i){192, 192}, 1);
-    app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){-300, 200}, (t_vec2i){192, 192}, 2);
-    app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){300, 200}, (t_vec2i){192, 192}, 3);
+    app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){-200, -300}, (t_vec2i){192, 192}, 0);
+    app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){200, -300}, (t_vec2i){192, 192}, 1);
+    app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){-600, -300}, (t_vec2i){192, 192}, 2);
+    app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){600, -300}, (t_vec2i){192, 192}, 3);
+    app->input_select_menu.docked_cards_count = 0;
     printf("pc: %d\n", app->input_handler.player_count);
 
     if (app->input_handler.player_count < 2)
@@ -197,6 +206,8 @@ void init_input_select_menu(t_app *app)
         app->input_select_menu.card_slots[2].hide = true;
     if (app->input_handler.player_count < 4)
         app->input_select_menu.card_slots[3].hide = true;
+    app->input_select_menu.valid_button = tex_button_create((t_vec2i){0, 250}, (t_vec2i){485, 202}, app->image_atlas.images[20], app->image_atlas.images[21]);
+    app->input_select_menu.valid_button.hide = true;
 }
 
 void player_count_menu_window_update(t_app *app)
@@ -229,6 +240,8 @@ void input_select_menu_window_update(t_app *app)
     static double last_time = 0.;
 
     double time = get_time();
+    //printf("frame time : %f - FPS: %f\n", time - last_time, 1. / (time - last_time));
+
     clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
 
     for (int i = 0; i < 4; i++) {
@@ -240,22 +253,17 @@ void input_select_menu_window_update(t_app *app)
     while (i < 2 + app->input_handler.controller_count)
     {
         if (!app->input_select_menu.cards[i].hide)
-        {
             grab_card_update(app, &app->input_select_menu.cards[i], app->input_select_menu.card_slots, time - last_time);
-        }
         i++;
     }
+    app->input_select_menu.valid_button.hide = !(app->input_select_menu.docked_cards_count == app->input_handler.player_count);
+    app->input_select_menu.cards[1].hide = app->input_select_menu.cards[0].docked_slot_index >= 0;
+    app->input_select_menu.cards[0].hide = app->input_select_menu.cards[1].docked_slot_index >= 0;
+    if (tex_button_update(app, app->input_select_menu.valid_button))
+        start_game(app);
+
     push_buffer_to_screen_image(app, 0);
     push_frame_buffer_to_screen(app);
-
-    for (int i = 0; i < 4; i++)
-    {
-		if (!app->input_select_menu.card_slots[i].hide)
-		{
-			printf("%d \n", app->input_select_menu.card_slots[i].docked_card_id);
-
-		}
-	}
 
     last_time = time;
 }
@@ -267,15 +275,15 @@ void game_update(void *param) {
     if (app->request_immediate_abort)
         return;
     mlx_mouse_get_pos(app->ctx, &app->input_handler.mouse_pos.x, &app->input_handler.mouse_pos.y);
-    if (app->game_state == ingame) {
+    if (app->game_state == ingame)
         ingame_update(app);
-    }
     else if (app->game_state == main_menu)
         main_menu_window_update(app);
     else if (app->game_state == player_count_select)
         player_count_menu_window_update(app);
     else if (app->game_state == input_select)
         input_select_menu_window_update(app);
+    app->input_handler.registered_click = false;
 }
 
 void handle_key_down(int key, void *param) {
@@ -300,24 +308,21 @@ void handle_controler_down(mlx_controller_event_code event, void *param) {
     app = param;
     if (event.button == MLX_CONTROLLER_CONNECT)
     {
-        if (app->input_handler.controller_count < 4)
+        if (app->game_state != ingame && app->input_handler.controller_count < 4)
         {
-            app->input_handler.devices[app->input_handler.controller_count].active = true;
-            app->input_handler.devices[app->input_handler.controller_count].type = device_controller;
-            app->input_handler.devices[app->input_handler.controller_count].controller_slot = app->input_handler.controller_count;
             app->input_handler.controller_count += 1;
+            init_devices(&app->input_handler);
             init_input_select_menu(app);
         }
-        if (app->game_state == ingame)
-            handle_resize_event(app);
     }
     if (event.button == MLX_CONTROLLER_DISCONNECT)
     {
         if (app->input_handler.controller_count > 0)
-            app->input_handler.controller_count -= 1;
+            {}
+            //app->input_handler.controller_count -= 1;
             // TODO: detect which one is disconnected and set active to false
-        if (app->game_state == ingame)
-            handle_resize_event(app);
+        //if (app->game_state == ingame)
+        //    handle_resize_event(app);
     }
 }
 

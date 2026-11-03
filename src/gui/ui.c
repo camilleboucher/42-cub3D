@@ -1,4 +1,5 @@
 #include "cube3D2.h"
+#include <stdio.h>
 
 void	draw_rect(t_app *app, t_vec2i pos, t_vec2i size, mlx_color color)
 {
@@ -22,6 +23,8 @@ mlx_color	blend_colors(mlx_color a, mlx_color b)
 {
 	mlx_color	merged;
 
+	if (b.a == 0xFF)
+	    return (b);
 	if (a.a + b.a > 0xFF)
 	{
 		b.a = 0xFF - a.a;
@@ -80,9 +83,8 @@ void	draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size,
 		y = start_pos.y;
 		while (y < out_size.y)
 		{
-			color = blend_colors(get_pixel(image, image->width * x / size.x,
-						image->height * y / size.y),
-					get_pixel(app->frame_buffer.buffer, x + pos.x, y + pos.y));
+			color = blend_colors(get_pixel(app->frame_buffer.buffer, x + pos.x, y + pos.y), get_pixel(image, image->width * x / size.x,
+						image->height * y / size.y));
 			set_pixel(app->frame_buffer.buffer, x + pos.x, y + pos.y, color);
 			y++;
 		}
@@ -135,6 +137,8 @@ bool	tex_button_update(t_app *app, t_tex_button button)
 {
 	bool	clicked;
 
+	if (button.hide)
+	    return (false);
 	button.is_hover = mouse_perfect_collision(app, button.pos, button.size,
 			button.default_image);
 	tex_button_draw(app, button);
@@ -195,10 +199,17 @@ void	grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4],
 	{
 		if (!slots[i].hide && (slots[i].docked_card_id == -1 || slots[i].docked_card_id == card->device_id) && box_to_box_collision(slots[i].pos, slots[i].size, (t_vec2i){card->pos.x, card->pos.y}, card->size))
 		{
+        	if (card->docked_slot_index >= 0)
+        	{
+        	    slots[card->docked_slot_index].docked_card_id = -1;
+        	    card->docked_slot_index = -1;
+                app->input_select_menu.docked_cards_count--;
+        	}
 			card->target = (t_vec2f){slots[i].pos.x, slots[i].pos.y};
 			in_slot = true;
 			slots[i].docked_card_id = card->device_id;
 			card->docked_slot_index = i;
+			app->input_select_menu.docked_cards_count++;
 		}
 		i++;
 	}
@@ -209,6 +220,7 @@ void	grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4],
 		{
 		    slots[card->docked_slot_index].docked_card_id = -1;
 		    card->docked_slot_index = -1;
+			app->input_select_menu.docked_cards_count--;
 		}
 	}
 }
@@ -224,6 +236,7 @@ t_tex_button	tex_button_create(t_vec2i pos, t_vec2i size,
 	button.size = size;
 	button.default_image = default_image;
 	button.hover_image = hover_image;
+	button.hide = false;
 	return (button);
 }
 
@@ -239,6 +252,7 @@ t_grab_card	grab_card_create(t_vec2f pos, t_vec2i size, int device_id)
 	card.size = size;
 	card.device_id = device_id;
 	card.hide = true;
+	card.docked_slot_index = -1;
 	return (card);
 }
 

@@ -120,5 +120,11 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/input_slot.png"); // 19
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/ok.png"); // 20
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/ok_hover.png"); // 21
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
     return (true);
 }
