@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "constants.h"
 #include "cub3D.h"
+#include "map_tools.h"
 
 void main_menu_window_update(t_app *app)
 {
@@ -83,7 +85,8 @@ void	check_door_activation(t_app *app, t_vec2f target)
 	cell = (int)target.x + (int)target.y * app->map.width;
 	if (app->map.cell[cell] == ID_DOOR_CLOSED)
 		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = true;
-	else if (app->map.cell[cell] == ID_DOOR_OPENED)
+	else if (app->map.cell[cell] == ID_DOOR_OPENED
+		&& map_get(&app->map, app->player.pos.x, app->player.pos.y) != ID_DOOR_OPENED)
 		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = false;
 }
 

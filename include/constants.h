@@ -35,6 +35,6 @@
 # define PLAYER_FORCE 15.
 # define PLAYER_BOX .1
 
-# define DOOR_SPEED 2
+# define DOOR_SPEED 1
 
 #endif
