@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
 /*   Updated: 2026/10/28 20:00:56 by cboucher         ###   ########.fr       */
@@ -37,9 +37,15 @@ void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
 	if (has_collision(map, new_pos))
 	{
 		if (!has_collision(map, (t_vec2f){new_pos.x, player->pos.y}))
-			player->pos.x = new_pos.x;
+        {
+            player->pos.x = new_pos.x;
+            player->speed.y = 0;
+        }
 		else if (!has_collision(map, (t_vec2f){player->pos.x, new_pos.y}))
-			player->pos.y = new_pos.y;
+		{
+            player->pos.y = new_pos.y;
+            player->speed.x = 0;
+        }
 	}
 	else
 		player->pos = new_pos;
@@ -84,8 +90,8 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
 
     if (vec2f_lenght(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
-    
-    
+
+
     if (vec2f_lenght(player->speed) > 0.)
     {
         t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
