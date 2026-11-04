@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 typedef struct s_app t_app;
+typedef struct s_input_handler t_input_handler;
 
 typedef enum e_device_type
 {
@@ -23,5 +24,7 @@ typedef struct s_input_device
 }					t_input_device;
 
 void				device_notify(t_app *app, int device_id);
+void                update_mouse_and_keyboard(t_input_handler *handler, t_input_device *device);
+void                update_keyboard(t_input_handler *handler, t_input_device *device, double delta_time);
 
 #endif

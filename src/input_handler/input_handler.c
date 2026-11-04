@@ -58,6 +58,8 @@ void input_handler_update(t_input_handler *handler, mlx_context ctx, double delt
 {
     unsigned int controller_index;
 
+    update_mouse_and_keyboard(handler, &handler->devices[1]);
+    update_keyboard(handler, &handler->devices[0], delta_time);
     controller_index = 0;
     while (controller_index < handler->controller_count)
     {

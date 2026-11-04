@@ -110,7 +110,6 @@ void ingame_update(t_app *app) {
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
-    app->input_handler.devices[1].total_rotation = app->input_handler.total_mouse_pos.x;
 
     unsigned int player_index;
     player_index = 0;
@@ -164,6 +163,8 @@ void start_game(t_app *app) {
     {
         int card_id = app->input_select_menu.card_slots[i].docked_card_id;
         app->players[i].device_id = app->input_select_menu.cards[card_id].device_id;
+        if (app->input_handler.devices[app->players[i].device_id].type == device_keyboard_and_mouse)
+            mlx_mouse_hide(app->ctx);
         i++;
     }
     app->input_handler.mouse_pos = (t_vec2i){0, 0};
