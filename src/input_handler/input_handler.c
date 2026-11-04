@@ -35,31 +35,37 @@ t_vec2f dead_zone(t_vec2f a)
     return (a);
 }
 
+double dead_one_axis(double a)
+{
+    if (a > 0. && a < 0.05)
+        a = 0.;
+    if (a < 0. && a > -0.05)
+        a = 0.;
+    return (a);
+}
 
 t_vec2f get_controler_left_vector(t_input_handler *handler, unsigned int controller_index)
 {
-    return (dead_zone(handler->devices[controller_index].left_vector));
+    return (dead_zone(handler->devices[controller_index].move_vector));
 }
 
-t_vec2f get_controler_right_vector(t_input_handler *handler, unsigned int controller_index)
+int get_controler_total_rotation(t_input_handler *handler, unsigned int controller_index)
 {
-    return (dead_zone(handler->devices[controller_index].right_vector));
+    return (handler->devices[controller_index].total_rotation);
 }
 
-void input_handler_update(t_input_handler *handler, mlx_context ctx)
+void input_handler_update(t_input_handler *handler, mlx_context ctx, double delta_time)
 {
     unsigned int controller_index;
 
-    //handler->devices[0].left_vector.x
     controller_index = 0;
     while (controller_index < handler->controller_count)
     {
         if (handler->devices[controller_index + 2].active && handler->devices[controller_index + 2].type == device_controller)
         {
-            handler->devices[controller_index + 2].left_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTX);
-            handler->devices[controller_index + 2].left_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTY);
-            handler->devices[controller_index + 2].right_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTX);
-            handler->devices[controller_index + 2].right_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTY);
+            handler->devices[controller_index + 2].move_vector.x = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTX);
+            handler->devices[controller_index + 2].move_vector.y = mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_LEFTY);
+            handler->devices[controller_index + 2].total_rotation += dead_one_axis(mlx_controller_get_axis(ctx, controller_index, MLX_CONTROLLER_AXIS_RIGHTX)) * 600. * delta_time;
         }
         controller_index++;
     }
@@ -69,20 +75,20 @@ void init_devices(t_input_handler *handler) {
     handler->devices[0].active = true;
     handler->devices[0].controller_slot = -1;
     handler->devices[0].type = device_keyboard;
-    handler->devices[0].left_vector = (t_vec2f){0, 0};
-    handler->devices[0].right_vector = (t_vec2f){0, 0};
+    handler->devices[0].move_vector = (t_vec2f){0, 0};
+    handler->devices[0].total_rotation = 0;
     handler->devices[1].active = true;
     handler->devices[1].controller_slot = -2;
     handler->devices[1].type = device_keyboard_and_mouse;
-    handler->devices[1].left_vector = (t_vec2f){0., 0.};
-    handler->devices[1].right_vector = (t_vec2f){0., 0.};
+    handler->devices[1].move_vector = (t_vec2f){0., 0.};
+    handler->devices[1].total_rotation = 0;
     unsigned int i = 0;
     while (i < handler->controller_count) {
         handler->devices[2 + i].active = true;
         handler->devices[2 + i].controller_slot = i;
         handler->devices[2 + i].type = device_controller;
-        handler->devices[2 + i].left_vector = (t_vec2f){0., 0.};
-        handler->devices[2 + i].right_vector = (t_vec2f){0., 0.};
+        handler->devices[2 + i].move_vector = (t_vec2f){0., 0.};
+        handler->devices[2 + i].total_rotation = 0;
         i++;
     }
 }

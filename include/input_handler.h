@@ -27,9 +27,9 @@ bool is_key_down(t_input_handler *handler, int key);
 
 t_vec2f get_controler_left_vector(t_input_handler *handler, unsigned int controller_index);
 
-t_vec2f get_controler_right_vector(t_input_handler *handler, unsigned int controller_index);
+int get_controler_total_rotation(t_input_handler *handler, unsigned int controller_index);
 
-void input_handler_update(t_input_handler *handler, mlx_context ctx);
+void input_handler_update(t_input_handler *handler, mlx_context ctx, double delta_time);
 
 void init_devices(t_input_handler *handler);
 

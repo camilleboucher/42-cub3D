@@ -43,7 +43,8 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
 
     //player->angle = input_handler->total_mouse_pos.x / 200.;
-    player->angle += get_controler_right_vector(input_handler, player->device_id).x * delta_time * 2.5;
+    player->angle = get_controler_total_rotation(input_handler, player->device_id) / 200.;
+    printf("%d\n", player->device_id);
     if (player->angle > M_PI)
         player->angle -= M_PI * 2.;
     if (player->angle < -M_PI)

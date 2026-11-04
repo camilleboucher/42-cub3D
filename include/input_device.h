@@ -16,8 +16,8 @@ typedef enum e_device_type
 typedef struct s_input_device
 {
 	bool			active;
-	t_vec2f			left_vector;
-	t_vec2f			right_vector;
+	t_vec2f			move_vector;
+	int             total_rotation;
 	t_device_type	type;
     int             controller_slot;
 }					t_input_device;

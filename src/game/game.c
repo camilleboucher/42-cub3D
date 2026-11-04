@@ -1,6 +1,7 @@
 #include "app.h"
 #include "cube3D2.h"
 #include "frame_buffer.h"
+#include "input_device.h"
 #include "input_handler.h"
 #include "map_tools.h"
 #include "mlx.h"
@@ -105,10 +106,11 @@ void ingame_update(t_app *app) {
         last_time = time;
 
     mouse_jail(app);
-    input_handler_update(&app->input_handler, app->ctx);
+    input_handler_update(&app->input_handler, app->ctx, time - last_time);
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+    app->input_handler.devices[1].total_rotation = app->input_handler.total_mouse_pos.x;
 
     unsigned int player_index;
     player_index = 0;
@@ -175,9 +177,9 @@ void start_game(t_app *app) {
 void set_card_image(t_app *app, t_grab_card *card) {
     if (app->input_handler.devices[card->device_id].type == device_controller)
         card->default_image = app->image_atlas.images[16];
-    if (app->input_handler.devices[card->device_id].type == device_keyboard)
-        card->default_image = app->image_atlas.images[17];
     if (app->input_handler.devices[card->device_id].type == device_keyboard_and_mouse)
+        card->default_image = app->image_atlas.images[17];
+    if (app->input_handler.devices[card->device_id].type == device_keyboard)
         card->default_image = app->image_atlas.images[18];
 }
 
