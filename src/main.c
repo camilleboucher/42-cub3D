@@ -16,9 +16,9 @@ static void	load_map(t_app *app, char *map_path);
 static void	check_file_extension(char *path, char *ext, int ext_size);
 static int	open_map(char *path);
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-	struct s_app app;
+	struct s_app	app;
 
 	if (argc != 2)
 		error_exit(ERR_NO_ARG);
@@ -36,21 +36,23 @@ int main(int argc, char *argv[])
 	app_destroy(&app);
 }
 
-static void load_map(t_app *app, char *map_path)
+static void	load_map(t_app *app, char *map_path)
 {
-	int fd;
+	int	fd;
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
 	init_parser(&app->player, &app->map);
 	parsing(fd, app, GET_INFOS);
-	app->map.ceil_color = (mlx_color){ .r=app->map.ceiling_rgb[0], .g=app->map.ceiling_rgb[1], .b=app->map.ceiling_rgb[2], .a=0xFF };
-	app->map.floor_color = (mlx_color){ .r=app->map.floor_rgb[0], .g=app->map.floor_rgb[1], .b=app->map.floor_rgb[2], .a=0xFF };
+	app->map.ceil_color = (mlx_color){.r = app->map.ceiling_rgb[0],
+		.g = app->map.ceiling_rgb[1], .b = app->map.ceiling_rgb[2], .a = 0xFF};
+	app->map.floor_color = (mlx_color){.r = app->map.floor_rgb[0],
+		.g = app->map.floor_rgb[1], .b = app->map.floor_rgb[2], .a = 0xFF};
 }
 
-static void check_file_extension(char *path, char *ext, int ext_size)
+static void	check_file_extension(char *path, char *ext, int ext_size)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (path[i])
@@ -69,9 +71,9 @@ static void check_file_extension(char *path, char *ext, int ext_size)
 	}
 }
 
-static int open_map(char *path)
+static int	open_map(char *path)
 {
-	int fd;
+	int	fd;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1 || read(fd, NULL, 0) == -1)
