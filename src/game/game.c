@@ -1,3 +1,4 @@
+#include "animated_sprite.h"
 #include "app.h"
 #include "cube3D2.h"
 #include "frame_buffer.h"
@@ -126,6 +127,12 @@ void ingame_update(t_app *app) {
             apply_blur(app, vec2f_lenght(app->players[player_index].speed) * 10);*/
         push_buffer_to_screen_image(app, player_index);
         player_index++;
+    }
+    if (app->input_handler.player_count == 3) {
+        clear_frame_buffer(app, (mlx_color){ .rgba=0x000000ff });
+        animated_sprite_update(&app->image_atlas.animated_sprite[0], time - last_time);
+        animated_sprite_draw(&app->frame_buffer, &app->image_atlas.animated_sprite[0], (t_vec2i){((int)app->frame_buffer.width - 498) / 2, ((int)app->frame_buffer.height - 498) / 2});
+        push_buffer_to_screen_image(app, 3);
     }
     last_time = time;
     push_frame_buffer_to_screen(app);

@@ -1,10 +1,12 @@
 #ifndef ATLAS_H
 #define ATLAS_H
 
+#include "animated_sprite.h"
 #include "frame_buffer.h"
 
 typedef struct s_image_atlas {
     t_region *images[50];
+    t_animated_sprite animated_sprite[10];
     unsigned image_amount;
 } t_image_atlas;
 

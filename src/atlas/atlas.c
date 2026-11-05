@@ -1,3 +1,4 @@
+#include "animated_sprite.h"
 #include "cube3D2.h"
 
 #include "frame_buffer.h"
@@ -126,5 +127,9 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/ok_hover.png"); // 21
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/maomao.png"); // 22
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.animated_sprite[0] = animated_sprite_from_region(app->image_atlas.images[22], 54, 0.03, true);
     return (true);
 }
