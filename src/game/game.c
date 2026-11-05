@@ -102,7 +102,7 @@ void ingame_update(t_app *app) {
 
     mouse_jail(app);
     player_input(&app->player, &app->input_handler, time - last_time);
-    
+
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;

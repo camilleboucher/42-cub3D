@@ -13,6 +13,7 @@ bool app_init(t_app *app)
     app->info.height = 600;
     app->info.is_resizable = true;
     app->window = mlx_new_window(app->ctx, &app->info);
+    mlx_set_window_min_size(app->ctx, app->window, 64, 64);
     if (app->window == MLX_NULL_HANDLE)
         return (false);
     app->frame_buffer.buffer = NULL;

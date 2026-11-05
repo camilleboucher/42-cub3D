@@ -101,7 +101,7 @@ void draw_rect(t_region *buffer, t_vec2i pos, t_vec2i size, mlx_color color)
 
 double decimal(double a)
 {
-    if (a < 0)
+    if (a < 0.)
         return (a - ceil(a));
     return (a - floor(a));
 }
@@ -113,12 +113,12 @@ void render_map_to_buffer(t_app *app, int dist, int canvas_size, int offset) {
     t_vec2i screen_pos;
 
     scare_size = canvas_size / (dist * 2);
-    map_x = app->player.pos.x - (double)dist - 1;
-    screen_pos = (t_vec2i){(int)((1. - decimal(app->player.pos.x) - 1.) * (double)scare_size) - scare_size + offset, 0};
+    map_x = ceil(app->player.pos.x - dist);
+    screen_pos = (t_vec2i){(int)((1. - decimal(app->player.pos.x) - 1.) * (double)scare_size) - scare_size + offset - scare_size / 2, 0};
     while (map_x <= app->player.pos.x + (double)dist + 1)
     {
-        map_y = app->player.pos.y - (double)dist - 1;
-        screen_pos.y = (int)((1. - decimal(app->player.pos.y) - 1.) * (double)scare_size) - scare_size + offset;
+        map_y = ceil(app->player.pos.y - dist);
+        screen_pos.y = (int)((1. - decimal(app->player.pos.y) - 1.) * (double)scare_size) - scare_size + offset - scare_size / 2;
         while (map_y <= app->player.pos.y + (double)dist + 1)
         {
             //printf("OwO %d %d\n", screen_pos.x, screen_pos.y);
@@ -133,7 +133,6 @@ void render_map_to_buffer(t_app *app, int dist, int canvas_size, int offset) {
         screen_pos.x += scare_size;
     }
 }
-
 
 void render_minimap(t_app *app) {
     t_vec2i center;
@@ -152,12 +151,11 @@ void render_minimap(t_app *app) {
     draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle + M_PI / 2.) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle + M_PI / 2.) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[8]);
     draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[9]);
     draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle - M_PI) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle - M_PI) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[10]);
-    
+
+    printf("%f %f\n", app->player.pos.x, app->player.pos.y);
     render_map_to_buffer(app, 5, app->minimap.size.x, (app->minimap.size.x - size.x));
-    mid_point_disc(app, (double)size.x / 2.1, (t_vec2i){app->minimap.pos.x / 2, app->minimap.pos.y / 2});
+    mid_point_disc(app, (double)size.x / 2.08, (t_vec2i){app->minimap.pos.x / 2, app->minimap.pos.y / 2});
     draw_rect(app->frame_buffer.minimap_frame_buffer, (t_vec2i){0, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
     draw_rect(app->frame_buffer.minimap_frame_buffer, (t_vec2i){app->minimap.size.x- (app->minimap.size.x - size.x / 2.1) / 4 + 1, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
-    static double a = 0.;
-    a += 0.001;
     //draw_square(app->frame_buffer.buffer, (t_vec2i){200, 200}, 100., - M_PI / 2 + 0.5);
 }
