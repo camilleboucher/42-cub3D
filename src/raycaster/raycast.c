@@ -34,6 +34,7 @@ typedef struct s_hit_info
 	int				tex_x;
 	int				side;
 	double			perp_wall_dist;
+	double             wall_x;
 	/* Line filling variables */
 	t_region		*image;
 	int				draw_start;
@@ -46,7 +47,6 @@ typedef struct s_hit_info
 	int				tex_pos;
 	double			scale;
 	double			stepstep;
-
 }					t_hit_info;
 
 void	screen_to_texture_line(t_app *app, t_hit_info *hit)
@@ -59,8 +59,10 @@ void	screen_to_texture_line(t_app *app, t_hit_info *hit)
 	while (hit->y < hit->draw_end)
 	{
 		tex_pos += hit->step;
+		if ((unsigned int)tex_pos >= hit->image->height)
+		    break ;
 		color = get_pixel_opt(hit->image, hit->tex_row
-				+ ((unsigned int)tex_pos & (64 - 1)));
+				+ ((unsigned int)tex_pos));
 		set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++, color);
 	}
 }
@@ -71,16 +73,16 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop) {
 	{
 		hit->stepstep += hit->scale;
 		color = get_pixel_opt(hit->image, hit->tex_row
-				+ ((unsigned int)hit->tex_pos & (64 - 1)));
+				+ ((unsigned int)hit->tex_pos % (hit->image->height)));
 		while (hit->y < hit->stepstep - 1e-6)
 			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
 				color);
 		hit->tex_pos++;
 	}
-	if (hit->tex_pos < 64 && hit->stepstep + hit->scale >= app->frame_buffer.height - 1)
+	if (hit->tex_pos < hit->image->height && hit->stepstep + hit->scale >= app->frame_buffer.height - 1)
 	{
 		color = get_pixel_opt(hit->image, hit->tex_row
-				+ ((unsigned int)hit->tex_pos & (64 - 1)));
+				+ ((unsigned int)hit->tex_pos % (hit->image->height)));
 		while (hit->y < app->frame_buffer.height)
 			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
 				color);
@@ -90,14 +92,13 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop) {
 void	texture_to_screen_line(t_app *app, t_hit_info *hit)
 {
 	int			stop;
-	mlx_color	color;
 
 	hit->tex_pos = 0;
 	hit->scale = 1. / hit->step;
 	hit->stepstep = (((int)app->frame_buffer.height - hit->line_height) / 2.);
 	if (hit->stepstep < -hit->scale)
 		hit->stepstep = fmod(hit->stepstep, hit->scale);
-	stop = 64;
+	stop = hit->image->height;
 	if (hit->line_height > app->frame_buffer.height)
 	{
 		hit->tex_pos += (int)((hit->line_height - app->frame_buffer.height)
@@ -118,7 +119,7 @@ void	draw_vertical_line(t_app *app, t_hit_info *hit)
 	hit->draw_end = ((int)app->frame_buffer.height + hit->line_height) / 2;
 	if (hit->draw_end > app->frame_buffer.height)
 		hit->draw_end = app->frame_buffer.height;
-	hit->step = 64. / (double)hit->line_height;
+	hit->step = ((double)hit->image->height + 1e-6) / (double)hit->line_height;
 	hit->y = 0;
 	hit->fb_row = hit->screen_x * app->frame_buffer.buffer->height;
 	while (hit->y < hit->draw_start)
@@ -137,9 +138,9 @@ void	draw_vertical_line(t_app *app, t_hit_info *hit)
 void	set_hit_info_side(int side, t_vec2f ray_dir, t_hit_info *hit)
 {
 	if (side == 0 && ray_dir.x > 0)
-		hit->tex_x = 64 - hit->tex_x - 1;
+		hit->tex_x = hit->image->width - hit->tex_x - 1;
 	if (side == 1 && ray_dir.y < 0)
-		hit->tex_x = 64 - hit->tex_x - 1;
+		hit->tex_x = hit->image->width - hit->tex_x - 1;
 	if (side)
 	{
 		if (ray_dir.y > 0)
@@ -238,17 +239,13 @@ void	compute_perp_wall_dist(t_hit_info *hit)
 		hit->perp_wall_dist = hit->side_dist.y - hit->delta_dist.y;
 }
 
-double	compute_wall_x(t_hit_info *hit, t_raycaster *raycaster)
+void	compute_wall_x(t_hit_info *hit, t_raycaster *raycaster)
 {
-	double	wall_x;
-
 	if (hit->side == 0)
-		wall_x = raycaster->camera_pos.y + hit->perp_wall_dist * hit->ray_dir.y;
+		hit->wall_x = raycaster->camera_pos.y + hit->perp_wall_dist * hit->ray_dir.y;
 	else
-		wall_x = raycaster->camera_pos.x + hit->perp_wall_dist * hit->ray_dir.x;
-	wall_x -= floorf(wall_x);
-	hit->tex_x = ((1. - 1e-6) - wall_x) * 64.;
-	return (wall_x);
+		hit->wall_x = raycaster->camera_pos.x + hit->perp_wall_dist * hit->ray_dir.x;
+	hit->wall_x -= floorf(hit->wall_x);
 }
 
 void update_hit_with_screen_x(t_app *app, t_hit_info *hit, t_raycaster *raycaster, t_vec2f plane)
@@ -266,7 +263,6 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 {
 	t_vec2f		plane;
 	t_hit_info	hit;
-	double wall_x;
 
 	plane = compute_plane(app, raycaster);
 	hit.screen_x = 0;
@@ -279,13 +275,14 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		compute_perp_wall_dist(&hit);
 		if (hit.perp_wall_dist < 0)
 			return ;
-		wall_x = compute_wall_x(&hit, raycaster);
+		compute_wall_x(&hit, raycaster);
 		hit.line_height = (int)app->frame_buffer.height / hit.perp_wall_dist;
 		set_hit_info_side(hit.side, hit.ray_dir, &hit);
 		if (hit.cell_id >= ID_DOOR_CLOSED)
 			hit.image = app->image_atlas.images[4 + hit.cell_id];
 		else
 			hit.image = app->image_atlas.images[3 + hit.side];
+		hit.tex_x = ((1. - 1e-6) - hit.wall_x) * (double)hit.image->width;
 		draw_vertical_line(app, &hit);
 		hit.screen_x++;
 	}
