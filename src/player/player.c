@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/28 16:48:00 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/10/28 20:00:56 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 bool	is_solid(char cell)
 {
-	if (cell == 1)
+	if (cell == ID_WALL)
 		return (true);
-	if (cell >= 3 && cell <= 5)
+	if (cell >= ID_DOOR_CLOSED && cell <= ID_DOOR_ALMOST_OPENED)
 		return (true);
 	return (false);
 }
@@ -90,8 +90,8 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
 
     if (vec2f_lenght(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
-    
-    
+
+
     if (vec2f_lenght(player->speed) > 0.)
     {
         t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);

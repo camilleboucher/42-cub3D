@@ -91,5 +91,17 @@ bool atlas_load_buttons(t_app *app) {
     app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, app->map.path_textures[2]);
     if (!app->image_atlas.images[app->image_atlas.image_amount++])
         return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/door_closed.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/door_almost_closed.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/door_almost_opened.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
+    app->image_atlas.images[app->image_atlas.image_amount] = load_image(app, "assets/door_opened.png");
+    if (!app->image_atlas.images[app->image_atlas.image_amount++])
+        return (false);
     return (true);
 }

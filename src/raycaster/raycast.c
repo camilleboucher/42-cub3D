@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yben-dje <yben-dje@student.642.fr>          +#+  +:+      
+/*   By: yben-dje <yben-dje@student.642.fr>          +#+  +:+
 	+#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 18:649:164 by yben-dje          #+#    #+#             */
@@ -22,6 +22,7 @@ int	max(int a, int b)
 
 typedef struct s_hit_info
 {
+	char			cell_id;
 	/* Raycaster variable */
 	t_vec2f			ray_dir;
 	t_vec2i			map_pos;
@@ -199,7 +200,8 @@ void	walk_raycaster(t_app *app, t_hit_info *hit)
 			hit->map_pos.y += hit->ray_step.y;
 			hit->side = 1;
 		}
-		if (map_get(&app->map, hit->map_pos.x, hit->map_pos.y) != 2)
+		hit->cell_id = map_get(&app->map, hit->map_pos.x, hit->map_pos.y);
+		if (hit->cell_id != 2)
 			break ;
 	}
 }
@@ -280,7 +282,10 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		wall_x = compute_wall_x(&hit, raycaster);
 		hit.line_height = (int)app->frame_buffer.height / hit.perp_wall_dist;
 		set_hit_info_side(hit.side, hit.ray_dir, &hit);
-		hit.image = app->image_atlas.images[3 + hit.side];
+		if (hit.cell_id >= ID_DOOR_CLOSED)
+			hit.image = app->image_atlas.images[4 + hit.cell_id];
+		else
+			hit.image = app->image_atlas.images[3 + hit.side];
 		draw_vertical_line(app, &hit);
 		hit.screen_x++;
 	}

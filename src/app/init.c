@@ -12,8 +12,20 @@
 
 #include "cub3D.h"
 
+void init_parser(t_player *player, t_map *map)
+{
+	player->pos = (t_vec2f){0};
+	map->height = 0;
+	map->width = 0;
+	ft_memset(map->path_textures, 0, sizeof(map->path_textures));
+	ft_memset(map->floor_rgb, 0, sizeof(map->floor_rgb));
+	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));
+}
+
 bool app_init(t_app *app)
 {
+	app->time.now = 0.;
+	app->time.last = 0.;
     app->ctx = mlx_init();
     if (app->ctx == MLX_NULL_HANDLE)
         return (false);

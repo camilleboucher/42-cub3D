@@ -6,23 +6,12 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:09:59 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:10:11 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:37:04 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INPUT_HANDLER_H
 #define INPUT_HANDLER_H
-
-typedef struct s_input_handler {
-  t_vec2i mouse_pos;
-  t_vec2f total_mouse_pos;
-  bool registered_click;
-  int keys[255];
-  t_vec2i old_mouse_pos;
-  unsigned int controler_count;
-  t_vec2f controler_vectors_left[4];
-  t_vec2f controler_vectors_right[4];
-} t_input_handler;
 
 void input_handler_set_down(t_input_handler *handler, int key);
 

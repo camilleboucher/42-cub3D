@@ -6,7 +6,7 @@
 #    By: cboucher <private_mail>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/27 15:11:43 by cboucher          #+#    #+#              #
-#    Updated: 2026/10/27 15:12:38 by cboucher         ###   ########.fr        #
+#    Updated: 2026/10/28 19:28:11 by cboucher         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/cleaner/cleaner.c \
 	   $(SRC_DIR)/map_tools/getters.c \
 	   $(SRC_DIR)/game/game.c \
+	   $(SRC_DIR)/game/objects.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
 	   $(SRC_DIR)/time_tools/time_tools.c \
 	   $(SRC_DIR)/input_handler/input_handler.c \
@@ -74,6 +75,7 @@ SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c \
 	   $(SRC_DIR_BONUS)/cleaner/cleaner.c \
 	   $(SRC_DIR_BONUS)/map_tools/getters.c \
 	   $(SRC_DIR_BONUS)/game/game.c \
+	   $(SRC_DIR_BONUS)/game/objects.c \
 	   $(SRC_DIR_BONUS)/raycaster/raycast.c \
 	   $(SRC_DIR_BONUS)/time_tools/time_tools.c \
 	   $(SRC_DIR_BONUS)/input_handler/input_handler.c \
