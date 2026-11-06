@@ -134,8 +134,8 @@ void ingame_update(t_app *app) {
         animated_sprite_draw(&app->frame_buffer, &app->image_atlas.animated_sprite[0], (t_vec2i){((int)app->frame_buffer.width - 498) / 2, ((int)app->frame_buffer.height - 498) / 2});
         push_buffer_to_screen_image(app, 3);
     }
-    last_time = time;
     push_frame_buffer_to_screen(app);
+    last_time = time;
 }
 
 void window_event_handle(int event, void *param)

@@ -189,7 +189,7 @@ void	grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4],
 	{
 		home_vector = vec2f_mul(vec2f_normalize(vec2f_sub(card->target,
 						card->pos)), 1500 * delta_time);
-		if (vec2f_lenght(home_vector) > vec2f_dist(card->target, card->pos))
+		if (vec2f_length(home_vector) > vec2f_dist(card->target, card->pos))
 			home_vector = vec2f_sub(card->target, card->pos);
 		card->pos = vec2f_add(card->pos, home_vector);
 	}

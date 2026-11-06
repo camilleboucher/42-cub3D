@@ -15,7 +15,7 @@ typedef struct s_animated_sprite {
     unsigned int frame_width;
 } t_animated_sprite;
 
-t_animated_sprite animated_sprite_from_region(t_region *frames, unsigned int frame_count, float frame_time, bool playing);
+t_animated_sprite animated_sprite_from_region(t_region *frames, unsigned int frame_count, double frame_time, bool playing);
 
 mlx_color *animated_sprite_get_buffer_start(t_animated_sprite *sprite, unsigned int *frame_width);
 
