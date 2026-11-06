@@ -31,19 +31,27 @@ static void    handle_keyboard_move_vector(t_input_handler *handler, t_input_dev
         device->move_vector.y = 1.0;
     if (is_key_down(handler, MLX_KEY_W))
         device->move_vector.y = -1.0;
-    if (vec2f_lenght(device->move_vector) > 1.)
+    if (vec2f_length(device->move_vector) > 1.)
         device->move_vector = vec2f_normalize(device->move_vector);
 }
 
 void    update_keyboard(t_input_handler *handler, t_input_device *device, double delta_time) {
     handle_keyboard_move_vector(handler, device);
     if (is_key_down(handler, MLX_KEY_RIGHT))
-        device->total_rotation += 600. * delta_time;
+        device->angle += 3. * delta_time;
     if (is_key_down(handler, MLX_KEY_LEFT))
-        device->total_rotation -= 600. * delta_time;
+        device->angle -= 3. * delta_time;
+    if (device->angle > M_PI)
+        device->angle -= M_PI * 2.;
+    if (device->angle < -M_PI)
+        device->angle += M_PI * 2.;
 }
 
 void    update_mouse_and_keyboard(t_input_handler *handler, t_input_device *device) {
     handle_keyboard_move_vector(handler, device);
-    handler->devices[1].total_rotation = handler->total_mouse_pos.x;
+    handler->devices[1].angle = (double)handler->total_mouse_pos.x / 600.;
+    if (device->angle > M_PI)
+        device->angle -= M_PI * 2.;
+    if (device->angle < -M_PI)
+        device->angle += M_PI * 2.;
 }

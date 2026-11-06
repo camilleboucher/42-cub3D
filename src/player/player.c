@@ -25,14 +25,14 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
 
     //printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
 
-    if (vec2f_lenght(player->speed) > PLAYER_MAX_SPEED)
+    if (vec2f_length(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
 
 
-    if (vec2f_lenght(player->speed) > 0.)
+    if (vec2f_length(player->speed) > 0.)
     {
         t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
-        if (vec2f_lenght(invert_friction) > vec2f_lenght(player->speed))
+        if (vec2f_length(invert_friction) > vec2f_length(player->speed))
             player->speed = (t_vec2f){0., 0.};
         else
             player->speed = vec2f_sub(player->speed, invert_friction);
@@ -43,10 +43,5 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
 
     //player->angle = input_handler->total_mouse_pos.x / 200.;
-    player->angle = get_controler_total_rotation(input_handler, player->device_id) / 200.;
-    if (player->angle > M_PI)
-        player->angle -= M_PI * 2.;
-    if (player->angle < -M_PI)
-        player->angle += M_PI * 2.;
-
+    player->angle = get_controler_angle(input_handler, player->device_id);
 }

@@ -18,7 +18,7 @@ typedef struct s_input_device
 {
 	bool			active;
 	t_vec2f			move_vector;
-	int             total_rotation;
+	double          angle;
 	t_device_type	type;
     int             controller_slot;
 }					t_input_device;

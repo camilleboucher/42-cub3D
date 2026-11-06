@@ -39,7 +39,7 @@ t_vec2f vec2f_normalize(t_vec2f a) {
     t_vec2f new;
     double lenght;
 
-    lenght = vec2f_lenght(a);
+    lenght = vec2f_length(a);
     if (lenght == 0.)
         return (a);
     new.x = a.x / lenght;
@@ -47,7 +47,7 @@ t_vec2f vec2f_normalize(t_vec2f a) {
     return (new);
 }
 
-double vec2f_lenght(t_vec2f a) {
+double vec2f_length(t_vec2f a) {
     double lenght;
 
     lenght = sqrtf(a.x * a.x + a.y * a.y);
