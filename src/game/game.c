@@ -84,7 +84,7 @@ void	check_door_activation(t_app *app, t_vec2f target)
 	if (app->map.cell[cell] == ID_DOOR_CLOSED)
 		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = true;
 	else if (app->map.cell[cell] == ID_DOOR_OPENED
-		&& map_get(&app->map, app->player.pos.x, app->player.pos.y) != ID_DOOR_OPENED)
+		&& !playerbox_in_door(&app->map, app->player.pos))
 		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = false;
 }
 
@@ -137,9 +137,9 @@ void ingame_update(t_app *app) {
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     app->input_handler.total_mouse_pos.x += get_controler_right_vector(&app->input_handler, 0).x * 600. * app->time.delta;
     //printf("%f\n", get_controler_right_vector(&app->input_handler, 0).x * 600. * (time - last_time));
+    action_input(app);
+    update_doors(app, app->objects.door, app->objects.nb_doors);
     player_input(&app->player, &app->input_handler, app->time.delta, &app->map);
-	action_input(app);
-	update_doors(app, app->objects.door, app->objects.nb_doors);
     draw_raycast(app, &raycaster);
     //apply_blur(app);
     push_frame_buffer_to_screen(app);
