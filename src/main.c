@@ -42,12 +42,18 @@ static void	load_map(t_app *app, char *map_path)
 
 	check_file_extension(map_path, ".cub", 4);
 	fd = open_map(map_path);
-	init_parser(&app->player, &app->map);
+	init_parser(app->players, &app->map);
 	parsing(fd, app, GET_INFOS);
+<<<<<<< HEAD
 	app->map.ceil_color = (mlx_color){.r = app->map.ceiling_rgb[0],
 		.g = app->map.ceiling_rgb[1], .b = app->map.ceiling_rgb[2], .a = 0xFF};
 	app->map.floor_color = (mlx_color){.r = app->map.floor_rgb[0],
 		.g = app->map.floor_rgb[1], .b = app->map.floor_rgb[2], .a = 0xFF};
+=======
+	app->map.ceil_color = (mlx_color){ .r=app->map.ceiling_rgb[0], .g=app->map.ceiling_rgb[1], .b=app->map.ceiling_rgb[2], .a=0xFF };
+	app->map.floor_color = (mlx_color){ .r=app->map.floor_rgb[0], .g=app->map.floor_rgb[1], .b=app->map.floor_rgb[2], .a=0xFF };
+	print_map_player(&app->map, &app->players[0]); //INFO: temporaire pour debug
+>>>>>>> main
 }
 
 static void	check_file_extension(char *path, char *ext, int ext_size)
@@ -80,3 +86,19 @@ static int	open_map(char *path)
 		error_exit(ERR_SYS);
 	return (fd);
 }
+<<<<<<< HEAD
+=======
+
+static void init_parser(t_player *players, t_map *map)
+{
+	players[0].pos = (t_vec2f){0};
+	players[1].pos = (t_vec2f){0};
+	players[2].pos = (t_vec2f){0};
+	players[3].pos = (t_vec2f){0};
+	map->height = 0;
+	map->width = 0;
+	ft_memset(map->path_textures, 0, sizeof(map->path_textures));
+	ft_memset(map->floor_rgb, 0, sizeof(map->floor_rgb));
+	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));
+}
+>>>>>>> main

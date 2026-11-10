@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC := cc
-CFLAGS := -Wall -Wextra -O3 -march=native -Wno-unused-result #TODO: -Werror
+CFLAGS := -Wall -Wextra -g -march=native -Wno-unused-result -Ofast #TODO: -Werror
 LDFLAGS = -lSDL2 -lm
 
 ifeq ($(FSANITIZE), true)
@@ -54,7 +54,10 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
 	   $(SRC_DIR)/time_tools/time_tools.c \
 	   $(SRC_DIR)/input_handler/input_handler.c \
-	   $(SRC_DIR)/player/player.c
+	   $(SRC_DIR)/player/player.c \
+	   $(SRC_DIR)/input_device/input_device.c \
+	   $(SRC_DIR)/animated_sprite/animated_sprite.c
+	   # $(SRC_DIR)/gnl2/gnl.c
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c \
 	   $(SRC_DIR_BONUS)/app/init.c \
@@ -98,7 +101,9 @@ $(OUTPUT_DIR):
 		$(OUTPUT_DIR)/vector2 $(OUTPUT_DIR)/app $(OUTPUT_DIR)/menus \
 		$(OUTPUT_DIR)/atlas $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/shaders \
 		$(OUTPUT_DIR)/parser $(OUTPUT_DIR)/error_manager $(OUTPUT_DIR)/cleaner \
-		$(OUTPUT_DIR)/map_tools $(OUTPUT_DIR)/raycaster
+		$(OUTPUT_DIR)/map_tools $(OUTPUT_DIR)/raycaster \
+		$(OUTPUT_DIR)/animated_sprite $(OUTPUT_DIR)/input_device
+
 $(OUTPUT_DIR_BONUS):
 	mkdir -p $(OUTPUT_DIR_BONUS) $(OUTPUT_DIR_BONUS)/player \
 		$(OUTPUT_DIR_BONUS)/input_handler $(OUTPUT_DIR_BONUS)/time_tools \
@@ -128,7 +133,9 @@ bonus: $(NAME_BONUS)
 clean:
 	rm -rf $(OUTPUT_DIR)
 	rm -rf $(OUTPUT_DIR_BONUS)
+ifneq ($(RE_NO_MLX), true)
 	make -C MacroLibX fclean
+endif
 	make -C libft fclean
 
 fclean: clean

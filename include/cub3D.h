@@ -41,8 +41,10 @@
 
 # include "error_manager.h"
 # include "input_handler.h"
-# include "player.h"
+# include "input_device.h"
 # include "frame_buffer.h"
+# include "animated_sprite.h"
+# include "player.h"
 # include "atlas.h"
 # include "ui.h"
 # include "game.h"

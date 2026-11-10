@@ -89,7 +89,7 @@ static t_error	checks_extracted_parsing_datas(t_app *app, t_error error)
 	}
 	if (error & MASK_ERRS_CRITICALS || error & ERR_MISSING_MAP)
 		return (error);
-	if (!app->player.pos.x || !app->player.pos.y)
+	if (!app->players[0].pos.x || !app->players[0].pos.y)
 		error |= ERR_MISSING_PLAYER;
 	return (error);
 }
