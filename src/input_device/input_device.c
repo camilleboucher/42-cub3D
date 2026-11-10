@@ -4,6 +4,7 @@
 #include "mlx_extended.h"
 #include "mlx_keycodes.h"
 #include "vector.h"
+#include "math.h"
 
 void	device_notify(t_app *app, int device_id)
 {

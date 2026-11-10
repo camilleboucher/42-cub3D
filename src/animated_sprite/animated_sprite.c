@@ -1,6 +1,4 @@
-#include "animated_sprite.h"
-#include "frame_buffer.h"
-#include "vector.h"
+#include "cub3D.h"
 
 t_animated_sprite animated_sprite_from_region(t_region *frames, unsigned int frame_count, double frame_time, bool playing) {
     t_animated_sprite sprite;
@@ -10,6 +8,7 @@ t_animated_sprite animated_sprite_from_region(t_region *frames, unsigned int fra
     sprite.frame_time = frame_time;
     sprite.frame_index = 0;
     sprite.playing = playing;
+    sprite.timer = 0.;
     sprite.frame_width = frames->width / frame_count;
     return (sprite);
 }
