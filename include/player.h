@@ -20,6 +20,7 @@ typedef struct s_player
 	t_vec2f	forward;
 	t_vec2f right;
 	t_vec2f speed;
+	int device_id;
 }	t_player;
 
 void player_input(t_player *player, t_input_handler *input_handler, double delta_time, t_map *map);
