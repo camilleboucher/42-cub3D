@@ -9,10 +9,7 @@
 /*   Updated: 2026/11/09 19:28:45 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "animated_sprite.h"
-#include "cube3D2.h"
-#include "frame_buffer.h"
+#include "cub3D.h"
 
 void	free_all_images(t_app *app)
 {

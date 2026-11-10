@@ -1,7 +1,16 @@
-#include "input_handler.h"
-#include "input_device.h"
-#include "mlx_extended.h"
-#include "vector.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_handler.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:18:13 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:29:30 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 void input_handler_set_down(t_input_handler *handler, int key)
 {

@@ -1,16 +1,58 @@
-#include <mlx_keycodes.h>
-#include "player.h"
-#include <math.h>
-#include <stdio.h>
-#include "input_handler.h"
-#include "mlx_extended.h"
-#include "vector.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   player.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/28 16:48:00 by yben-dje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define PLAYER_MAX_SPEED 4.
-#define PLAYER_SPEED_DECREASE 8.
-#define PLAYER_FORCE 15.
+#include "cub3D.h"
 
-void player_input(t_player *player, t_input_handler *input_handler, double delta_time) {
+
+bool	is_solid(char cell)
+{
+	if (cell == 1)
+		return (true);
+	if (cell >= 3 && cell <= 5)
+		return (true);
+	return (false);
+}
+
+bool	has_collision(t_map *map, t_vec2f test_pos)
+{
+	return (is_solid(map_get(map, test_pos.x - PLAYER_BOX,test_pos.y + PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x - PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
+}
+
+void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
+{
+	t_vec2f	new_pos;
+
+	new_pos = vec2f_add(player->pos, delta_pos);
+	if (has_collision(map, new_pos))
+	{
+		if (!has_collision(map, (t_vec2f){new_pos.x, player->pos.y}))
+        {
+            player->pos.x = new_pos.x;
+            player->speed.y = 0;
+        }
+		else if (!has_collision(map, (t_vec2f){player->pos.x, new_pos.y}))
+		{
+            player->pos.y = new_pos.y;
+            player->speed.x = 0;
+        }
+	}
+	else
+		player->pos = new_pos;
+}
+
+void player_input(t_player *player, t_input_handler *input_handler, double delta_time, t_map *map) {
     player->forward.x = cos(player->angle);
     player->forward.y = sin(player->angle);
 
@@ -28,7 +70,6 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     if (vec2f_length(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
 
-
     if (vec2f_length(player->speed) > 0.)
     {
         t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
@@ -39,9 +80,7 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     }
 
     //printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
+	move_player(map, player, vec2f_mul(player->speed, delta_time));
 
-    player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
-
-    //player->angle = input_handler->total_mouse_pos.x / 200.;
     player->angle = get_controler_angle(input_handler, player->device_id);
 }

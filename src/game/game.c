@@ -1,17 +1,16 @@
-#include "animated_sprite.h"
-#include "app.h"
-#include "cube3D2.h"
-#include "frame_buffer.h"
-#include "input_device.h"
-#include "input_handler.h"
-#include "map_tools.h"
-#include "mlx.h"
-#include "mlx_keycodes.h"
-#include <stdio.h>
-#include "shaders.h"
-#include "ui.h"
-#include "vector.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:15:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 16:07:17 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "cub3D.h"
 
 void handle_resize_event(t_app *app)
 {
@@ -120,7 +119,7 @@ void ingame_update(t_app *app) {
         raycaster.camera_pos = app->players[player_index].pos;
         raycaster.camera_dir.x = cos(app->players[player_index].angle);
         raycaster.camera_dir.y = sin(app->players[player_index].angle);
-        player_input(&app->players[player_index], &app->input_handler, time - last_time);
+        player_input(&app->players[player_index], &app->input_handler, time - last_time, &app->map);
         draw_raycast(app, &raycaster);
         //apply_blur(app);
         /*if (vec2f_lenght(app->players->speed) > 0.1)

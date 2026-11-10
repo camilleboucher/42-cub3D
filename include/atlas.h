@@ -1,9 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   atlas.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:04:38 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:36:33 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ATLAS_H
 #define ATLAS_H
 
-#include "animated_sprite.h"
-#include "frame_buffer.h"
-
+#include "cub3D.h"
 typedef struct s_image_atlas {
     t_region *images[50];
     t_animated_sprite animated_sprite[10];

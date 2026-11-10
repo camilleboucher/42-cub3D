@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/09/15 17:04:28 by yben-dje         ###   ########.fr       */
+/*   Created: 2026/09/24 17:12:31 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:11:30 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
-
-#include "vector.h"
-#include "mlx.h"
 
 typedef enum e_direction
 {
@@ -22,6 +19,7 @@ typedef enum e_direction
 	SOUTH,
 	WEST,
 	EAST,
+	DOOR,
 	FLOOR,
 	CEILING,
 	NO_DIRECTION
@@ -36,14 +34,14 @@ typedef enum e_rgb
 
 typedef struct s_map
 {
-	char			cell[MAP_SIZE_MAX_VALS * MAP_SIZE_MAX_VALS];
-	TYPE_MAP_SIZE	width;
-	TYPE_MAP_SIZE	height;
-	char			*path_textures[4];
-	uint8_t			floor_rgb[3];
-	uint8_t			ceiling_rgb[3];
-	mlx_color		floor_color;
-	mlx_color		ceil_color;
+	char		*cell;
+	uint16_t	width;
+	uint16_t	height;
+	char		*path_textures[5];
+	uint8_t		floor_rgb[3];
+	uint8_t		ceiling_rgb[3];
+	mlx_color	floor_color;
+	mlx_color	ceil_color;
 }	t_map;
 
 #endif

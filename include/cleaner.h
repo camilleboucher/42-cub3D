@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   components.h                                       :+:      :+:    :+:   */
+/*   cleaner.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 17:08:47 by aiga             ###   ########.fr       */
+/*   Created: 2026/09/24 15:29:14 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:36:19 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMPONENTS_H
-# define COMPONENTS_H
+#ifndef CLEANER_H
+# define CLEANER_H
 
-typedef struct s_position
-{
-	TYPE_MAP_SIZE	x;
-	TYPE_MAP_SIZE	y;
-}	t_position;
+void	clean_map(t_map *map);
+void	app_destroy(t_app *app);
 
 #endif

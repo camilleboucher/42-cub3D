@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 17:54:47 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/03 14:13:53 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/09/24 16:07:28 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	get_info(t_map *map, char *s, t_error *error)
 	direction = get_info_direction(s, ft_strlen(s));
 	if (direction == NO_DIRECTION)
 		return (*error |= ERR_WRONG_INFO_START);
-	else if (direction > EAST)
+	else if (direction > DOOR)
 		s++;
 	else
 		s += 2;
@@ -50,6 +50,8 @@ static t_direction	get_info_direction(char *s, int size)
 			return (WEST);
 		else if (ft_strncmp(s, "EA", 2) == 0)
 			return (EAST);
+		else if (ft_strncmp(s, "DO", 2) == 0)
+			return (DOOR);
 	}
 	if (size >= 1)
 	{
@@ -66,7 +68,9 @@ static bool	set_info_direction(t_map *map, t_direction direction,
 {
 	char	**path_texture_dir;
 
-	if (direction <= EAST)
+	if (!*s)
+		return (*error |= ERR_MISSING_INFO);
+	if (direction <= DOOR)
 	{
 		path_texture_dir = &map->path_textures[direction];
 		if (*path_texture_dir)
@@ -80,15 +84,15 @@ static bool	set_info_direction(t_map *map, t_direction direction,
 		*error = (*error | set_info_color(map->floor_rgb, direction, s, *error))
 			& ~ERR_NO_RGB_FLOOR;
 	else
-		*error = (*error | set_info_color(map->ceiling_rgb, direction, s, *error))
-			& ~ERR_NO_RGB_CEILING;
+		*error = (*error | set_info_color(map->ceiling_rgb,
+					direction, s, *error)) & ~ERR_NO_RGB_CEILING;
 	if (check_complete_infos(map->path_textures, error))
 		return (false);
 	return (*error);
 }
 
-static t_error		set_info_color(uint8_t *color, t_direction direction,
-						char *s, t_error eflag)
+static t_error	set_info_color(uint8_t *color, t_direction direction,
+					char *s, t_error eflag)
 {
 	t_error	error;
 	char	**rgb;
@@ -102,10 +106,10 @@ static t_error		set_info_color(uint8_t *color, t_direction direction,
 	if (!rgb)
 		return (ERR_SYS);
 	i = 0;
-	error = ERR_NONE;
-	while (i <= B)
+	error = check_split_rgb8(rgb, s);
+	while (i < 3)
 	{
-		if (!is_rgb8(rgb[i]))
+		if (error || !is_rgb8(rgb[i]))
 		{
 			error = ERR_NOT_RGB8;
 			break ;
@@ -119,7 +123,8 @@ static t_error		set_info_color(uint8_t *color, t_direction direction,
 
 static bool	check_complete_infos(char **path_textures, t_error *error)
 {
-	return ((*error & MASK_ERR_NO_RGBS) == 0
-		 && path_textures[NORTH] && path_textures[SOUTH]
-		 && path_textures[WEST] && path_textures[EAST]);
+	return ((*error & MASK_ERRS_NO_RGBS) == 0
+		&& path_textures[NORTH] && path_textures[SOUTH]
+		&& path_textures[WEST] && path_textures[EAST]
+		&& path_textures[DOOR]);
 }
