@@ -83,12 +83,8 @@ void player_input(t_player *player, t_input_handler *input_handler, double delta
     if (vec2f_length(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
 
-<<<<<<< HEAD
 
-    if (vec2f_lenght(player->speed) > 0.)
-=======
     if (vec2f_length(player->speed) > 0.)
->>>>>>> main
     {
         t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
         if (vec2f_length(invert_friction) > vec2f_length(player->speed))

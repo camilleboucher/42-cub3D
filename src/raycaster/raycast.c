@@ -283,7 +283,7 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		hit.line_height = (int)app->frame_buffer.height / hit.perp_wall_dist;
 		set_hit_info_side(hit.side, hit.ray_dir, &hit);
 		if (hit.cell_id >= ID_DOOR_CLOSED)
-			hit.image = app->image_atlas.images[4 + hit.cell_id];
+			hit.image = app->image_atlas.images[20 + hit.cell_id];
 		else
 			hit.image = app->image_atlas.images[3 + hit.side];
 		draw_vertical_line(app, &hit);

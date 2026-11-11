@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef INPUT_HANDLER_H
-#define INPUT_HANDLER_H
+# define INPUT_HANDLER_H
 
 void input_handler_set_down(t_input_handler *handler, int key);
 

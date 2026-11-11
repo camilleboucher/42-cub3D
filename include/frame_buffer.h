@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
-
 #ifndef FRAME_BUFFER_H
-#define FRAME_BUFFER_H
+# define FRAME_BUFFER_H
+
+# include "cub3D.h"
 
 bool reallocate_frame_buffer(t_app *app);
 void clear_frame_buffer(t_app *app, mlx_color color);

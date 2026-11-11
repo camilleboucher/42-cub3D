@@ -40,15 +40,16 @@
 # include "structs.h"
 
 # include "error_manager.h"
+# include "app.h"
+
 # include "input_handler.h"
-# include "input_device.h"
 # include "frame_buffer.h"
 # include "animated_sprite.h"
 # include "player.h"
 # include "atlas.h"
 # include "ui.h"
 # include "game.h"
-# include "app.h"
+# include "input_device.h"
 # include "parser.h"
 # include "cleaner.h"
 

@@ -86,7 +86,7 @@ void mouse_jail(t_app *app) {
     }
 }
 
-void	check_door_activation(t_app *app, t_vec2f target)
+void	check_door_activation(t_app *app, t_vec2f target, t_player *player)
 {
 	int	cell;
 
@@ -94,11 +94,11 @@ void	check_door_activation(t_app *app, t_vec2f target)
 	if (app->map.cell[cell] == ID_DOOR_CLOSED)
 		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = true;
 	else if (app->map.cell[cell] == ID_DOOR_OPENED
-		&& !playerbox_in_door(&app->map, app->player.pos))
+		&& !playerbox_in_door(&app->map, player->pos))
 		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = false;
 }
 
-void	action_input(t_app *app)
+void	action_input(t_app *app, t_player *player)
 {
 	if (app->input_handler.action_key
 		&& !is_key_down(&app->input_handler, MLX_KEY_F))
@@ -108,7 +108,7 @@ void	action_input(t_app *app)
 		app->input_handler.action_key = true;
 	if (app->input_handler.action_key)
 		check_door_activation(app,
-			vec2f_add(app->player.pos, app->player.forward));
+			vec2f_add(player->pos, player->forward), player);
 }
 
 void ingame_update(t_app *app) {
@@ -140,14 +140,17 @@ void ingame_update(t_app *app) {
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
 
+    update_doors(app, app->objects.door, app->objects.nb_doors);
+
     unsigned int player_index;
     player_index = 0;
-    while (player_index < app->input_handler.player_)
+    while (player_index < app->input_handler.player_count)
     {
         raycaster = (t_raycaster){0};
         raycaster.camera_pos = app->players[player_index].pos;
         raycaster.camera_dir.x = cos(app->players[player_index].angle);
         raycaster.camera_dir.y = sin(app->players[player_index].angle);
+        action_input(app, &app->players[player_index]);
         player_input(&app->players[player_index], &app->input_handler, app->time.delta, &app->map);
         draw_raycast(app, &raycaster);
         //apply_blur(app);
@@ -162,7 +165,6 @@ void ingame_update(t_app *app) {
         animated_sprite_draw(&app->frame_buffer, &app->image_atlas.animated_sprite[0], (t_vec2i){((int)app->frame_buffer.width - 498) / 2, ((int)app->frame_buffer.height - 498) / 2});
         push_buffer_to_screen_image(app, 3);
     }
->>>>>>> main
     push_frame_buffer_to_screen(app);
     app->time.last = app->time.now;
 }

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef ATLAS_H
-#define ATLAS_H
+# define ATLAS_H
 
 bool atlas_load_buttons(t_app *app);
 void free_all_images(t_app *app);

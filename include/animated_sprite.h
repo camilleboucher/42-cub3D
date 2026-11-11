@@ -11,19 +11,9 @@
 /* ************************************************************************** */
 
 #ifndef ANIMATED_SPRITE_H
-#define ANIMATED_SPRITE_H
+# define ANIMATED_SPRITE_H
 
-#include "cub3D.h"
-
-typedef struct s_animated_sprite {
-    t_region *frames;
-    unsigned int frame_count;
-    double frame_time;
-    double timer;
-    unsigned int frame_index;
-    bool playing;
-    unsigned int frame_width;
-} t_animated_sprite;
+# include "cub3D.h"
 
 t_animated_sprite animated_sprite_from_region(t_region *frames, unsigned int frame_count, double frame_time, bool playing);
 
