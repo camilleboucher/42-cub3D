@@ -24,6 +24,7 @@ void	free_all_images(t_app *app)
 	}
 }
 
+
 void	copy_image_to_region(t_app *app, t_region *region, mlx_image image,
 		t_vec2i size)
 {
@@ -84,7 +85,9 @@ bool	atlas_load_buttons(t_app *app)
 		"assets/how_many_players_sign.png", "assets/controler.png",
 		"assets/keyboard_mouse.png", "assets/keyboard.png",
 		"assets/input_slot.png", "assets/ok.png", "assets/ok_hover.png",
-		"assets/maomao.png"};
+		"assets/maomao.png", "assets/door_closed.png",
+		"assets/door_almost_closed.png", "assets/door_almost_opened.png",
+		"assets/door_opened.png"};
 
 	app->image_atlas.image_amount = 0;
 	i = 0;

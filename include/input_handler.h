@@ -6,30 +6,12 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:09:59 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:10:11 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:37:04 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INPUT_HANDLER_H
-#define INPUT_HANDLER_H
-
-#include "mlx.h"
-#include "vector.h"
-#include <stdbool.h>
-#include "input_device.h"
-
-typedef struct s_input_handler {
-  t_vec2i mouse_pos;
-  t_vec2f total_mouse_pos;
-  bool registered_click;
-  int keys[255];
-  t_vec2i old_mouse_pos;
-  unsigned int player_count;
-  unsigned int controller_count;
-  t_input_device devices[6];
-  bool mouse_down;
-  bool mouse_is_busy;
-} t_input_handler;
+# define INPUT_HANDLER_H
 
 void input_handler_set_down(t_input_handler *handler, int key);
 

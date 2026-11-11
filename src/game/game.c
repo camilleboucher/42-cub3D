@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:15:33 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 16:07:17 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/28 20:06:49 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,30 +86,61 @@ void mouse_jail(t_app *app) {
     }
 }
 
+void	check_door_activation(t_app *app, t_vec2f target, t_player *player)
+{
+	int	cell;
+
+	cell = (int)target.x + (int)target.y * app->map.width;
+	if (app->map.cell[cell] == ID_DOOR_CLOSED)
+		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = true;
+	else if (app->map.cell[cell] == ID_DOOR_OPENED
+		&& !playerbox_in_door(&app->map, player->pos))
+		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = false;
+}
+
+void	action_input(t_app *app, t_player *player)
+{
+	if (app->input_handler.action_key
+		&& !is_key_down(&app->input_handler, MLX_KEY_F))
+		app->input_handler.action_key = false;
+	if (!app->input_handler.action_key
+		&& is_key_down(&app->input_handler, MLX_KEY_F))
+		app->input_handler.action_key = true;
+	if (app->input_handler.action_key)
+		check_door_activation(app,
+			vec2f_add(player->pos, player->forward), player);
+}
+
 void ingame_update(t_app *app) {
     t_raycaster raycaster;
 
-    static double last_time = 0.;
     static double old_average = 0.0;
     static unsigned int frame_count = 0;
 
-    double time = get_time();
-    double average = (1. / (time - last_time) + old_average * (double)frame_count) / ((double)frame_count + 1.);
+    //printf("%f - %f\n", app->player.pos, app->player.pos.y);
+
+    app->time.now = get_time();
+    app->time.delta = app->time.now - app->time.last;
+    double average = (1. / app->time.delta + old_average * (double)frame_count) / ((double)frame_count + 1.);
+
     old_average = average;
     frame_count++;
-    printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
+    //printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
     if (is_key_down(&app->input_handler, MLX_KEY_C)) {
         average = 0.0;
         frame_count = 0;
     }
-    if (last_time == 0.)
-        last_time = time;
+    if (app->time.last == 0.)
+        app->time.last = app->time.now;
 
     mouse_jail(app);
-    input_handler_update(&app->input_handler, app->ctx, time - last_time);
+
+    input_handler_update(&app->input_handler, app->ctx, app->time.delta);
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
+
+    update_doors(app, app->objects.door, app->objects.nb_doors);
 
     unsigned int player_index;
     player_index = 0;
@@ -119,7 +150,8 @@ void ingame_update(t_app *app) {
         raycaster.camera_pos = app->players[player_index].pos;
         raycaster.camera_dir.x = cos(app->players[player_index].angle);
         raycaster.camera_dir.y = sin(app->players[player_index].angle);
-        player_input(&app->players[player_index], &app->input_handler, time - last_time, &app->map);
+        action_input(app, &app->players[player_index]);
+        player_input(&app->players[player_index], &app->input_handler, app->time.delta, &app->map);
         draw_raycast(app, &raycaster);
         //apply_blur(app);
         /*if (vec2f_lenght(app->players->speed) > 0.1)
@@ -129,12 +161,12 @@ void ingame_update(t_app *app) {
     }
     if (app->input_handler.player_count == 3) {
         clear_frame_buffer(app, (mlx_color){ .rgba=0x000000ff });
-        animated_sprite_update(&app->image_atlas.animated_sprite[0], time - last_time);
+        animated_sprite_update(&app->image_atlas.animated_sprite[0], app->time.delta);
         animated_sprite_draw(&app->frame_buffer, &app->image_atlas.animated_sprite[0], (t_vec2i){((int)app->frame_buffer.width - 498) / 2, ((int)app->frame_buffer.height - 498) / 2});
         push_buffer_to_screen_image(app, 3);
     }
     push_frame_buffer_to_screen(app);
-    last_time = time;
+    app->time.last = app->time.now;
 }
 
 void window_event_handle(int event, void *param)

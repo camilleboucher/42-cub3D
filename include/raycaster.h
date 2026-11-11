@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef RAYCASTER_H
-#define RAYCASTER_H
+# define RAYCASTER_H
 
 typedef struct s_raycaster {
     t_vec2f camera_pos;

@@ -10,28 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
-
 #ifndef FRAME_BUFFER_H
-#define FRAME_BUFFER_H
+# define FRAME_BUFFER_H
 
-typedef struct s_app t_app;
-
-typedef struct s_region {
-  unsigned int width;
-  unsigned int height;
-  mlx_color buffer[];
-} t_region;
-
-typedef struct s_frame_buffer {
-  t_region *buffer;
-  t_region *shader_buffer;
-  unsigned int width;
-  unsigned int height;
-  mlx_image screen_image;
-  unsigned int screen_width;
-  unsigned int screen_height;
-} t_frame_buffer;
+# include "cub3D.h"
 
 bool reallocate_frame_buffer(t_app *app);
 void clear_frame_buffer(t_app *app, mlx_color color);

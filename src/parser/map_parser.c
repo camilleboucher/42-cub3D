@@ -29,7 +29,7 @@ void	parsing_map(t_app *app, t_map *map, t_list *map_head, t_error error)
 			error |= ERR_SYS;
 		else
 		{
-			ft_memset(map->cell, C_VOID, map->height * map->width);
+			ft_memset(map->cell, ID_VOID, map->height * map->width);
 			map->height = 0;
 			while (map_line && !(error & MASK_ERRS_CRITICALS))
 			{
@@ -81,7 +81,7 @@ static t_error	checks_extracted_parsing_datas(t_app *app, t_error error)
 	int	i;
 
 	i = 0;
-	while (i < 5)
+	while (i < 4)
 	{
 		if (!app->map.path_textures[i])
 			error |= ERR_MISSING_INFO;

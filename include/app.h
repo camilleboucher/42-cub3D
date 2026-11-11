@@ -10,35 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
-
 #ifndef APP_H
-#define APP_H
+# define APP_H
 
-typedef enum e_game_state {
-    ingame,
-    player_count_select,
-    input_select,
-    main_menu,
-} t_game_state;
-
-typedef struct s_app
-{
-    mlx_context ctx;
-    mlx_window window;
-    mlx_window_create_info info;
-    t_input_handler input_handler;
-    t_frame_buffer frame_buffer;
-    bool request_immediate_abort;
-    t_image_atlas image_atlas;
-    t_map map;
-    t_player players[4];
-    t_game_state game_state;
-    t_main_menu main_menu;
-    t_player_count_menu player_count_menu;
-    t_input_select_menu input_select_menu;
-} t_app;
+# include "cub3D.h"
 
 bool app_init(t_app *app);
+void	init_parser(t_player *player, t_map *map);
 
 #endif

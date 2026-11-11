@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef MAP_TOOLS_H
-#define MAP_TOOLS_H
+# define MAP_TOOLS_H
 
 char map_get(t_map *map, int x, int y);
 

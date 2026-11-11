@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:51:12 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:41:48 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:15:57 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,16 @@
 # include "structs.h"
 
 # include "error_manager.h"
+# include "app.h"
+
 # include "input_handler.h"
-# include "input_device.h"
 # include "frame_buffer.h"
 # include "animated_sprite.h"
 # include "player.h"
 # include "atlas.h"
-# include "menus.h"
 # include "ui.h"
-# include "app.h"
+# include "game.h"
+# include "input_device.h"
 # include "parser.h"
 # include "cleaner.h"
 
