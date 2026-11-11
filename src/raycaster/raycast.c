@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yben-dje <yben-dje@student.642.fr>          +#+  +:+
-	+#+        */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/27 18:649:164 by yben-dje          #+#    #+#             */
-/*   Updated: 2026/10/07 14:30:33 by cboucher         ###   ########.fr       */
+/*   Created: 2026/11/11 18:43:03 by cboucher          #+#    #+#             */
+/*   Updated: 2026/11/11 18:43:11 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,35 +18,6 @@ int	max(int a, int b)
 		return (b);
 	return (a);
 }
-
-typedef struct s_hit_info
-{
-	char			cell_id;
-	/* Raycaster variable */
-	t_vec2f			ray_dir;
-	t_vec2i			map_pos;
-	t_vec2f			side_dist;
-	t_vec2f			delta_dist;
-	t_vec2f			ray_step;
-	unsigned int	screen_x;
-	int				line_height;
-	int				tex_x;
-	int				side;
-	double			perp_wall_dist;
-	/* Line filling variables */
-	t_region		*image;
-	int				draw_start;
-	int				draw_end;
-	double			step;
-	unsigned int	y;
-	unsigned int	fb_row;
-	unsigned int	tex_row;
-
-	int				tex_pos;
-	double			scale;
-	double			stepstep;
-
-}					t_hit_info;
 
 void	screen_to_texture_line(t_app *app, t_hit_info *hit)
 {
@@ -65,8 +35,10 @@ void	screen_to_texture_line(t_app *app, t_hit_info *hit)
 	}
 }
 
-void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop) {
+void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
+{
 	mlx_color	color;
+
 	while (hit->tex_pos < stop)
 	{
 		hit->stepstep += hit->scale;
@@ -77,7 +49,8 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop) {
 				color);
 		hit->tex_pos++;
 	}
-	if (hit->tex_pos < 64 && hit->stepstep + hit->scale >= app->frame_buffer.height - 1)
+	if (hit->tex_pos < 64 && hit->stepstep
+		+ hit->scale >= app->frame_buffer.height - 1)
 	{
 		color = get_pixel_opt(hit->image, hit->tex_row
 				+ ((unsigned int)hit->tex_pos & (64 - 1)));
@@ -251,22 +224,23 @@ double	compute_wall_x(t_hit_info *hit, t_raycaster *raycaster)
 	return (wall_x);
 }
 
-void update_hit_with_screen_x(t_app *app, t_hit_info *hit, t_raycaster *raycaster, t_vec2f plane)
+void	update_hit_with_screen_x(t_app *app, t_hit_info *hit,
+		t_raycaster *raycaster, t_vec2f plane)
 {
-    double camera_x;
+	double	camera_x;
 
-    camera_x = 2 * hit->screen_x / (double)app->frame_buffer.width - 1;
-    hit->ray_dir = (t_vec2f){raycaster->camera_dir.x + plane.x * camera_x,
-        raycaster->camera_dir.y + plane.y * camera_x};
-    hit->map_pos = (t_vec2i){(int)raycaster->camera_pos.x,
-        (int)raycaster->camera_pos.y};
+	camera_x = 2 * hit->screen_x / (double)app->frame_buffer.width - 1;
+	hit->ray_dir = (t_vec2f){raycaster->camera_dir.x + plane.x * camera_x,
+		raycaster->camera_dir.y + plane.y * camera_x};
+	hit->map_pos = (t_vec2i){(int)raycaster->camera_pos.x,
+		(int)raycaster->camera_pos.y};
 }
 
 void	draw_raycast(t_app *app, t_raycaster *raycaster)
 {
 	t_vec2f		plane;
 	t_hit_info	hit;
-	double wall_x;
+	double		wall_x;
 
 	plane = compute_plane(app, raycaster);
 	hit.screen_x = 0;

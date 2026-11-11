@@ -15,7 +15,7 @@
 
 # include "cub3D.h"
 
-bool app_init(t_app *app);
+bool	app_init(t_app *app);
 void	init_parser(t_player *player, t_map *map);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/24 15:25:55 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/28 18:26:41 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/11/11 17:55:45 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	main(int argc, char *argv[])
 	app = (struct s_app){0};
 	load_map(&app, argv[1]);
 	app_init(&app);
-	if (!atlas_load_buttons(&app)
-		|| !create_objects(&app))
+	if (!atlas_load_buttons(&app) || !create_objects(&app))
 	{
 		app_destroy(&app);
 		return (1);
