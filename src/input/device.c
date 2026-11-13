@@ -48,6 +48,14 @@ void	update_keyboard(t_input_handler *handler, t_input_device *device,
 		double delta_time)
 {
 	handle_keyboard_move_vector(handler, device);
+	if (device->action_key && (!is_key_down(handler, MLX_KEY_F)))
+		device->action_key = false;
+	if (!device->action_key && is_key_down(handler, MLX_KEY_F))
+		device->action_key = true;
+	if (device->sprint_key && (!is_key_down(handler, MLX_KEY_LSHIFT)))
+		device->sprint_key = false;
+	if (!device->sprint_key && is_key_down(handler, MLX_KEY_LSHIFT))
+		device->sprint_key = true;
 	if (is_key_down(handler, MLX_KEY_RIGHT))
 		device->angle += 3. * delta_time;
 	if (is_key_down(handler, MLX_KEY_LEFT))
@@ -62,6 +70,14 @@ void	update_mouse_and_keyboard(t_input_handler *handler,
 		t_input_device *device)
 {
 	handle_keyboard_move_vector(handler, device);
+	if (device->action_key && (!is_key_down(handler, MLX_KEY_F)))
+		device->action_key = false;
+	if (!device->action_key && is_key_down(handler, MLX_KEY_F))
+		device->action_key = true;
+	if (device->sprint_key && (!is_key_down(handler, MLX_KEY_LSHIFT)))
+		device->sprint_key = false;
+	if (!device->sprint_key && is_key_down(handler, MLX_KEY_LSHIFT))
+		device->sprint_key = true;
 	handler->devices[1].angle = (double)handler->total_mouse_pos.x / 600.;
 	if (device->angle > M_PI)
 		device->angle -= M_PI * 2.;
