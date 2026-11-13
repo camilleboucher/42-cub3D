@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:11:55 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:11:55 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_H
 # define VECTOR_H
 
@@ -21,7 +33,7 @@ t_vec2f		vec2f_mul(t_vec2f a, double b);
 
 t_vec2f		vec2f_div(t_vec2f a, double b);
 
-double		vec2f_lenght(t_vec2f a);
+double		vec2f_length(t_vec2f a);
 
 double		vec2f_dist(t_vec2f a, t_vec2f b);
 

@@ -6,7 +6,7 @@
 /*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 15:51:12 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/31 15:42:20 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/10/28 18:15:57 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,42 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include <string.h>
+# include <sys/time.h>
 # include <unistd.h>
 
+# include "mlx.h"
+# include "mlx_extended.h"
+# include "mlx_keycodes.h"
+
+# include "ft_list.h"
 # include "ft_ctype.h"
 # include "ft_stdlib.h"
 # include "ft_string.h"
+
 # include "get_next_line.h"
+# include "vector.h"
 
 # include "constants.h"
-# include "components.h"
 # include "structs.h"
 
 # include "error_manager.h"
+# include "app.h"
+
+# include "input_handler.h"
+# include "frame_buffer.h"
+# include "animated_sprite.h"
 # include "player.h"
+# include "atlas.h"
+# include "ui.h"
+# include "game.h"
+# include "input_device.h"
 # include "parser.h"
+# include "cleaner.h"
+
+# include "math.h"
+# include "raycaster.h"
+# include "time_tools.h"
+# include "shaders.h"
+# include "map_tools.h"
 
 #endif

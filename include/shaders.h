@@ -1,6 +1,18 @@
-#ifndef SHADERS_H
-#define SHADERS_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shaders.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:11:16 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:11:17 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void apply_blur(t_app *app);
+#ifndef SHADERS_H
+# define SHADERS_H
+
+void apply_blur(t_app *app, int radius);
 
 #endif

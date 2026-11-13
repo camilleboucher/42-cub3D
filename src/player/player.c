@@ -1,60 +1,100 @@
-#include <mlx_keycodes.h>
-#include "player.h"
-#include <math.h>
-#include "input_handler.h"
-#include "vector.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   player.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/28 20:00:56 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define PLAYER_MAX_SPEED 2.
-#define PLAYER_SPEED_DECREASE 6.
-#define PLAYER_FORCE 6.
+#include "cub3D.h"
 
-void player_input(t_player *player, t_input_handler *input_handler, double delta_time) {
+
+bool	is_solid(char cell)
+{
+	if (cell == ID_WALL)
+		return (true);
+	if (cell >= ID_DOOR_CLOSED && cell < ID_DOOR_OPENED)
+		return (true);
+	return (false);
+}
+
+bool	is_door(char cell)
+{
+	return (cell >= ID_DOOR_CLOSED && cell <= ID_DOOR_OPENED);
+}
+
+bool	playerbox_in_door(t_map *map, t_vec2f test_pos)
+{
+	return (is_door(map_get(map, test_pos.x - PLAYER_BOX,test_pos.y + PLAYER_BOX))
+	|| is_door(map_get(map, test_pos.x - PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_door(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_door(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
+}
+
+bool	has_collision(t_map *map, t_vec2f test_pos)
+{
+	return (is_solid(map_get(map, test_pos.x - PLAYER_BOX,test_pos.y + PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x - PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y - PLAYER_BOX))
+	|| is_solid(map_get(map, test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
+}
+
+void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
+{
+	t_vec2f	new_pos;
+
+	new_pos = vec2f_add(player->pos, delta_pos);
+	if (has_collision(map, new_pos))
+	{
+		if (!has_collision(map, (t_vec2f){new_pos.x, player->pos.y}))
+        {
+            player->pos.x = new_pos.x;
+            player->speed.y = 0;
+        }
+		else if (!has_collision(map, (t_vec2f){player->pos.x, new_pos.y}))
+		{
+            player->pos.y = new_pos.y;
+            player->speed.x = 0;
+        }
+	}
+	else
+		player->pos = new_pos;
+}
+
+void player_input(t_player *player, t_input_handler *input_handler, double delta_time, t_map *map) {
     player->forward.x = cos(player->angle);
     player->forward.y = sin(player->angle);
 
     player->right.x = -sin(player->angle);
     player->right.y = cos(player->angle);
     t_vec2f move = {0., 0.};
-    if (is_key_down(input_handler, MLX_KEY_W)) {
-        move = vec2f_add(move, player->forward);
-    }
-    if (is_key_down(input_handler, MLX_KEY_S)) {
-        move = vec2f_sub(move, player->forward);
-    }
-    if (is_key_down(input_handler, MLX_KEY_A)) {
-        move = vec2f_sub(move, player->right);
-    }
-    if (is_key_down(input_handler, MLX_KEY_D)) {
-         move = vec2f_add(move, player->right);
-    }
-    move = vec2f_mul(vec2f_normalize(move), PLAYER_FORCE);
+    move = vec2f_add(move, vec2f_mul(player->forward, -get_controler_left_vector(input_handler, player->device_id).y));
+    move = vec2f_add(move, vec2f_mul(player->right, get_controler_left_vector(input_handler, player->device_id).x));
+
+    move = vec2f_mul(move, PLAYER_FORCE);
     player->speed = vec2f_add(player->speed, vec2f_mul(move, delta_time));
 
     //printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
 
-    if (vec2f_lenght(player->speed) > PLAYER_MAX_SPEED)
+    if (vec2f_length(player->speed) > PLAYER_MAX_SPEED)
         player->speed = vec2f_mul(vec2f_normalize(player->speed), PLAYER_MAX_SPEED);
-    
-    
-    if (vec2f_lenght(move) < 1e-6) {
-        if (vec2f_lenght(player->speed) > 0.)
-        {
-            t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
-            if (vec2f_lenght(invert_friction) > vec2f_lenght(player->speed))
-                player->speed = (t_vec2f){0., 0.};
-            else
-                player->speed = vec2f_sub(player->speed, invert_friction);
-        }
+
+
+    if (vec2f_length(player->speed) > 0.)
+    {
+        t_vec2f invert_friction = vec2f_mul(vec2f_normalize(player->speed), PLAYER_SPEED_DECREASE * delta_time);
+        if (vec2f_length(invert_friction) > vec2f_length(player->speed))
+            player->speed = (t_vec2f){0., 0.};
+        else
+            player->speed = vec2f_sub(player->speed, invert_friction);
     }
 
     //printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
+	move_player(map, player, vec2f_mul(player->speed, delta_time));
 
-    player->pos = vec2f_add(player->pos, vec2f_mul(player->speed, delta_time));
-
-    player->angle = input_handler->total_mouse_pos.x / 200.;
-    if (player->angle > M_PI)
-        player->angle -= M_PI * 2.;
-    if (player->angle < -M_PI)
-        player->angle += M_PI * 2.;
-    
+    player->angle = get_controler_angle(input_handler, player->device_id);
 }

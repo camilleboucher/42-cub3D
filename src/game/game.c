@@ -1,24 +1,16 @@
-#include "cube3D2.h"
-#include "map_tools.h"
-#include "mlx_keycodes.h"
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:15:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/28 20:06:49 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void main_menu_window_update(t_app *app)
-{
-    clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
-    // apply_blur(app, a / 2 % 20 + 1, 5);
-    app->main_menu.play_button.pos.x = ((int)app->frame_buffer.width - (int)app->main_menu.play_button.default_image->width) / 2;
-    app->main_menu.play_button.pos.y = ((int)app->frame_buffer.height - (int)app->main_menu.play_button.default_image->height) / 2;
-    if (tex_button_update(app, app->main_menu.play_button))
-    {
-        //printf("Click!\n");
-        app->minimap.showed = true;
-        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
-        app->input_handler.old_mouse_pos = (t_vec2i){app->frame_buffer.width / 2, app->frame_buffer.height / 2};
-        app->game_state = ingame;
-    }
-    push_frame_buffer_to_screen(app);
-}
+#include "cub3D.h"
 
 void handle_resize_event(t_app *app)
 {
@@ -29,88 +21,151 @@ void handle_resize_event(t_app *app)
     if (!resize_frame_buffer(app, width, height))
         app->request_immediate_abort = true;
 }
+void main_menu_window_update(t_app *app)
+{
+    clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
+    // apply_blur(app, a / 2 % 20 + 1, 5);
+    if (tex_button_update(app, app->main_menu.play_button))
+        app->game_state = player_count_select;
+    push_buffer_to_screen_image(app, 0);
+    push_frame_buffer_to_screen(app);
+}
+
 void handle_mouse_up(int button, void *param)
 {
     t_app *app;
 
     app = param;
     if (button == 1)
+    {
         app->input_handler.registered_click = true;
+        app->input_handler.mouse_down = false;
+    }
+}
+
+void handle_mouse_down(int button, void *param)
+{
+    t_app *app;
+
+    app = param;
+    if (button == 1)
+    {
+        app->input_handler.mouse_down = true;
+    }
 }
 
 void mouse_jail(t_app *app) {
     t_vec2i mouse_box;
-    mouse_box.x = app->frame_buffer.width / 4;
-    mouse_box.y = app->frame_buffer.height / 4;
-    if (app->input_handler.mouse_pos.x > app->frame_buffer.width / 2 + mouse_box.x)
+    mouse_box.x = app->frame_buffer.screen_width / 4;
+    mouse_box.y = app->frame_buffer.screen_height / 4;
+    if (app->input_handler.mouse_pos.x > app->frame_buffer.screen_width / 2 + mouse_box.x)
     {
-        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2 - mouse_box.x, app->input_handler.mouse_pos.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2 - mouse_box.x, app->input_handler.mouse_pos.y};
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.screen_width / 2 - mouse_box.x, app->input_handler.mouse_pos.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.screen_width / 2 - mouse_box.x, app->input_handler.mouse_pos.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
-    if (app->input_handler.mouse_pos.x < app->frame_buffer.width / 2 - mouse_box.x)
+    if (app->input_handler.mouse_pos.x < app->frame_buffer.screen_width / 2 - mouse_box.x)
     {
-        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2 + mouse_box.x, app->input_handler.mouse_pos.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2 + mouse_box.x, app->input_handler.mouse_pos.y};
+        mlx_mouse_move(app->ctx, app->window, app->frame_buffer.screen_width / 2 + mouse_box.x, app->input_handler.mouse_pos.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.screen_width / 2 + mouse_box.x, app->input_handler.mouse_pos.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
-    if (app->input_handler.mouse_pos.y < app->frame_buffer.height / 2 - mouse_box.y)
+    if (app->input_handler.mouse_pos.y < app->frame_buffer.screen_height / 2 - mouse_box.y)
     {
-        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 + mouse_box.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 + mouse_box.y};
+        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 + mouse_box.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 + mouse_box.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
-    if (app->input_handler.mouse_pos.y > app->frame_buffer.height / 2 + mouse_box.y)
+    if (app->input_handler.mouse_pos.y > app->frame_buffer.screen_height / 2 + mouse_box.y)
     {
-        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 - mouse_box.y);
-        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.height / 2 - mouse_box.y};
+        mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 - mouse_box.y);
+        app->input_handler.mouse_pos = (t_vec2i){app->input_handler.mouse_pos.x, app->frame_buffer.screen_height / 2 - mouse_box.y};
         app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
     }
+}
+
+void	check_door_activation(t_app *app, t_vec2f target, t_player *player)
+{
+	int	cell;
+
+	cell = (int)target.x + (int)target.y * app->map.width;
+	if (app->map.cell[cell] == ID_DOOR_CLOSED)
+		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = true;
+	else if (app->map.cell[cell] == ID_DOOR_OPENED
+		&& !playerbox_in_door(&app->map, player->pos))
+		app->objects.door[get_door_id(cell, app->objects.nb_doors, app)].opening = false;
+}
+
+void	action_input(t_app *app, t_player *player)
+{
+	if (app->input_handler.action_key
+		&& !is_key_down(&app->input_handler, MLX_KEY_F))
+		app->input_handler.action_key = false;
+	if (!app->input_handler.action_key
+		&& is_key_down(&app->input_handler, MLX_KEY_F))
+		app->input_handler.action_key = true;
+	if (app->input_handler.action_key)
+		check_door_activation(app,
+			vec2f_add(player->pos, player->forward), player);
 }
 
 void ingame_update(t_app *app) {
     t_raycaster raycaster;
 
-    static double a = 1.0;
-    static double last_time = 0.;
     static double old_average = 0.0;
     static unsigned int frame_count = 0;
 
     //printf("%f - %f\n", app->player.pos, app->player.pos.y);
 
-    double time = get_time();
-    double average = (1. / (time - last_time) + old_average * (double)frame_count) / ((double)frame_count + 1.);
+    app->time.now = get_time();
+    app->time.delta = app->time.now - app->time.last;
+    double average = (1. / app->time.delta + old_average * (double)frame_count) / ((double)frame_count + 1.);
+
     old_average = average;
     frame_count++;
-    printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
-    if (is_key_down(&app->input_handler, MLX_KEY_SPACE) && last_time != 0.)
-    {
-        //app->player.pos.x += (time - last_time) * 0.2;
-        app->player.pos.y -= (time - last_time) * 0.4;
-    }
+    //printf("frame time : %f - FPS: %f - Average: %f\n", time - last_time, 1. / (time - last_time), average);
     if (is_key_down(&app->input_handler, MLX_KEY_C)) {
         average = 0.0;
         frame_count = 0;
     }
-
-    raycaster = (t_raycaster){0};
-
-    raycaster.camera_pos = app->player.pos;
-    raycaster.camera_dir.x = cos(app->player.angle);
-    raycaster.camera_dir.y = sin(app->player.angle);
-    //clear_frame_buffer(app, (mlx_color){.rgba = 0xFF0000FF});
+    if (app->time.last == 0.)
+        app->time.last = app->time.now;
 
     mouse_jail(app);
-    player_input(&app->player, &app->input_handler, time - last_time);
-
+    input_handler_update(&app->input_handler, app->ctx, app->time.delta);
     app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x - app->input_handler.old_mouse_pos.x;
     app->input_handler.total_mouse_pos.y += app->input_handler.mouse_pos.y - app->input_handler.old_mouse_pos.y;
     app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
-    draw_raycast(app, &raycaster);
-    render_minimap(app);
-    //apply_blur(app, 32, 2);
+
+    update_doors(app, app->objects.door, app->objects.nb_doors);
+
+    unsigned int player_index;
+    player_index = 0;
+    while (player_index < app->input_handler.player_count)
+    {
+        raycaster = (t_raycaster){0};
+        raycaster.camera_pos = app->players[player_index].pos;
+        raycaster.camera_dir.x = cos(app->players[player_index].angle);
+        raycaster.camera_dir.y = sin(app->players[player_index].angle);
+        action_input(app, &app->players[player_index]);
+        player_input(&app->players[player_index], &app->input_handler, app->time.delta, &app->map);
+        draw_raycast(app, &raycaster);
+        if (player_index == 0)
+        	render_minimap(app);
+        //apply_blur(app);
+        /*if (vec2f_lenght(app->players->speed) > 0.1)
+            apply_blur(app, vec2f_lenght(app->players[player_index].speed) * 10);*/
+        push_buffer_to_screen_image(app, player_index);
+        player_index++;
+    }
+    if (app->input_handler.player_count == 3) {
+        clear_frame_buffer(app, (mlx_color){ .rgba=0x000000ff });
+        animated_sprite_update(&app->image_atlas.animated_sprite[0], app->time.delta);
+        animated_sprite_draw(&app->frame_buffer, &app->image_atlas.animated_sprite[0], (t_vec2i){((int)app->frame_buffer.width - 498) / 2, ((int)app->frame_buffer.height - 498) / 2});
+        push_buffer_to_screen_image(app, 3);
+    }
     push_frame_buffer_to_screen(app);
-    last_time = time;
+    app->time.last = app->time.now;
 }
 
 void window_event_handle(int event, void *param)
@@ -134,7 +189,123 @@ void window_event_handle(int event, void *param)
 
 void init_main_menu(t_app *app)
 {
-    app->main_menu.play_button = tex_button_create((t_vec2i){100, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
+    app->main_menu.play_button = tex_button_create((t_vec2i){0, 0}, (t_vec2i){485, 202}, app->image_atlas.images[0], app->image_atlas.images[1]);
+}
+
+void start_game(t_app *app) {
+    unsigned int i;
+    i = 0;
+    while (i < app->input_handler.player_count)
+    {
+        int card_id = app->input_select_menu.card_slots[i].docked_card_id;
+        app->players[i].device_id = app->input_select_menu.cards[card_id].device_id;
+        if (app->input_handler.devices[app->players[i].device_id].type == device_keyboard_and_mouse)
+            mlx_mouse_hide(app->ctx);
+        i++;
+    }
+    app->minimap.showed = true;
+    app->input_handler.mouse_pos = (t_vec2i){0, 0};
+    app->input_handler.old_mouse_pos = (t_vec2i){0, 0};
+    mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2, app->frame_buffer.height / 2);
+    app->game_state = ingame;
+    if (app->input_handler.player_count > 1)
+        handle_resize_event(app);
+}
+
+void set_card_image(t_app *app, t_grab_card *card) {
+    if (app->input_handler.devices[card->device_id].type == device_controller)
+        card->default_image = app->image_atlas.images[16];
+    if (app->input_handler.devices[card->device_id].type == device_keyboard_and_mouse)
+        card->default_image = app->image_atlas.images[17];
+    if (app->input_handler.devices[card->device_id].type == device_keyboard)
+        card->default_image = app->image_atlas.images[18];
+}
+
+void init_input_select_menu(t_app *app)
+{
+    int i = 0;
+    unsigned int devices_count = 2 + app->input_handler.controller_count;
+    while (i < 2 + app->input_handler.controller_count)
+    {
+        app->input_select_menu.cards[i] = grab_card_create((t_vec2f){-(int)devices_count * 100 + 192 / 2 + 200 * i + (200 - 192) / 2, 0}, (t_vec2i){192, 192}, i);
+        set_card_image(app, &app->input_select_menu.cards[i]);
+        app->input_select_menu.cards[i].hide = false;
+        i++;
+    }
+
+    app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){-200, -300}, (t_vec2i){192, 192}, 0);
+    app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){200, -300}, (t_vec2i){192, 192}, 1);
+    app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){-600, -300}, (t_vec2i){192, 192}, 2);
+    app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){600, -300}, (t_vec2i){192, 192}, 3);
+    app->input_select_menu.docked_cards_count = 0;
+    printf("pc: %d\n", app->input_handler.player_count);
+
+    if (app->input_handler.player_count < 2)
+        app->input_select_menu.card_slots[1].hide = true;
+    if (app->input_handler.player_count < 3)
+        app->input_select_menu.card_slots[2].hide = true;
+    if (app->input_handler.player_count < 4)
+        app->input_select_menu.card_slots[3].hide = true;
+    app->input_select_menu.valid_button = tex_button_create((t_vec2i){0, 250}, (t_vec2i){485, 202}, app->image_atlas.images[20], app->image_atlas.images[21]);
+    app->input_select_menu.valid_button.hide = true;
+}
+
+void player_count_menu_window_update(t_app *app)
+{
+    clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
+    // apply_blur(app, a / 2 % 20 + 1, 5);
+    draw_image_strech(app->frame_buffer.buffer, (t_vec2i){0, -200}, (t_vec2i){619, 311}, app->image_atlas.images[15]);
+    if (tex_button_update(app, app->player_count_menu.one_button))
+        {app->input_handler.player_count = 1; app->game_state = input_select; init_input_select_menu(app);}
+    if (tex_button_update(app, app->player_count_menu.two_button))
+        {app->input_handler.player_count = 2; app->game_state = input_select; init_input_select_menu(app);}
+    if (tex_button_update(app, app->player_count_menu.three_button))
+        {app->input_handler.player_count = 3; app->game_state = input_select; init_input_select_menu(app);}
+    if (tex_button_update(app, app->player_count_menu.four_button))
+        {app->input_handler.player_count = 4; app->game_state = input_select; init_input_select_menu(app);}
+    push_buffer_to_screen_image(app, 0);
+    push_frame_buffer_to_screen(app);
+}
+
+void init_player_count_menu(t_app *app)
+{
+    app->player_count_menu.one_button = tex_button_create((t_vec2i){-150, 50}, (t_vec2i){260, 200}, app->image_atlas.images[7], app->image_atlas.images[11]);
+    app->player_count_menu.two_button = tex_button_create((t_vec2i){150, 50}, (t_vec2i){260, 200}, app->image_atlas.images[8], app->image_atlas.images[12]);
+    app->player_count_menu.three_button = tex_button_create((t_vec2i){-150, 300}, (t_vec2i){260, 200}, app->image_atlas.images[9], app->image_atlas.images[13]);
+    app->player_count_menu.four_button = tex_button_create((t_vec2i){150, 300}, (t_vec2i){260, 200}, app->image_atlas.images[10], app->image_atlas.images[14]);
+}
+
+void input_select_menu_window_update(t_app *app)
+{
+    static double last_time = 0.;
+
+    double time = get_time();
+    //printf("frame time : %f - FPS: %f\n", time - last_time, 1. / (time - last_time));
+
+    clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
+
+    for (int i = 0; i < 4; i++) {
+        t_card_slot slot = app->input_select_menu.card_slots[i];
+        if (!slot.hide)
+            draw_image_strech(app->frame_buffer.buffer, (t_vec2i){slot.pos.x + 1, slot.pos.y - 4}, (t_vec2i){342, 320}, app->image_atlas.images[19]);
+    }
+    unsigned int i = 0;
+    while (i < 2 + app->input_handler.controller_count)
+    {
+        if (!app->input_select_menu.cards[i].hide)
+            grab_card_update(app, &app->input_select_menu.cards[i], app->input_select_menu.card_slots, time - last_time);
+        i++;
+    }
+    app->input_select_menu.valid_button.hide = !(app->input_select_menu.docked_cards_count == app->input_handler.player_count);
+    app->input_select_menu.cards[1].hide = app->input_select_menu.cards[0].docked_slot_index >= 0;
+    app->input_select_menu.cards[0].hide = app->input_select_menu.cards[1].docked_slot_index >= 0;
+    if (tex_button_update(app, app->input_select_menu.valid_button))
+        start_game(app);
+
+    push_buffer_to_screen_image(app, 0);
+    push_frame_buffer_to_screen(app);
+
+    last_time = time;
 }
 
 void game_update(void *param) {
@@ -144,11 +315,15 @@ void game_update(void *param) {
     if (app->request_immediate_abort)
         return;
     mlx_mouse_get_pos(app->ctx, &app->input_handler.mouse_pos.x, &app->input_handler.mouse_pos.y);
-    if (app->game_state == ingame) {
+    if (app->game_state == ingame)
         ingame_update(app);
-    }
     else if (app->game_state == main_menu)
         main_menu_window_update(app);
+    else if (app->game_state == player_count_select)
+        player_count_menu_window_update(app);
+    else if (app->game_state == input_select)
+        input_select_menu_window_update(app);
+    app->input_handler.registered_click = false;
 }
 
 void handle_key_down(int key, void *param) {
@@ -156,6 +331,8 @@ void handle_key_down(int key, void *param) {
 
     app = param;
     input_handler_set_down(&app->input_handler, key);
+    if (key == MLX_KEY_ESCAPE)
+        mlx_loop_end(app->ctx);
 }
 
 void handle_key_up(int key, void *param) {
@@ -165,15 +342,43 @@ void handle_key_up(int key, void *param) {
     input_handler_set_up(&app->input_handler, key);
 }
 
+void handle_controler_down(mlx_controller_event_code event, void *param) {
+    t_app *app;
+
+    app = param;
+    if (event.button == MLX_CONTROLLER_CONNECT)
+    {
+        if (app->game_state != ingame && app->input_handler.controller_count < 4)
+        {
+            app->input_handler.controller_count += 1;
+            init_devices(&app->input_handler);
+            init_input_select_menu(app);
+        }
+    }
+    if (event.button == MLX_CONTROLLER_DISCONNECT)
+    {
+        if (app->input_handler.controller_count > 0)
+            {}
+            //app->input_handler.controller_count -= 1;
+            // TODO: detect which one is disconnected and set active to false
+        //if (app->game_state == ingame)
+        //    handle_resize_event(app);
+    }
+}
+
 void main_loop(t_app *app)
 {
     app->game_state = main_menu;
-
+    init_devices(&app->input_handler);
     init_main_menu(app);
+    init_player_count_menu(app);
     mlx_add_loop_hook(app->ctx, &game_update, app);
     mlx_on_event(app->ctx, app->window, MLX_WINDOW_EVENT, &window_event_handle, app);
     mlx_on_event(app->ctx, app->window, MLX_MOUSEUP, &handle_mouse_up, app);
+    mlx_on_event(app->ctx, app->window, MLX_MOUSEDOWN, &handle_mouse_down, app);
     mlx_on_event(app->ctx, app->window, MLX_KEYDOWN, &handle_key_down, app);
     mlx_on_event(app->ctx, app->window, MLX_KEYUP, &handle_key_up, app);
+    mlx_on_event(app->ctx, app->window, MLX_CONTROLLERDOWN, (void(*)(int, void*))handle_controler_down, app);
+	//mlx_on_event(app->ctx, app->window, MLX_CONTROLLERUP, (void(*)(int, void*))handle_controler_, NULL);
     mlx_loop(app->ctx);
 }

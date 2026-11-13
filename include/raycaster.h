@@ -1,7 +1,17 @@
-#ifndef RAYCASTER_H
-#define RAYCASTER_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycaster.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:11:08 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:11:12 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "vector.h"
+#ifndef RAYCASTER_H
+# define RAYCASTER_H
 
 typedef struct s_raycaster {
     t_vec2f camera_pos;

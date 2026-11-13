@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   components.h                                       :+:      :+:    :+:   */
+/*   game.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/03 13:56:49 by cboucher          #+#    #+#             */
-/*   Updated: 2026/08/04 17:08:47 by aiga             ###   ########.fr       */
+/*   Created: 2026/10/07 14:10:04 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/28 18:20:11 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMPONENTS_H
-# define COMPONENTS_H
+#ifndef GAME_H
+# define GAME_H
 
-#include "constants.h"
-#include <stdint.h>
+# include "cub3D.h"
+//objects.c
+bool	create_objects(t_app *app);
+int		get_door_id(int cell, int nb_doors, t_app *app);
+void	update_doors(t_app *app, t_door *door, int nb_doors);
 
-typedef struct s_position
-{
-	TYPE_MAP_SIZE	x;
-	TYPE_MAP_SIZE	y;
-}	t_position;
+//game.c
+void	main_loop(t_app *app);
 
 #endif

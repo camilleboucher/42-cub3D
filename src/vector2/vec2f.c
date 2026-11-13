@@ -1,4 +1,16 @@
-#include "cube3D2.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vec2f.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:43:36 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:43:39 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 t_vec2f vec2f_add(t_vec2f a, t_vec2f b) {
     t_vec2f new;
@@ -39,7 +51,7 @@ t_vec2f vec2f_normalize(t_vec2f a) {
     t_vec2f new;
     double lenght;
 
-    lenght = vec2f_lenght(a);
+    lenght = vec2f_length(a);
     if (lenght == 0.)
         return (a);
     new.x = a.x / lenght;
@@ -47,7 +59,7 @@ t_vec2f vec2f_normalize(t_vec2f a) {
     return (new);
 }
 
-double vec2f_lenght(t_vec2f a) {
+double vec2f_length(t_vec2f a) {
     double lenght;
 
     lenght = sqrtf(a.x * a.x + a.y * a.y);

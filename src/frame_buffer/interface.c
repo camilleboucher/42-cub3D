@@ -1,4 +1,16 @@
-#include "cube3D2.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   interface.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:15:22 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/07 14:29:19 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
 
 void set_pixel(t_region *frame_buffer, unsigned int x, unsigned int y, mlx_color color)
 {
@@ -16,13 +28,7 @@ void clear_frame_buffer(t_app *app, mlx_color color)
 
     i = 0;
     while (i < app->frame_buffer.width * app->frame_buffer.height)
-    {
-        if (((i / app->frame_buffer.height) / 64 + (i % app->frame_buffer.height) / 64) % 2 == 0)
-            app->frame_buffer.buffer->buffer[i] = color;
-        else
-            app->frame_buffer.buffer->buffer[i] = (mlx_color){.rgba = 0xFFFFFFFF};
-        i++;
-    }
+        app->frame_buffer.buffer->buffer[i++] = color;
 }
 
 void set_pixel_opt(t_region *frame_buffer, unsigned int i, mlx_color color)

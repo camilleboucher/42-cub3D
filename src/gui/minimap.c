@@ -2,6 +2,7 @@
 #include "frame_buffer.h"
 #include "map_tools.h"
 #include "mlx.h"
+#include "ui.h"
 #include "vector.h"
 #include <math.h>
 #include <stdio.h>
@@ -72,7 +73,36 @@ void draw_square(t_region *buffer, t_vec2i pos, double size, double angle) {
     }
 }
 
-void draw_rect(t_region *buffer, t_vec2i pos, t_vec2i size, mlx_color color)
+void draw_rect_checked(t_region *buffer, t_vec2i pos, t_vec2i size, mlx_color color)
+{
+    int x;
+    int y;
+    t_vec2i stop;
+    int y_start;
+
+    pos.x += ((int)buffer->width - (int)size.x) / 2;
+	pos.y += ((int)buffer->height - (int)size.y) / 2;
+    stop = (t_vec2i){pos.x + size.x, pos.y + size.y};
+    x = pos.x;
+    if (pos.x < 0)
+        x = 0;
+    y_start = pos.y;
+    if (y_start < 0)
+        y_start = 0;
+    if (stop.x > (int)buffer->width)
+        stop.x = buffer->width;
+    if (stop.y > (int)buffer->height)
+        stop.y = buffer->height;
+    while (x < stop.x)
+    {
+        y = y_start;
+        while (y < stop.y)
+            set_pixel(buffer, x, y++, color);
+        x++;
+    }
+}
+
+void draw_rect_raw(t_region *buffer, t_vec2i pos, t_vec2i size, mlx_color color)
 {
     int x;
     int y;
@@ -106,30 +136,42 @@ double decimal(double a)
     return (a - floor(a));
 }
 
+void minimap_put_tile(t_app *app, t_vec2i map_pos, int scare_size, t_vec2i screen_pos) {
+	char cell_type;
+
+	cell_type = map_get(&app->map, map_pos.x, map_pos.y);
+	if (map_pos.x > 0 && map_pos.x < app->map.width && map_pos.y > 0 && map_pos.y < app->map.height)
+	{
+		if (cell_type == 1)
+        	draw_image_strech(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, app->image_atlas.images[32]);
+		else if (cell_type >= 3 && cell_type <= 6)
+        	draw_image_strech(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, app->image_atlas.images[30 + cell_type]);
+		else
+			draw_rect_checked(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, (mlx_color){ .rgba=0xFFFFFFFF });
+	}
+	else
+    	draw_rect_checked(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, (mlx_color){ .rgba=0xFFFFFFFF });
+}
+
 void render_map_to_buffer(t_app *app, int dist, int canvas_size, int offset) {
-    int map_x;
-    int map_y;
+    t_vec2i map_pos;
     int scare_size;
     t_vec2i screen_pos;
 
     scare_size = canvas_size / (dist * 2);
-    map_x = ceil(app->player.pos.x - dist);
-    screen_pos = (t_vec2i){(int)((1. - decimal(app->player.pos.x) - 1.) * (double)scare_size) - scare_size + offset - scare_size / 2, 0};
-    while (map_x <= app->player.pos.x + (double)dist + 1)
+    map_pos.x = ceil(app->players[0].pos.x - dist);
+    screen_pos = (t_vec2i){(int)((1. - decimal(app->players[0].pos.x) - 1.) * (double)scare_size) - scare_size + offset, 0};
+    while (map_pos.x <= app->players[0].pos.x + (double)dist + 1)
     {
-        map_y = ceil(app->player.pos.y - dist);
-        screen_pos.y = (int)((1. - decimal(app->player.pos.y) - 1.) * (double)scare_size) - scare_size + offset - scare_size / 2;
-        while (map_y <= app->player.pos.y + (double)dist + 1)
+        map_pos.y = ceil(app->players[0].pos.y - dist);
+        screen_pos.y = (int)((1. - decimal(app->players[0].pos.y) - 1.) * (double)scare_size) - scare_size + offset;
+        while (map_pos.y <= app->players[0].pos.y + (double)dist + 1)
         {
-            //printf("OwO %d %d\n", screen_pos.x, screen_pos.y);
-            if (map_x > 0 && map_x < app->map.width && map_y > 0 && map_y < app->map.height && map_get(&app->map, map_x, map_y) == '1')
-                draw_rect(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, (mlx_color){ .rgba=0x999999FF });
-            else
-                draw_rect(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, (mlx_color){ .rgba=0xFFFFFFFF });
-            map_y++;
+            minimap_put_tile(app, map_pos, scare_size, screen_pos);
+            map_pos.y++;
             screen_pos.y += scare_size;
         }
-        map_x++;
+        map_pos.x++;
         screen_pos.x += scare_size;
     }
 }
@@ -139,23 +181,23 @@ void render_minimap(t_app *app) {
     t_vec2i size;
     t_vec2i indicator_size;
 
-    //printf("%f %f\n", app->player.pos.x, app->player.pos.y);
+    //printf("%f %f\n", app->players[0].pos.x, app->players[0].pos.y);
 
     size = (t_vec2i){app->minimap.size.x / 4 * 3, app->minimap.size.y / 4 * 3};
     center = (t_vec2i){app->minimap.size.x / 2, app->minimap.size.y / 2};
     indicator_size = (t_vec2i){app->minimap.size.x / 4, app->minimap.size.y / 4};
     //mid_point_disc(app, size.x / 2 - size.x / 50, center);
     clear_region(app->frame_buffer.minimap_overlay_frame_buffer, (mlx_color){ .rgba=0x00000000 });
-    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(app->minimap.size.x - size.x) / 2, (app->minimap.size.y - size.y) / 2}, size, app->image_atlas.images[11]);
-    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle - M_PI / 2.) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle - M_PI / 2.) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[7]);
-    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle + M_PI / 2.) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle + M_PI / 2.) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[8]);
-    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[9]);
-    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){center.x + (cos(-app->player.angle - M_PI) * size.x - indicator_size.x) / 2, center.y + (sin(-app->player.angle - M_PI) * size.y - indicator_size.y) / 2}, indicator_size, app->image_atlas.images[10]);
+    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){0, 0}, size, app->image_atlas.images[31]);
+    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(cos(-app->players[0].angle - M_PI / 2.) * size.x) / 2, (sin(-app->players[0].angle - M_PI / 2.) * size.y) / 2}, indicator_size, app->image_atlas.images[27]);
+    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(cos(-app->players[0].angle + M_PI / 2.) * size.x) / 2, (sin(-app->players[0].angle + M_PI / 2.) * size.y) / 2}, indicator_size, app->image_atlas.images[28]);
+    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(cos(-app->players[0].angle) * size.x) / 2, (sin(-app->players[0].angle) * size.y) / 2}, indicator_size, app->image_atlas.images[29]);
+    draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(cos(-app->players[0].angle - M_PI) * size.x) / 2, (sin(-app->players[0].angle - M_PI) * size.y) / 2}, indicator_size, app->image_atlas.images[30]);
 
-    printf("%f %f\n", app->player.pos.x, app->player.pos.y);
-    render_map_to_buffer(app, 5, app->minimap.size.x, (app->minimap.size.x - size.x));
+    printf("%f %f\n", app->players[0].pos.x, app->players[0].pos.y);
+    render_map_to_buffer(app, 5, app->minimap.size.x, -app->minimap.size.x / 4);
     mid_point_disc(app, (double)size.x / 2.08, (t_vec2i){app->minimap.pos.x / 2, app->minimap.pos.y / 2});
-    draw_rect(app->frame_buffer.minimap_frame_buffer, (t_vec2i){0, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
-    draw_rect(app->frame_buffer.minimap_frame_buffer, (t_vec2i){app->minimap.size.x- (app->minimap.size.x - size.x / 2.1) / 4 + 1, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
+    draw_rect_raw(app->frame_buffer.minimap_frame_buffer, (t_vec2i){0, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
+    draw_rect_raw(app->frame_buffer.minimap_frame_buffer, (t_vec2i){app->minimap.size.x- (app->minimap.size.x - size.x / 2.1) / 4 + 1, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
     //draw_square(app->frame_buffer.buffer, (t_vec2i){200, 200}, 100., - M_PI / 2 + 0.5);
 }
