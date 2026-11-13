@@ -42,21 +42,18 @@
 # include "error_manager.h"
 # include "app.h"
 
-# include "input_handler.h"
+# include "input.h"
 # include "frame_buffer.h"
 # include "animated_sprite.h"
-# include "player.h"
 # include "atlas.h"
 # include "ui.h"
 # include "game.h"
-# include "input_device.h"
 # include "parser.h"
 # include "cleaner.h"
 
 # include "math.h"
 # include "raycaster.h"
-# include "time_tools.h"
+# include "tools.h"
 # include "shaders.h"
-# include "map_tools.h"
 
 #endif

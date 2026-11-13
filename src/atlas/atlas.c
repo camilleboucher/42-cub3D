@@ -6,9 +6,10 @@
 /*   By: yben-dje <yben-dje@student.42angouleme.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/09 18:36:50 by yben-dje          #+#    #+#             */
-/*   Updated: 2026/11/09 19:28:45 by yben-dje         ###   ########.fr       */
+/*   Updated: 2026/11/11 17:57:15 by cboucher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "cub3D.h"
 #include "mlx_profile.h"
 

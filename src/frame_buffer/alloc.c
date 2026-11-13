@@ -113,19 +113,20 @@ bool resize_frame_buffer(t_app *app, unsigned int width, unsigned height)
     return (true);
 }
 
-void push_buffer_to_screen_image(t_app *app, unsigned int sub_screen_index)
+void	push_buffer_to_screen_image(t_app *app, unsigned int sub_screen_index)
 {
-    t_vec2i offset;
+	t_vec2i	offset;
 
-    offset = (t_vec2i){0, 0};
-    if (app->input_handler.player_count > 1)
-        offset = (t_vec2i){(sub_screen_index % 2) * app->frame_buffer.width, (sub_screen_index / 2) * app->frame_buffer.height};
-    mlx_set_image_region(app->ctx, app->frame_buffer.screen_image, offset.y, offset.x,
-        app->frame_buffer.buffer->height, app->frame_buffer.buffer->width,
-        app->frame_buffer.buffer->buffer);
+	offset = (t_vec2i){0, 0};
+	if (app->input_handler.player_count > 1)
+		offset = (t_vec2i){(sub_screen_index % 2) * app->frame_buffer.width,
+			(sub_screen_index / 2) * app->frame_buffer.height};
+	mlx_set_image_region(app->ctx, app->frame_buffer.screen_image, offset.y,
+		offset.x, app->frame_buffer.buffer->height,
+		app->frame_buffer.buffer->width, app->frame_buffer.buffer->buffer);
 }
 
-void push_frame_buffer_to_screen(t_app *app)
+void	push_frame_buffer_to_screen(t_app *app)
 {
     mlx_clear_window(app->ctx, app->window, (mlx_color){.rgba = 0x000000FF});
 

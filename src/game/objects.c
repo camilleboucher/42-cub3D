@@ -83,14 +83,16 @@ void	update_doors(t_app *app, t_door *door, int nb_doors)
 			door[nb_doors].progress += progress;
 			if (door[nb_doors].progress > 1)
 				door[nb_doors].progress = 1;
-			app->map.cell[door[nb_doors].cell] = door[nb_doors].progress * 3 + 3;
+			app->map.cell[door[nb_doors].cell] = door[nb_doors].progress * 3
+				+ 3;
 		}
 		else if (door[nb_doors].progress >= 0 && !door[nb_doors].opening)
 		{
 			door[nb_doors].progress -= progress;
 			if (door[nb_doors].progress < 0)
 				door[nb_doors].progress = 0;
-			app->map.cell[door[nb_doors].cell] = door[nb_doors].progress * 3 + 3;
+			app->map.cell[door[nb_doors].cell] = door[nb_doors].progress * 3
+				+ 3;
 		}
 	}
 }

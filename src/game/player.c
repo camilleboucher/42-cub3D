@@ -1,0 +1,104 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   player.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yben-dje <yben-dje@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/07 14:19:33 by cboucher          #+#    #+#             */
+/*   Updated: 2026/10/28 20:00:56 by cboucher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3D.h"
+#include "vector.h"
+
+bool	is_solid(char cell)
+{
+	if (cell == ID_WALL)
+		return (true);
+	if (cell >= ID_DOOR_CLOSED && cell < ID_DOOR_OPENED)
+		return (true);
+	return (false);
+}
+
+bool	is_door(char cell)
+{
+	return (cell >= ID_DOOR_CLOSED && cell <= ID_DOOR_OPENED);
+}
+
+bool	playerbox_in_door(t_map *map, t_vec2f test_pos)
+{
+	return (is_door(map_get(map, test_pos.x - PLAYER_BOX, test_pos.y
+				+ PLAYER_BOX)) || is_door(map_get(map, test_pos.x - PLAYER_BOX,
+				test_pos.y - PLAYER_BOX)) || is_door(map_get(map, test_pos.x
+				+ PLAYER_BOX, test_pos.y - PLAYER_BOX)) || is_door(map_get(map,
+				test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
+}
+
+bool	has_collision(t_map *map, t_vec2f test_pos)
+{
+	return (is_solid(map_get(map, test_pos.x - PLAYER_BOX, test_pos.y
+				+ PLAYER_BOX)) || is_solid(map_get(map, test_pos.x - PLAYER_BOX,
+				test_pos.y - PLAYER_BOX)) || is_solid(map_get(map, test_pos.x
+				+ PLAYER_BOX, test_pos.y - PLAYER_BOX)) || is_solid(map_get(map,
+				test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
+}
+
+void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
+{
+	t_vec2f	new_pos;
+
+	new_pos = vec2f_add(player->pos, delta_pos);
+	if (has_collision(map, new_pos))
+	{
+		if (!has_collision(map, (t_vec2f){new_pos.x, player->pos.y}))
+		{
+			player->pos.x = new_pos.x;
+			player->speed.y = 0;
+		}
+		else if (!has_collision(map, (t_vec2f){player->pos.x, new_pos.y}))
+		{
+			player->pos.y = new_pos.y;
+			player->speed.x = 0;
+		}
+	}
+	else
+		player->pos = new_pos;
+}
+
+void	move_input(t_player *player, t_input_handler *input_handler,
+		double delta_time, t_map *map)
+{
+	t_vec2f	move;
+	t_vec2f	invert_friction;
+
+	player->forward.x = cos(player->angle);
+	player->forward.y = sin(player->angle);
+	player->right.x = -sin(player->angle);
+	player->right.y = cos(player->angle);
+	move = (t_vec2f){0., 0.};
+	move = vec2f_add(move, vec2f_mul(player->forward,
+				-get_controler_left_vector(input_handler,
+					player->device_id).y));
+	move = vec2f_add(move, vec2f_mul(player->right,
+				get_controler_left_vector(input_handler, player->device_id).x));
+	move = vec2f_mul(move, PLAYER_FORCE);
+	player->speed = vec2f_add(player->speed, vec2f_mul(move, delta_time));
+	// printf("1Speed: %f - %f\n", player->speed.x, player->speed.y);
+	if (vec2f_length(player->speed) > PLAYER_MAX_SPEED)
+		player->speed = vec2f_mul(vec2f_normalize(player->speed),
+				PLAYER_MAX_SPEED);
+	if (vec2f_length(player->speed) > 0.)
+	{
+		invert_friction = vec2f_mul(vec2f_normalize(player->speed),
+				PLAYER_SPEED_DECREASE * delta_time);
+		if (vec2f_length(invert_friction) > vec2f_length(player->speed))
+			player->speed = (t_vec2f){0., 0.};
+		else
+			player->speed = vec2f_sub(player->speed, invert_friction);
+	}
+	// printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
+	move_player(map, player, vec2f_mul(player->speed, delta_time));
+	player->angle = get_controler_angle(input_handler, player->device_id);
+}

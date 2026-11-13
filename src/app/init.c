@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-void init_parser(t_player *player, t_map *map)
+void	init_parser(t_player *player, t_map *map)
 {
 	player->pos = (t_vec2f){0};
 	map->height = 0;
@@ -22,7 +22,7 @@ void init_parser(t_player *player, t_map *map)
 	ft_memset(map->ceiling_rgb, 0, sizeof(map->ceiling_rgb));
 }
 
-bool app_init(t_app *app)
+bool	app_init(t_app *app)
 {
 	app->time.now = 0.;
 	app->time.last = 0.;

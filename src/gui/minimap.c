@@ -1,6 +1,5 @@
 #include "cub3D.h"
 #include "frame_buffer.h"
-#include "map_tools.h"
 #include "mlx.h"
 #include "ui.h"
 #include "vector.h"
@@ -59,7 +58,6 @@ void draw_square(t_region *buffer, t_vec2i pos, double size, double angle) {
     set_pixel(buffer, pos4.x, pos4.y, (mlx_color){ .rgba=0x00FFFFFF });
     double step_left = (pos1.x - pos2.x) / (pos2.y - pos1.y);
     double step_right = (pos4.x - pos1.x) / (pos4.y - pos1.y);
-    printf("%f %f\n", step_left, step_right);
     if (step_right <= 0.01 || step_left <= 0.01)
         return;
     double start = pos1.x;
@@ -194,7 +192,7 @@ void render_minimap(t_app *app) {
     draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(cos(-app->players[0].angle) * size.x) / 2, (sin(-app->players[0].angle) * size.y) / 2}, indicator_size, app->image_atlas.images[29]);
     draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer, (t_vec2i){(cos(-app->players[0].angle - M_PI) * size.x) / 2, (sin(-app->players[0].angle - M_PI) * size.y) / 2}, indicator_size, app->image_atlas.images[30]);
 
-    printf("%f %f\n", app->players[0].pos.x, app->players[0].pos.y);
+    //printf("%f %f\n", app->players[0].pos.x, app->players[0].pos.y);
     render_map_to_buffer(app, 5, app->minimap.size.x, -app->minimap.size.x / 4);
     mid_point_disc(app, (double)size.x / 2.08, (t_vec2i){app->minimap.pos.x / 2, app->minimap.pos.y / 2});
     draw_rect_raw(app->frame_buffer.minimap_frame_buffer, (t_vec2i){0, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4, app->minimap.size.y}, (mlx_color){ .rgba=0x00000000 });
