@@ -28,6 +28,8 @@ typedef struct s_input_device
 	double					angle;
 	t_device_type			type;
 	int						controller_slot;
+	bool					action_key;
+	bool					sprint_key;
 }							t_input_device;
 
 // for input handler
@@ -37,7 +39,6 @@ typedef struct s_input_handler
 	t_vec2f					total_mouse_pos;
 	bool					registered_click;
 	int						keys[255];
-	bool					action_key;
 	t_vec2i					old_mouse_pos;
 	unsigned int			player_count;
 	unsigned int			controller_count;
