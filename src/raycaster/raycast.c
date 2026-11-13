@@ -19,7 +19,7 @@ int	max(int a, int b)
 	return (a);
 }
 
-void	screen_to_texture_line(t_app *app, t_hit_info *hit)
+void	screen_to_texture_line(t_app *app, t_hit_info *hit, bool is_door)
 {
 	double		tex_pos;
 	mlx_color	color;
@@ -31,11 +31,11 @@ void	screen_to_texture_line(t_app *app, t_hit_info *hit)
 		tex_pos += hit->step;
 		color = get_pixel_opt(hit->image, hit->tex_row
 				+ ((unsigned int)tex_pos & (64 - 1)));
-		set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++, color);
+		set_pxl(app->frame_buffer.buffer, hit->fb_row + hit->y++, color, is_door);
 	}
 }
 
-void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
+void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop, bool is_door)
 {
 	mlx_color	color;
 
@@ -45,8 +45,8 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
 		color = get_pixel_opt(hit->image, hit->tex_row
 				+ ((unsigned int)hit->tex_pos & (64 - 1)));
 		while (hit->y < hit->stepstep - 1e-6)
-			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
-				color);
+			set_pxl(app->frame_buffer.buffer, hit->fb_row + hit->y++,
+				color, is_door);
 		hit->tex_pos++;
 	}
 	if (hit->tex_pos < 64 && hit->stepstep
@@ -55,12 +55,12 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
 		color = get_pixel_opt(hit->image, hit->tex_row
 				+ ((unsigned int)hit->tex_pos & (64 - 1)));
 		while (hit->y < app->frame_buffer.height)
-			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
-				color);
+			set_pxl(app->frame_buffer.buffer, hit->fb_row + hit->y++,
+				color, is_door);
 	}
 }
 
-void	texture_to_screen_line(t_app *app, t_hit_info *hit)
+void	texture_to_screen_line(t_app *app, t_hit_info *hit, bool is_door)
 {
 	int			stop;
 	mlx_color	color;
@@ -80,10 +80,10 @@ void	texture_to_screen_line(t_app *app, t_hit_info *hit)
 		stop -= max((hit->stepstep + hit->scale * (stop - hit->tex_pos))
 				- (app->frame_buffer.height - 1), 0) / hit->scale;
 	}
-	texture_to_screen_fill(app, hit, stop);
+	texture_to_screen_fill(app, hit, stop, is_door);
 }
 
-void	draw_vertical_line(t_app *app, t_hit_info *hit)
+void	draw_vertical_line(t_app *app, t_hit_info *hit, bool is_door)
 {
 	hit->draw_start = ((int)app->frame_buffer.height - hit->line_height) / 2;
 	if (hit->draw_start < 0)
@@ -95,16 +95,16 @@ void	draw_vertical_line(t_app *app, t_hit_info *hit)
 	hit->y = 0;
 	hit->fb_row = hit->screen_x * app->frame_buffer.buffer->height;
 	while (hit->y < hit->draw_start)
-		set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
-			app->map.ceil_color);
+		set_pxl(app->frame_buffer.buffer, hit->fb_row + hit->y++,
+			app->map.ceil_color, is_door);
 	hit->tex_row = hit->tex_x * hit->image->height;
 	if (hit->step >= 2.)
-		screen_to_texture_line(app, hit);
+		screen_to_texture_line(app, hit, is_door);
 	else if (hit->step > 0.)
-		texture_to_screen_line(app, hit);
+		texture_to_screen_line(app, hit, is_door);
 	while (hit->y < app->frame_buffer.height)
-		set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
-			app->map.floor_color);
+		set_pxl(app->frame_buffer.buffer, hit->fb_row + hit->y++,
+			app->map.floor_color, is_door);
 }
 
 void	set_hit_info_side(int side, t_vec2f ray_dir, t_hit_info *hit)
@@ -236,11 +236,36 @@ void	update_hit_with_screen_x(t_app *app, t_hit_info *hit,
 		(int)raycaster->camera_pos.y};
 }
 
+void	draw_door_transparency(t_app *app, t_raycaster *raycaster, t_hit_info *hit)
+{
+	unsigned int	i;
+
+	i = hit->screen_x * app->frame_buffer.height;
+	while (i < (hit->screen_x + 1) * + app->frame_buffer.height)
+		set_pixel_opt(app->frame_buffer.buffer, i++, (mlx_color){.rgba = 0x0});
+	while (true)
+	{
+		if (hit->cell_id >= ID_DOOR_CLOSED)
+			hit->image = app->image_atlas.images[20 + hit->cell_id];
+		else
+			hit->image = app->image_atlas.images[3 + hit->side];
+		draw_vertical_line(app, hit, true);
+		if (hit->cell_id < ID_DOOR_CLOSED)
+			break ;
+		walk_raycaster(app, hit);
+		compute_perp_wall_dist(hit);
+		if (hit->perp_wall_dist < 0)
+			return ;
+		compute_wall_x(hit, raycaster);
+		hit->line_height = (int)app->frame_buffer.height / hit->perp_wall_dist;
+		set_hit_info_side(hit->side, hit->ray_dir, hit);
+	}
+}
+
 void	draw_raycast(t_app *app, t_raycaster *raycaster)
 {
 	t_vec2f		plane;
 	t_hit_info	hit;
-	double		wall_x;
 
 	plane = compute_plane(app, raycaster);
 	hit.screen_x = 0;
@@ -253,14 +278,16 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		compute_perp_wall_dist(&hit);
 		if (hit.perp_wall_dist < 0)
 			return ;
-		wall_x = compute_wall_x(&hit, raycaster);
+		compute_wall_x(&hit, raycaster);
 		hit.line_height = (int)app->frame_buffer.height / hit.perp_wall_dist;
 		set_hit_info_side(hit.side, hit.ray_dir, &hit);
 		if (hit.cell_id >= ID_DOOR_CLOSED)
-			hit.image = app->image_atlas.images[20 + hit.cell_id];
+			draw_door_transparency(app, raycaster, &hit);
 		else
+		{
 			hit.image = app->image_atlas.images[3 + hit.side];
-		draw_vertical_line(app, &hit);
+			draw_vertical_line(app, &hit, false);
+		}
 		hit.screen_x++;
 	}
 }
