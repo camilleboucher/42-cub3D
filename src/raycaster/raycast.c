@@ -63,7 +63,6 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
 void	texture_to_screen_line(t_app *app, t_hit_info *hit)
 {
 	int			stop;
-	mlx_color	color;
 
 	hit->tex_pos = 0;
 	hit->scale = 1. / hit->step;

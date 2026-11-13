@@ -168,6 +168,8 @@ void	ingame_update(t_app *app)
 		move_input(&app->players[player_index], &app->input_handler,
 			app->time.delta, &app->map);
 		draw_raycast(app, &raycaster);
+		if (player_index == 0)
+        	render_minimap(app);
 		// apply_blur(app);
 		/*if (vec2f_lenght(app->players->speed) > 0.1)
 			apply_blur(app, vec2f_lenght(app->players[player_index].speed)
@@ -235,6 +237,7 @@ void	start_game(t_app *app)
 	app->input_handler.old_mouse_pos = (t_vec2i){0, 0};
 	mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2,
 		app->frame_buffer.height / 2);
+	app->minimap.showed = true;
 	app->game_state = ingame;
 	if (app->input_handler.player_count > 1)
 		handle_resize_event(app);
@@ -292,7 +295,7 @@ void	player_count_menu_window_update(t_app *app)
 {
 	clear_frame_buffer(app, (mlx_color){.rgba = 0x305050FF});
 	// apply_blur(app, a / 2 % 20 + 1, 5);
-	draw_image_strech(app, (t_vec2i){0, -200}, (t_vec2i){619, 311},
+	draw_image_strech(app->frame_buffer.buffer, (t_vec2i){0, -200}, (t_vec2i){619, 311},
 		app->image_atlas.images[15]);
 	if (tex_button_update(app, app->player_count_menu.one_button))
 	{
@@ -352,7 +355,7 @@ void	input_select_menu_window_update(t_app *app)
 	{
 		slot = app->input_select_menu.card_slots[i];
 		if (!slot.hide)
-			draw_image_strech(app, (t_vec2i){slot.pos.x + 1, slot.pos.y - 4},
+			draw_image_strech(app->frame_buffer.buffer, (t_vec2i){slot.pos.x + 1, slot.pos.y - 4},
 				(t_vec2i){342, 320}, app->image_atlas.images[19]);
 	}
 	i = 0;

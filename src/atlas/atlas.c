@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "mlx_profile.h"
 
 void	free_all_images(t_app *app)
 {
@@ -24,6 +25,25 @@ void	free_all_images(t_app *app)
 		i++;
 	}
 }
+
+void copy_image_to_region_hflip(t_app *app, t_region *region, mlx_image image, t_vec2i size) {
+    int x;
+    int y;
+
+    x = 0;
+    while (x < size.x)
+    {
+        y = 0;
+        while (y < size.y)
+        {
+            mlx_color color = mlx_get_image_pixel(app->ctx, image, size.x - x - 1, y);
+            set_pixel(region, x, y, color);
+            y++;
+        }
+        x++;
+    }
+}
+
 
 void	copy_image_to_region(t_app *app, t_region *region, mlx_image image,
 		t_vec2i size)
@@ -46,7 +66,7 @@ void	copy_image_to_region(t_app *app, t_region *region, mlx_image image,
 	}
 }
 
-t_region	*load_image(t_app *app, const char *path)
+t_region	*load_image(t_app *app, const char *path, bool hflip)
 {
 	t_region	*region;
 	mlx_image	img;
@@ -62,12 +82,16 @@ t_region	*load_image(t_app *app, const char *path)
 	if (!region)
 	{
 		free_all_images(app);
-		mlx_destroy_image(app->ctx, img);
+		if (img != MLX_NULL_HANDLE)
+			mlx_destroy_image(app->ctx, img);
 		return (NULL);
 	}
 	region->width = size.x;
 	region->height = size.y;
-	copy_image_to_region(app, region, img, size);
+	if (hflip)
+        copy_image_to_region_hflip(app, region, img, size);
+    else
+        copy_image_to_region(app, region, img, size);
 	mlx_destroy_image(app->ctx, img);
 	return (region);
 }
@@ -87,14 +111,19 @@ bool	atlas_load_buttons(t_app *app)
 		"assets/input_slot.png", "assets/ok.png", "assets/ok_hover.png",
 		"assets/maomao.png", "assets/door_closed.png",
 		"assets/door_almost_closed.png", "assets/door_almost_opened.png",
-		"assets/door_opened.png"};
+		"assets/door_opened.png", "assets/map/indicator_north.png",
+		"assets/map/indicator_south.png", "assets/map/indicator_east.png",
+		"assets/map/indicator_west.png", "assets/map/frame.png",
+		"assets/map/minimap_wall.png", "assets/map/minimap_door.png",
+		"assets/map/minimap_door2.png", "assets/map/minimap_door3.png",
+		"assets/map/minimap_door4.png"};
 
 	app->image_atlas.image_amount = 0;
 	i = 0;
 	while (i < sizeof(files) / sizeof(char *))
 	{
 		app->image_atlas.images[app->image_atlas.image_amount] = load_image(app,
-				files[i++]);
+				files[i++], false);
 		if (!app->image_atlas.images[app->image_atlas.image_amount++])
 			return (false);
 	}

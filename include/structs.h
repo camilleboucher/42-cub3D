@@ -54,16 +54,19 @@ typedef struct s_region
 	mlx_color				buffer[];
 }							t_region;
 
-typedef struct s_frame_buffer
-{
-	t_region				*buffer;
-	t_region				*shader_buffer;
-	unsigned int			width;
-	unsigned int			height;
-	mlx_image				screen_image;
-	unsigned int			screen_width;
-	unsigned int			screen_height;
-}							t_frame_buffer;
+typedef struct s_frame_buffer {
+  t_region *buffer;
+  t_region *shader_buffer;
+  unsigned int width;
+  unsigned int height;
+  mlx_image screen_image;
+  unsigned int screen_width;
+  unsigned int screen_height;
+  t_region *minimap_frame_buffer;
+  t_region *minimap_overlay_frame_buffer;
+  mlx_image minimap_frame_buffer_image;
+  mlx_image minimap_overlay_frame_buffer_image;
+} t_frame_buffer;
 
 // for animated_sprite.h
 typedef struct s_animated_sprite
@@ -223,23 +226,30 @@ typedef struct s_time
 	double					delta;
 }							t_time;
 
+typedef struct s_minimap {
+    t_vec2i size;
+    t_vec2i pos;
+    bool showed;
+} t_minimap;
+
 typedef struct s_app
 {
-	mlx_context				ctx;
-	mlx_window				window;
-	mlx_window_create_info	info;
-	t_input_handler			input_handler;
-	t_frame_buffer			frame_buffer;
-	bool					request_immediate_abort;
-	t_image_atlas			image_atlas;
-	t_map					map;
-	t_player				players[4];
-	t_objects				objects;
-	t_game_state			game_state;
-	t_main_menu				main_menu;
-	t_player_count_menu		player_count_menu;
-	t_input_select_menu		input_select_menu;
-	t_time					time;
-}							t_app;
+    mlx_context ctx;
+    mlx_window window;
+    mlx_window_create_info info;
+    t_input_handler input_handler;
+    t_frame_buffer frame_buffer;
+    bool request_immediate_abort;
+    t_image_atlas image_atlas;
+    t_map map;
+    t_player players[4];
+    t_objects	objects;
+    t_game_state game_state;
+    t_main_menu main_menu;
+    t_player_count_menu player_count_menu;
+    t_input_select_menu input_select_menu;
+    t_time		time;
+    t_minimap minimap;
+} t_app;
 
 #endif

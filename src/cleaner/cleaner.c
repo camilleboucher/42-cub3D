@@ -30,9 +30,16 @@ void	app_destroy(t_app *app)
 {
 	clean_map(&app->map);
 	objects_destroy(&app->objects);
-	free(app->frame_buffer.buffer);
-	free(app->frame_buffer.shader_buffer);
-	mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
-	mlx_destroy_window(app->ctx, app->window);
-	mlx_destroy_context(app->ctx);
+    free(app->frame_buffer.buffer);
+    free(app->frame_buffer.shader_buffer);
+    free(app->frame_buffer.minimap_frame_buffer);
+    free(app->frame_buffer.minimap_overlay_frame_buffer);
+    if (app->frame_buffer.minimap_frame_buffer_image)
+        mlx_destroy_image(app->ctx, app->frame_buffer.minimap_frame_buffer_image);
+    if (app->frame_buffer.minimap_overlay_frame_buffer_image)
+        mlx_destroy_image(app->ctx, app->frame_buffer.minimap_overlay_frame_buffer_image);
+    if (app->frame_buffer.screen_image)
+    	mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
+    mlx_destroy_window(app->ctx, app->window);
+    mlx_destroy_context(app->ctx);
 }

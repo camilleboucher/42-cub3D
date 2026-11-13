@@ -26,24 +26,24 @@ bool	app_init(t_app *app)
 {
 	app->time.now = 0.;
 	app->time.last = 0.;
-	app->ctx = mlx_init();
-	if (app->ctx == MLX_NULL_HANDLE)
-		return (false);
-	app->info = (mlx_window_create_info){0};
-	app->info.title = "Cube 3D";
-	app->info.width = 800;
-	app->info.height = 600;
-	app->info.is_resizable = true;
-	app->window = mlx_new_window(app->ctx, &app->info);
-	if (app->window == MLX_NULL_HANDLE)
-		return (false);
-	app->frame_buffer.buffer = NULL;
-	app->frame_buffer.shader_buffer = NULL;
-	app->frame_buffer.screen_image = NULL;
-	app->request_immediate_abort = false;
-	app->game_state = main_menu;
-	app->input_handler = (t_input_handler){0};
-	if (!resize_frame_buffer(app, app->info.width, app->info.height))
-		return (false);
-	return (true);
+    app->ctx = mlx_init();
+    if (app->ctx == MLX_NULL_HANDLE)
+        return (false);
+    app->info = (mlx_window_create_info){0};
+    app->info.title = "Cube 3D";
+    app->info.width = 800;
+    app->info.height = 600;
+    app->info.is_resizable = true;
+    app->window = mlx_new_window(app->ctx, &app->info);
+    mlx_set_window_min_size(app->ctx, app->window, 64, 64);
+    if (app->window == MLX_NULL_HANDLE)
+        return (false);
+    app->request_immediate_abort = false;
+    app->game_state = main_menu;
+    app->input_handler = (t_input_handler){ 0 };
+    app->minimap.showed = false;
+    //mlx_set_fps_goal(app->ctx, 30);
+    if (!resize_frame_buffer(app, app->info.width, app->info.height))
+        return (false);
+    return (true);
 }

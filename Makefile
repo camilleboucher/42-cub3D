@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: cboucher <private_mail>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/10/27 15:11:43 by cboucher          #+#    #+#              #
-#    Updated: 2026/10/28 19:28:11 by cboucher         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 CC := cc
 CFLAGS := -Wall -Wextra -O3 -march=native -flto -Wno-unused-result #TODO: -Werror
 LDFLAGS = -flto -lSDL2 -lm
@@ -50,12 +38,13 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/game/game.c \
 	   $(SRC_DIR)/game/objects.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
+	   $(SRC_DIR)/gui/minimap.c \
 	   $(SRC_DIR)/tools/tools.c \
 	   $(SRC_DIR)/input/handler.c \
 	   $(SRC_DIR)/input/device.c \
 	   $(SRC_DIR)/game/player.c \
 	   $(SRC_DIR)/animated_sprite/animated_sprite.c
-	   # $(SRC_DIR)/gnl2/gnl.c
+
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c
 
