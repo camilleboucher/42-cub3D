@@ -445,6 +445,13 @@ void	handle_controler_down(mlx_controller_event_code event, void *param)
 	{
 		if (app->input_handler.controller_count > 0)
 		{
+			if (app->game_state != ingame
+				&& app->input_handler.controller_count > 0)
+			{
+				app->input_handler.controller_count -= 1;
+				init_devices(&app->input_handler);
+				init_input_select_menu(app);
+			}
 		}
 		// app->input_handler.controller_count -= 1;
 		// TODO: detect which one is disconnected and set active to false
