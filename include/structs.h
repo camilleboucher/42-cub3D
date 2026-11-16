@@ -26,6 +26,7 @@ typedef struct s_input_device
 	bool					active;
 	t_vec2f					move_vector;
 	double					angle;
+	double                  initial_angle;
 	t_device_type			type;
 	int						controller_slot;
 	bool					action_key;

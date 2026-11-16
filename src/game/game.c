@@ -221,12 +221,18 @@ void	start_game(t_app *app)
 	{
 		card_id = app->input_select_menu.card_slots[i].docked_card_id;
 		app->players[i].device_id = app->input_select_menu.cards[card_id].device_id;
+		app->input_handler.devices[app->players[i].device_id].angle
+		    = app->players[i].angle;
+		app->input_handler.devices[app->players[i].device_id].initial_angle
+		    = app->players[i].angle;
 		if (app->input_handler.devices[app->players[i].device_id].type == device_keyboard_and_mouse)
 			mlx_mouse_hide(app->ctx);
 		i++;
 	}
-	app->input_handler.mouse_pos = (t_vec2i){0, 0};
-	app->input_handler.old_mouse_pos = (t_vec2i){0, 0};
+	app->input_handler.total_mouse_pos = (t_vec2f){0, 0};
+	app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2,
+	    app->frame_buffer.height / 2};
+	app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
 	mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2,
 		app->frame_buffer.height / 2);
 	app->game_state = ingame;
