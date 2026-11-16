@@ -32,6 +32,7 @@
 
 # define PLAYER_MAX_SPEED 4.
 # define PLAYER_SPEED_DECREASE 8.
+# define PLAYER_SPRINT 2.
 # define PLAYER_FORCE 15.
 # define PLAYER_BOX .1
 

@@ -112,14 +112,13 @@ static bool	save_player(char *s, int *i, t_app *app, t_error *error)
 	if (app->players[0].pos.x || app->players[0].pos.y)
 		*error |= ERR_DUPLICATE_PLAYER;
 	else if (dir == 'E')
-		app->players[0].angle = 0;
+		init_players_angle(app, 4, 0);
 	else if (dir == 'N')
-		app->players[0].angle = M_PI_2;
+	    init_players_angle(app, 4, -M_PI_2);
 	else if (dir == 'W')
-		app->players[0].angle = M_PI;
+		init_players_angle(app, 4, M_PI);
 	else if (dir == 'S')
-		app->players[0].angle = -M_PI_2;
-	// TODO: Update other players's rotation
+		init_players_angle(app, 4, M_PI_2);
 	app->players[0].pos = (t_vec2f){(*i) + .5, app->map.height + .5};
 	app->players[1].pos = (t_vec2f){(*i) + .5, app->map.height + .5};
 	app->players[2].pos = (t_vec2f){(*i) + .5, app->map.height + .5};

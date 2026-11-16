@@ -4,7 +4,15 @@ _This project has been created as part of the 42 curriculum by cboucher and yben
 
 ## Description
 
-WORK IN PROGRESS
+Cub3D is the final C project in 42’s common core. Developed in pairs, it challenges us to build a basic raycaster inspired by Wolfenstein 3D (1992). The project involves parsing the map and asset information, including wall textures and floor and ceiling colors. For the bonus features, we added doors that open and close, a minimap, mouse support, and some animations.
+
+### Bonus++
+
+To make the game even more fun, we added a menu, split-screen multiplayer for up to four players, controller support, and a hidden Easter egg!
+
+### Technical Details and Design Choices
+
+Cub3D uses a raycasting engine to create a 3D-like view of a 2D map. For each vertical screen column, the program casts a ray from the player’s position and calculates where it first hits a wall. The distance to that wall determines its height on screen. The DDA (Digital Differential Analyzer) algorithm efficiently traces each ray through the map grid, stepping from one cell boundary to the next until it finds a wall. This approach provides fast rendering while keeping the world represented as a simple 2D grid.
 
 ## Instructions
 
@@ -18,13 +26,14 @@ Use `make` or `make re` to compile the program. For cleaning the generated files
 
 To use the cub3D program, run cub3D with a .cub map file.
 
-Example : `./cub3D maps/1.cub`
+Example : `./cub3D maps/valid/better_map_subject.cub`
+
+The player can move with the QWSD keys.
 
 ## Resources
 
 1.	MacroLibX Documentation : [https://macrolibx.kbz8.me/]
-2.	[Key codes](https://wiki.libsdl.org/SDL2/SDL_Scancode)
-3.	Raycasting : [Lode's Computer Graphics Tutorial](https://lodev.org/cgtutor/raycasting.html)
-4.	[DDA (Digital Differential Analyzer)](https://www.youtube.com/watch?v=NbSee-XM7WA)
-5.	Wikipedia Article: [Fonction trigonométrique](https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique)
-3.	Web research and AI chat for some notions about double linked list.
+2.	Raycasting : [Lode's Computer Graphics Tutorial](https://lodev.org/cgtutor/raycasting.html)
+3.	[DDA (Digital Differential Analyzer)](https://www.youtube.com/watch?v=NbSee-XM7WA)
+4.	Wikipedia Article: [Fonction trigonométrique](https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique)
+5.	Web research and AI chat for some notions.

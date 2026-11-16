@@ -115,15 +115,9 @@ void	check_door_activation(t_app *app, t_vec2f target, t_player *player)
 
 void	action_input(t_app *app, t_player *player)
 {
-	if (app->input_handler.action_key && !is_key_down(&app->input_handler,
-			MLX_KEY_F))
-		app->input_handler.action_key = false;
-	if (!app->input_handler.action_key && is_key_down(&app->input_handler,
-			MLX_KEY_F))
-		app->input_handler.action_key = true;
-	if (app->input_handler.action_key)
-		check_door_activation(app, vec2f_add(player->pos, player->forward),
-			player);
+		if (app->input_handler.devices[player->device_id].action_key)
+			check_door_activation(app, vec2f_add(player->pos, player->forward),
+				player);
 }
 
 void	ingame_update(t_app *app)
@@ -227,12 +221,18 @@ void	start_game(t_app *app)
 	{
 		card_id = app->input_select_menu.card_slots[i].docked_card_id;
 		app->players[i].device_id = app->input_select_menu.cards[card_id].device_id;
+		app->input_handler.devices[app->players[i].device_id].angle
+		    = app->players[i].angle;
+		app->input_handler.devices[app->players[i].device_id].initial_angle
+		    = app->players[i].angle;
 		if (app->input_handler.devices[app->players[i].device_id].type == device_keyboard_and_mouse)
 			mlx_mouse_hide(app->ctx);
 		i++;
 	}
-	app->input_handler.mouse_pos = (t_vec2i){0, 0};
-	app->input_handler.old_mouse_pos = (t_vec2i){0, 0};
+	app->input_handler.total_mouse_pos = (t_vec2f){0, 0};
+	app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2,
+	    app->frame_buffer.height / 2};
+	app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
 	mlx_mouse_move(app->ctx, app->window, app->frame_buffer.width / 2,
 		app->frame_buffer.height / 2);
 	app->game_state = ingame;
@@ -411,11 +411,26 @@ void	handle_key_up(int key, void *param)
 	input_handler_set_up(&app->input_handler, key);
 }
 
+void	handle_controler_up(mlx_controller_event_code event, void *param)
+{
+	t_app			*app;
+	t_input_device	*device;
+
+	app = param;
+	device = &app->input_handler.devices[2 + event.controller_id];
+	if (device->action_key && event.button == MLX_CONTROLLER_X)
+		device->action_key = false;
+	if (device->sprint_key && event.button == MLX_CONTROLLER_A)
+		device->sprint_key = false;
+}
+
 void	handle_controler_down(mlx_controller_event_code event, void *param)
 {
 	t_app	*app;
+	t_input_device	*device;
 
 	app = param;
+	device = &app->input_handler.devices[2 + event.controller_id];
 	if (event.button == MLX_CONTROLLER_CONNECT)
 	{
 		if (app->game_state != ingame
@@ -436,6 +451,10 @@ void	handle_controler_down(mlx_controller_event_code event, void *param)
 		// if (app->game_state == ingame)
 		//    handle_resize_event(app);
 	}
+	if (!device->action_key && event.button == MLX_CONTROLLER_X)
+		device->action_key = true;
+	if (!device->sprint_key && event.button == MLX_CONTROLLER_A)
+		device->sprint_key = true;
 }
 
 void	main_loop(t_app *app)
@@ -453,6 +472,8 @@ void	main_loop(t_app *app)
 	mlx_on_event(app->ctx, app->window, MLX_KEYUP, &handle_key_up, app);
 	mlx_on_event(app->ctx, app->window, MLX_CONTROLLERDOWN, (void (*)(int,
 				void *))handle_controler_down, app);
+	mlx_on_event(app->ctx, app->window, MLX_CONTROLLERUP, (void (*)(int,
+				void *))handle_controler_up, app);
 	// mlx_on_event(app->ctx, app->window, MLX_CONTROLLERUP, (void(*)(int,void*))handle_controler_, NULL);
 	mlx_loop(app->ctx);
 }
