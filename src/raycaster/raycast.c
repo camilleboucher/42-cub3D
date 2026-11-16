@@ -241,7 +241,7 @@ void	draw_door_transparency(t_app *app, t_raycaster *raycaster, t_hit_info *hit)
 	unsigned int	i;
 
 	i = hit->screen_x * app->frame_buffer.height;
-	while (i < (hit->screen_x + 1) * + app->frame_buffer.height)
+	while (i < (hit->screen_x + 1) * app->frame_buffer.height)
 		set_pixel_opt(app->frame_buffer.buffer, i++, (mlx_color){.rgba = 0x0});
 	while (true)
 	{
