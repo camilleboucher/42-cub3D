@@ -202,12 +202,13 @@ t_vec2f	compute_plane(t_app *app, t_raycaster *raycaster)
 	return (plane);
 }
 
-void	compute_perp_wall_dist(t_hit_info *hit)
+void	compute_perp_wall_dist(t_app *app, t_hit_info *hit)
 {
 	if (hit->side == 0)
 		hit->perp_wall_dist = hit->side_dist.x - hit->delta_dist.x;
 	else
 		hit->perp_wall_dist = hit->side_dist.y - hit->delta_dist.y;
+	app->frame_buffer.z_buffer[hit->screen_x] = hit->perp_wall_dist;
 }
 
 double	compute_wall_x(t_hit_info *hit, t_raycaster *raycaster)

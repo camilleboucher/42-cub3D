@@ -14,6 +14,7 @@
 #include "mlx.h"
 #include "mlx_profile.h"
 #include "structs.h"
+#include <stdlib.h>
 
 static bool	allocate_buffers(t_app *app)
 {
@@ -21,6 +22,7 @@ static bool	allocate_buffers(t_app *app)
 			* (app->frame_buffer.width * app->frame_buffer.height));
 	app->frame_buffer.shader_buffer = malloc(sizeof(t_region) + sizeof(mlx_color)
 			* (app->frame_buffer.width * app->frame_buffer.height));
+	app->frame_buffer.z_buffer = malloc(app->frame_buffer.width * sizeof(double));
 	if (!app->frame_buffer.buffer || !app->frame_buffer.shader_buffer)
 		return (false);
 	app->frame_buffer.screen_image = mlx_new_image(app->ctx,
@@ -79,11 +81,6 @@ bool	reallocate_frame_buffer(t_app *app)
 	app->frame_buffer.minimap_overlay_frame_buffer->height = app->minimap.size.y;
 	return (true);
 }
-
-
-///    ---------------------------------------------------------
-
-
 
 bool resize_frame_buffer(t_app *app, unsigned int width, unsigned height)
 {
