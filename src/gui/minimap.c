@@ -138,7 +138,7 @@ void minimap_put_tile(t_app *app, t_vec2i map_pos, int scare_size, t_vec2i scree
 	char cell_type;
 
 	cell_type = map_get(&app->map, map_pos.x, map_pos.y);
-	if (map_pos.x > 0 && map_pos.x < app->map.width && map_pos.y > 0 && map_pos.y < app->map.height)
+	if (map_pos.x >= 0 && map_pos.x < app->map.width && map_pos.y >= 0 && map_pos.y < app->map.height)
 	{
 		if (cell_type == 1)
         	draw_image_strech(app->frame_buffer.minimap_frame_buffer, screen_pos, (t_vec2i){scare_size, scare_size}, app->image_atlas.images[32]);

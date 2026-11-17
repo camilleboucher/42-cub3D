@@ -111,9 +111,9 @@ bool	atlas_load_buttons(t_app *app)
 		"assets/input_slot.png", "assets/ok.png", "assets/ok_hover.png",
 		"assets/maomao.png", "assets/door_closed.png",
 		"assets/door_almost_closed.png", "assets/door_almost_opened.png",
-		"assets/door_opened.png", "assets/map/indicator_north.png",
-		"assets/map/indicator_south.png", "assets/map/indicator_east.png",
-		"assets/map/indicator_west.png", "assets/map/frame.png",
+		"assets/door_opened.png", "assets/map/indicator_east.png",
+		"assets/map/indicator_west.png", "assets/map/indicator_south.png",
+		"assets/map/indicator_north.png", "assets/map/frame.png",
 		"assets/map/minimap_wall.png", "assets/map/minimap_door.png",
 		"assets/map/minimap_door2.png", "assets/map/minimap_door3.png",
 		"assets/map/minimap_door4.png"};
