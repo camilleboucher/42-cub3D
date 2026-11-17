@@ -112,12 +112,6 @@ void	draw_vertical_line(t_app *app, t_hit_info *hit, bool is_door)
 
 void	set_hit_info_side(int side, t_vec2f ray_dir, t_hit_info *hit)
 {
-	// TODO: This might be important and be moved after hit->image is properly set
-
-	/*if (side == 0 && ray_dir.x > 0)
-		hit->tex_x = hit->image->width - hit->tex_x - 1;
-	if (side == 1 && ray_dir.y < 0)
-	hit->tex_x = hit->image->width - hit->tex_x - 1;*/
 	if (side)
 	{
 		if (ray_dir.y > 0)
@@ -250,7 +244,6 @@ void	draw_door_transparency(t_app *app, t_raycaster *raycaster, t_hit_info *hit)
 			hit->image = app->image_atlas.images[20 + hit->cell_id];
 		else
 			hit->image = app->image_atlas.images[3 + hit->side];
-		printf("UwU OwO\n");
 		draw_vertical_line(app, hit, true);
 		if (hit->cell_id < ID_DOOR_CLOSED)
 			break ;
