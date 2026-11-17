@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "vector.h"
 
 bool	is_solid(char cell)
 {
@@ -45,10 +44,13 @@ bool	has_collision(t_map *map, t_vec2f test_pos)
 				test_pos.x + PLAYER_BOX, test_pos.y + PLAYER_BOX)));
 }
 
-void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
+void	move_player(t_map *map, t_player *player, t_vec2f delta_pos, bool sprint_key)
 {
 	t_vec2f	new_pos;
 
+	if (sprint_key)
+		delta_pos = (t_vec2f){delta_pos.x * PLAYER_SPRINT,
+			delta_pos.y * PLAYER_SPRINT};
 	new_pos = vec2f_add(player->pos, delta_pos);
 	if (has_collision(map, new_pos))
 	{
@@ -99,6 +101,7 @@ void	move_input(t_player *player, t_input_handler *input_handler,
 			player->speed = vec2f_sub(player->speed, invert_friction);
 	}
 	// printf("2Speed: %f - %f\n", player->speed.x, player->speed.y);
-	move_player(map, player, vec2f_mul(player->speed, delta_time));
+		move_player(map, player, vec2f_mul(player->speed, delta_time),
+			input_handler->devices[player->device_id].sprint_key);
 	player->angle = get_controler_angle(input_handler, player->device_id);
 }

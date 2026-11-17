@@ -18,6 +18,12 @@ void	set_pixel(t_region *frame_buffer, unsigned int x, unsigned int y,
 	frame_buffer->buffer[y + x * frame_buffer->height] = color;
 }
 
+void set_pxl(t_region *frame_buf, unsigned int i, mlx_color color, bool is_door)
+{
+	if (!is_door || get_pixel_opt(frame_buf, i).a < 255)
+		set_pixel_opt(frame_buf, i, color);
+}
+
 mlx_color	get_pixel(t_region *frame_buffer, unsigned int x, unsigned int y)
 {
 	return (frame_buffer->buffer[y + x * frame_buffer->height]);
