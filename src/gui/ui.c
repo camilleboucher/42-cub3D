@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "mlx.h"
+#include <stdio.h>
 
 void	draw_rect(t_app *app, t_vec2i pos, t_vec2i size, mlx_color color)
 {
@@ -47,46 +49,45 @@ mlx_color	blend_colors(mlx_color a, mlx_color b)
 	return (merged);
 }
 
-static t_vec2i	get_out_size(t_app *app, t_vec2i pos, t_vec2i size)
+static t_vec2i get_out_size(t_region *buffer, t_vec2i pos, t_vec2i size)
 {
-	t_vec2i	out_size;
+    t_vec2i out_size;
 
-	out_size = size;
-	if (pos.x + size.x > (int)app->frame_buffer.width)
-		out_size.x = (int)app->frame_buffer.width - pos.x;
-	if (pos.y + size.y > (int)app->frame_buffer.height)
-		out_size.y = (int)app->frame_buffer.height - pos.y;
-	return (out_size);
+    out_size = size;
+	if (pos.x + size.x > (int)buffer->width)
+		out_size.x = (int)buffer->width - pos.x;
+	if (pos.y + size.y > (int)buffer->height)
+		out_size.y = (int)buffer->height - pos.y;
+    return (out_size);
 }
 
-static t_vec2i	get_start_pos(t_vec2i pos)
+static t_vec2i get_start_pos(t_vec2i pos)
 {
-	t_vec2i	start_pos;
+    t_vec2i start_pos;
 
-	start_pos = (t_vec2i){0, 0};
-	if (pos.x < 0)
-		start_pos.x = -pos.x;
-	if (pos.y < 0)
-		start_pos.y = -pos.y;
-	return (start_pos);
+    start_pos = (t_vec2i){0, 0};
+    if (pos.x < 0)
+        start_pos.x = -pos.x;
+    if (pos.y < 0)
+        start_pos.y = -pos.y;
+    return (start_pos);
 }
 
-void	draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size,
-		t_region *image)
+void draw_image_strech(t_region *buffer, t_vec2i pos, t_vec2i size, t_region *image)
 {
-	int			x;
-	int			y;
-	mlx_color	color;
-	t_vec2i		out_size;
-	t_vec2i		start_pos;
+    int x;
+    int y;
+    mlx_color color;
+    t_vec2i out_size;
+    t_vec2i start_pos;
 
-	pos.x += ((int)app->frame_buffer.width - (int)size.x) / 2;
-	pos.y += ((int)app->frame_buffer.height - (int)size.y) / 2;
-	if (pos.x > (int)app->frame_buffer.buffer->width
-		|| pos.y > (int)app->frame_buffer.buffer->height || pos.x + size.x < 0
+    pos.x += ((int)buffer->width - (int)size.x) / 2;
+	pos.y += ((int)buffer->height - (int)size.y) / 2;
+	if (pos.x > (int)buffer->width
+		|| pos.y > (int)buffer->height || pos.x + size.x < 0
 		|| pos.y + size.y < 0)
 		return ;
-	out_size = get_out_size(app, pos, size);
+	out_size = get_out_size(buffer, pos, size);
 	start_pos = get_start_pos(pos);
 	x = start_pos.x;
 	while (x < out_size.x)
@@ -94,10 +95,10 @@ void	draw_image_strech(t_app *app, t_vec2i pos, t_vec2i size,
 		y = start_pos.y;
 		while (y < out_size.y)
 		{
-			color = blend_colors(get_pixel(app->frame_buffer.buffer, x + pos.x,
+			color = blend_colors(get_pixel(buffer, x + pos.x,
 						y + pos.y), get_pixel(image, image->width * x / size.x,
 						image->height * y / size.y));
-			set_pixel(app->frame_buffer.buffer, x + pos.x, y + pos.y, color);
+			set_pixel(buffer, x + pos.x, y + pos.y, color);
 			y++;
 		}
 		x++;
@@ -123,9 +124,9 @@ bool	box_to_box_collision(t_vec2i pos1, t_vec2i size1, t_vec2i pos2,
 void	tex_button_draw(t_app *app, t_tex_button button)
 {
 	if (button.is_hover)
-		draw_image_strech(app, button.pos, button.size, button.hover_image);
+		draw_image_strech(app->frame_buffer.buffer, button.pos, button.size, button.hover_image);
 	else
-		draw_image_strech(app, button.pos, button.size, button.default_image);
+		draw_image_strech(app->frame_buffer.buffer, button.pos, button.size, button.default_image);
 }
 
 bool	mouse_perfect_collision(t_app *app, t_vec2i pos, t_vec2i size,
@@ -176,7 +177,7 @@ void	grab_card_update(t_app *app, t_grab_card *card, t_card_slot slots[4],
 	pos = (t_vec2i){card->pos.x, card->pos.y};
 	card->is_hover = mouse_perfect_collision(app, pos, card->size,
 			card->default_image);
-	draw_image_strech(app, pos, card->size, card->default_image);
+	draw_image_strech(app->frame_buffer.buffer, pos, card->size, card->default_image);
 	if (!app->input_handler.mouse_is_busy && !card->is_grab && card->is_hover
 		&& app->input_handler.mouse_down)
 	{
