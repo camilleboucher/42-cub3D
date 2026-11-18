@@ -6,7 +6,7 @@
 /*   By: yannis <yannis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 23:49:06 by yannis            #+#    #+#             */
-/*   Updated: 2026/11/18 23:59:11 by yannis           ###   ########.fr       */
+/*   Updated: 2026/11/19 00:03:17 by yannis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ static void	v_scan_line(t_frame_buffer *buffer, t_sprite_render_info *info,
 	int			d;
 	int			tex_y;
 	mlx_color	color;
+	int			raw;
 
 	y = info->draw_start.y + 1;
+	raw = x * buffer->height;
 	while (y <= info->draw_end.y)
 	{
 		d = (y - info->v_offset) * 256 - buffer->height * 128
@@ -28,7 +30,7 @@ static void	v_scan_line(t_frame_buffer *buffer, t_sprite_render_info *info,
 		tex_y = (d * info->texture->height / info->sprite_size.y) / 256;
 		color = get_pixel(info->texture, tex_x, tex_y);
 		if (color.a > 100)
-			set_pixel(buffer->buffer, x, y, color);
+			set_pixel_opt(buffer->buffer, raw + y, color);
 		y++;
 	}
 }
