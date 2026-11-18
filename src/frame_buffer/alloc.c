@@ -23,7 +23,7 @@ static bool	allocate_buffers(t_app *app)
 	app->frame_buffer.shader_buffer = malloc(sizeof(t_region) + sizeof(mlx_color)
 			* (app->frame_buffer.width * app->frame_buffer.height));
 	app->frame_buffer.z_buffer = malloc(app->frame_buffer.width * sizeof(double));
-	if (!app->frame_buffer.buffer || !app->frame_buffer.shader_buffer)
+	if (!app->frame_buffer.buffer || !app->frame_buffer.shader_buffer || !app->frame_buffer.z_buffer)
 		return (false);
 	app->frame_buffer.screen_image = mlx_new_image(app->ctx,
 			app->frame_buffer.screen_height, app->frame_buffer.screen_width);
@@ -54,6 +54,7 @@ bool	reallocate_frame_buffer(t_app *app)
 	free(app->frame_buffer.buffer);
 	free(app->frame_buffer.minimap_frame_buffer);
 	free(app->frame_buffer.minimap_overlay_frame_buffer);
+    free(app->frame_buffer.z_buffer);
 	if (app->frame_buffer.screen_image != MLX_NULL_HANDLE)
 		mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
 	if (app->frame_buffer.minimap_frame_buffer_image != MLX_NULL_HANDLE)
@@ -64,6 +65,7 @@ bool	reallocate_frame_buffer(t_app *app)
 	app->frame_buffer.buffer = NULL;
 	app->frame_buffer.minimap_frame_buffer = NULL;
 	app->frame_buffer.minimap_overlay_frame_buffer = NULL;
+    app->frame_buffer.z_buffer = NULL;
 	app->frame_buffer.screen_image = MLX_NULL_HANDLE;
 	app->frame_buffer.minimap_frame_buffer_image = MLX_NULL_HANDLE;
 	app->frame_buffer.minimap_overlay_frame_buffer_image = MLX_NULL_HANDLE;

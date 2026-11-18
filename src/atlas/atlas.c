@@ -116,7 +116,9 @@ bool	atlas_load_buttons(t_app *app)
 		"assets/map/indicator_north.png", "assets/map/frame.png",
 		"assets/map/minimap_wall.png", "assets/map/minimap_door.png",
 		"assets/map/minimap_door2.png", "assets/map/minimap_door3.png",
-		"assets/map/minimap_door4.png"};
+		"assets/map/minimap_door4.png", "assets/mao_mao-s.png",
+		"assets/jinshi-s.png", "assets/gaoshun-s.png",
+		"assets/xiaolan-s.png"};
 
 	app->image_atlas.image_amount = 0;
 	i = 0;

@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yannis <yannis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/11 18:43:03 by cboucher          #+#    #+#             */
-/*   Updated: 2026/11/11 18:43:11 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/11/18 23:48:36 by yannis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "raycaster.h"
+#include <math.h>
 
 int	max(int a, int b)
 {
@@ -219,7 +221,7 @@ double	compute_wall_x(t_hit_info *hit, t_raycaster *raycaster)
 		wall_x = raycaster->camera_pos.y + hit->perp_wall_dist * hit->ray_dir.y;
 	else
 		wall_x = raycaster->camera_pos.x + hit->perp_wall_dist * hit->ray_dir.x;
-	wall_x -= floorf(wall_x);
+	wall_x -= floor(wall_x);
 	hit->tex_x = ((1. - 1e-6) - wall_x) * 64.;
 	return (wall_x);
 }
@@ -253,7 +255,7 @@ void	draw_door_transparency(t_app *app, t_raycaster *raycaster, t_hit_info *hit)
 		if (hit->cell_id < ID_DOOR_CLOSED)
 			break ;
 		walk_raycaster(app, hit);
-		compute_perp_wall_dist(hit);
+		compute_perp_wall_dist(app, hit);
 		if (hit->perp_wall_dist < 0)
 			return ;
 		compute_wall_x(hit, raycaster);
@@ -275,8 +277,8 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		set_delta_dist(app, &hit);
 		set_side_dist_and_step_values(&hit, raycaster);
 		walk_raycaster(app, &hit);
-		compute_perp_wall_dist(&hit);
-		if (hit.perp_wall_dist < 0)
+		compute_perp_wall_dist(app, &hit);
+		if (hit.perp_wall_dist < 0.)
 			return ;
 		compute_wall_x(&hit, raycaster);
 		hit.line_height = (int)app->frame_buffer.height / hit.perp_wall_dist;
@@ -290,4 +292,5 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		}
 		hit.screen_x++;
 	}
+	draw_players(app, plane, raycaster);
 }

@@ -43,7 +43,8 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/input/handler.c \
 	   $(SRC_DIR)/input/device.c \
 	   $(SRC_DIR)/game/player.c \
-	   $(SRC_DIR)/animated_sprite/animated_sprite.c
+	   $(SRC_DIR)/animated_sprite/animated_sprite.c \
+	   $(SRC_DIR)/raycaster/billboards.c
 
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c
