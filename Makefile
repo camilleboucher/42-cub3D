@@ -1,5 +1,5 @@
 CC := cc
-CFLAGS := -Wall -Wextra -O3 -march=native -flto -Wno-unused-result #TODO: -Werror
+CFLAGS := -Wall -Wextra -Wno-unused-result -march=native -flto -O3 #TODO: -Werror
 LDFLAGS = -flto -lSDL2 -lm
 
 ifeq ($(FSANITIZE), true)
@@ -8,6 +8,8 @@ endif
 
 ifeq ($(DEBUG), true)
 	CFLAGS += -g
+else
+	CFLAGS += -O3 -march=native -flto
 endif
 
 NAME := cub3D
