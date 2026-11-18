@@ -216,7 +216,7 @@ void	compute_wall_x(t_hit_info *hit, t_raycaster *raycaster)
 		hit->wall_x = raycaster->camera_pos.y + hit->perp_wall_dist * hit->ray_dir.y;
 	else
 		hit->wall_x = raycaster->camera_pos.x + hit->perp_wall_dist * hit->ray_dir.x;
-	hit->wall_x -= floorf(hit->wall_x);
+	hit->wall_x -= floor(hit->wall_x);
 }
 
 void	update_hit_with_screen_x(t_app *app, t_hit_info *hit,
