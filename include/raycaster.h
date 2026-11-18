@@ -27,6 +27,7 @@ typedef struct s_hit_info
 	int				tex_x;
 	int				side;
 	double			perp_wall_dist;
+	double			wall_x;
 	/* Line filling variables */
 	t_region		*image;
 	int				draw_start;
