@@ -6,11 +6,12 @@
 /*   By: yannis <yannis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 23:49:06 by yannis            #+#    #+#             */
-/*   Updated: 2026/11/19 00:03:17 by yannis           ###   ########.fr       */
+/*   Updated: 2026/11/19 15:08:25 by yannis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include <stdio.h>
 
 static void	v_scan_line(t_frame_buffer *buffer, t_sprite_render_info *info,
 		int tex_x, int x)
@@ -21,7 +22,7 @@ static void	v_scan_line(t_frame_buffer *buffer, t_sprite_render_info *info,
 	mlx_color	color;
 	int			raw;
 
-	y = info->draw_start.y + 1;
+	y = info->draw_start.y;
 	raw = x * buffer->height;
 	while (y <= info->draw_end.y)
 	{
@@ -58,14 +59,14 @@ void	display_single_player(t_frame_buffer *buffer,
 {
 	info->v_offset = (.20 * info->texture->height) / info->transformed.y;
 	info->draw_start.y = ((int)buffer->height - info->sprite_size.y) / 2
-		+ info->v_offset;
-	info->draw_end.y = info->draw_start.y + info->sprite_size.y;
+		+ info->v_offset + 1; // IDK why I need a + 1
+	info->draw_end.y = info->draw_start.y + info->sprite_size.y - 2;
 	if (info->draw_start.y < 0)
 		info->draw_start.y = 0;
 	if (info->draw_end.y >= (int)buffer->height)
 		info->draw_end.y = (int)buffer->height - 1;
 	info->draw_start.x = info->sprite_screen_x - info->sprite_size.x / 2;
-	info->draw_end.x = info->draw_start.x + info->sprite_size.x;
+	info->draw_end.x = info->draw_start.x + info->sprite_size.x - 1;
 	if (info->draw_start.x < 0)
 		info->draw_start.x = 0;
 	if (info->draw_end.x >= (int)buffer->width)
