@@ -42,13 +42,13 @@ void	display_sprite(t_frame_buffer *buffer, t_sprite_render_info *info)
 	int	tex_x;
 
 	x = info->draw_start.x;
-	while (x < info->draw_end.x)
+	while (x <= info->draw_end.x)
 	{
 		tex_x = (int)(256 * (x - (info->sprite_screen_x - info->sprite_size.x
 						/ 2)) * info->texture->width / info->sprite_size.x)
 			/ 256;
 		if (info->transformed.y > 0 && info->transformed.y < buffer->z_buffer[x]
-			&& x > 0 && x < buffer->width)
+			&& x >= 0 && x < buffer->width)
 			v_scan_line(buffer, info, tex_x, x);
 		x++;
 	}
@@ -57,9 +57,8 @@ void	display_sprite(t_frame_buffer *buffer, t_sprite_render_info *info)
 void	display_single_player(t_frame_buffer *buffer,
 		t_sprite_render_info *info)
 {
-	info->v_offset = (.20 * info->texture->height) / info->transformed.y;
-	info->draw_start.y = ((int)buffer->height - info->sprite_size.y) / 2
-		+ info->v_offset + 1; // IDK why I need a + 1
+	info->v_offset = (.20 * buffer->height) / info->transformed.y;
+	info->draw_start.y = ((int)buffer->height - info->sprite_size.y) / 2 + info->v_offset + 1; // IDK why I need a + 1
 	info->draw_end.y = info->draw_start.y + info->sprite_size.y - 2;
 	if (info->draw_start.y < 0)
 		info->draw_start.y = 0;
@@ -115,12 +114,12 @@ static void	swap_players(int *pl_a, int *pl_b, double *dist_a, double *dist_b)
 	}
 }
 
-void	quick_players_sort(double dists[4], int players[4])
+void	quick_players_sort(double dists[4], int players[4], int player_count)
 {
 	int	i;
 	int	j;
 
-	i = 4;
+	i = player_count;
 	j = 0;
 	while (i)
 	{
@@ -151,7 +150,7 @@ void	draw_players(t_app *app, t_vec2f plane, t_raycaster *raycaster)
 	players_index[1] = 1;
 	players_index[2] = 2;
 	players_index[3] = 3;
-	quick_players_sort(dists, players_index);
+	quick_players_sort(dists, players_index, app->input_handler.player_count);
 	if (app->input_handler.player_count > 1)
 		draw_single_player(app, players_index[0], plane, raycaster);
 	if (app->input_handler.player_count > 2)

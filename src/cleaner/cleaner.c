@@ -34,6 +34,7 @@ void	app_destroy(t_app *app)
     free(app->frame_buffer.shader_buffer);
     free(app->frame_buffer.minimap_frame_buffer);
     free(app->frame_buffer.minimap_overlay_frame_buffer);
+    free(app->frame_buffer.z_buffer);
     if (app->frame_buffer.minimap_frame_buffer_image)
         mlx_destroy_image(app->ctx, app->frame_buffer.minimap_frame_buffer_image);
     if (app->frame_buffer.minimap_overlay_frame_buffer_image)
