@@ -68,6 +68,7 @@ typedef struct s_frame_buffer {
   t_region *minimap_overlay_frame_buffer;
   mlx_image minimap_frame_buffer_image;
   mlx_image minimap_overlay_frame_buffer_image;
+  double	*z_buffer;
 } t_frame_buffer;
 
 // for animated_sprite.h

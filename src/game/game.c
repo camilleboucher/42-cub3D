@@ -199,7 +199,7 @@ void	window_event_handle(int event, void *param)
 	}
 	else if (event == MLX_WINDOW_SIZE_CHANGED)
 	{
-		printf("bla\n");
+		printf("Resized\n");
 		handle_resize_event(app);
 		if (app->request_immediate_abort)
 			mlx_loop_end(app->ctx);

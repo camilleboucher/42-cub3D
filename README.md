@@ -37,3 +37,9 @@ The player can move with the QWSD keys.
 3.	[DDA (Digital Differential Analyzer)](https://www.youtube.com/watch?v=NbSee-XM7WA)
 4.	Wikipedia Article: [Fonction trigonométrique](https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique)
 5.	Web research and AI chat for some notions.
+
+Image sources:
+Mao Mao: https://greatcharacters.miraheze.org/wiki/File:Maomao_Anime_Design_Season_2.png
+Jinshi: https://greatcharacters.miraheze.org/wiki/File:Jinshi_anime_season_2.png
+Xiaolan: https://www.animecharactersdatabase.com/characters.php?id=133148
+Gaoshun: https://www.animecharactersdatabase.com/characters.php?id=133147

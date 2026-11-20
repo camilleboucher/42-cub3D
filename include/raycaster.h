@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
+/*   By: yannis <yannis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:11:08 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:11:12 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/11/18 23:46:42 by yannis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,17 @@ typedef struct s_raycaster
 	t_vec2f			camera_dir;
 }					t_raycaster;
 
+typedef struct s_sprite_render_info {
+	t_region *texture;
+	int sprite_screen_x;
+	t_vec2i sprite_size;
+	t_vec2f transformed;
+	t_vec2i draw_start;
+	t_vec2i draw_end;
+	int v_offset;
+} t_sprite_render_info;
+
 void				draw_raycast(t_app *app, t_raycaster *raycaster);
+void				draw_players(t_app *app, t_vec2f plane, t_raycaster *raycaster);
 
 #endif
