@@ -56,9 +56,9 @@ INCLUDES_BONUS := -Iinclude_bonus -IMacroLibX/includes -Ilibft/include
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OUTPUT_DIR)/%.o)
 OBJ_BONUS := $(SRC_BONUS:$(SRC_DIR_BONUS)/%.c=$(OUTPUT_DIR_BONUS)/%.o)
 
-$(NAME): $(OUTPUT_DIR) $(OBJ) MacroLibX/libmlx.so libft/libft.a
+$(NAME): MacroLibX/libmlx.so $(OUTPUT_DIR) $(OBJ) libft/libft.a
 	$(CC) $(OBJ) MacroLibX/libmlx.so libft/libft.a $(CFLAGS) $(LDFLAGS) -o $@ libft/libft.a
-$(NAME_BONUS): $(OUTPUT_DIR_BONUS) $(OBJ_BONUS) MacroLibX/libmlx.so libft/libft.a
+$(NAME_BONUS): MacroLibX/libmlx.so $(OUTPUT_DIR_BONUS) $(OBJ_BONUS) libft/libft.a
 	$(CC) $(OBJ_BONUS) MacroLibX/libmlx.so libft/libft.a $(CFLAGS) $(LDFLAGS) -o $@ libft/libft.a
 
 $(OUTPUT_DIR):
@@ -88,6 +88,7 @@ $(OUTPUT_DIR_BONUS)/%.o: $(SRC_DIR_BONUS)/%.c
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES_BONUS)
 
 MacroLibX/libmlx.so:
+	if [ ! -f MacroLibX/Makefile ]; then git submodule init && git submodule update; fi
 	make -C MacroLibX -j
 
 libft/libft.a:
