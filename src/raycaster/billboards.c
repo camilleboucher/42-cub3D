@@ -58,7 +58,8 @@ void	display_single_player(t_frame_buffer *buffer,
 		t_sprite_render_info *info)
 {
 	info->v_offset = (.20 * buffer->height) / info->transformed.y;
-	info->draw_start.y = ((int)buffer->height - info->sprite_size.y) / 2 + info->v_offset + 1; // IDK why I need a + 1
+	info->draw_start.y = ((int)buffer->height - info->sprite_size.y) / 2
+		+ info->v_offset + 1;
 	info->draw_end.y = info->draw_start.y + info->sprite_size.y - 2;
 	if (info->draw_start.y < 0)
 		info->draw_start.y = 0;
@@ -80,7 +81,7 @@ void	draw_single_player(t_app *app, int player_i, t_vec2f plane,
 	t_vec2f					sprite_pos;
 	t_vec2f					transformed;
 	const double			inv_det = 1. / (plane.x * raycaster->camera_dir.y
-						- raycaster->camera_dir.x * plane.y);
+			- raycaster->camera_dir.x * plane.y);
 
 	sprite_pos = vec2f_sub(app->players[player_i].pos, raycaster->camera_pos);
 	transformed.x = raycaster->camera_dir.y * sprite_pos.x
@@ -96,42 +97,6 @@ void	draw_single_player(t_app *app, int player_i, t_vec2f plane,
 	info.transformed = transformed;
 	info.texture = app->image_atlas.images[37 + player_i];
 	display_single_player(&app->frame_buffer, &info);
-}
-
-static void	swap_players(int *pl_a, int *pl_b, double *dist_a, double *dist_b)
-{
-	int		pl_temp;
-	double	dist_temp;
-
-	if (*dist_a < *dist_b)
-	{
-		pl_temp = *pl_b;
-		*pl_b = *pl_a;
-		*pl_a = pl_temp;
-		dist_temp = *dist_b;
-		*dist_b = *dist_a;
-		*dist_a = dist_temp;
-	}
-}
-
-void	quick_players_sort(double dists[4], int players[4], int player_count)
-{
-	int	i;
-	int	j;
-
-	i = player_count;
-	j = 0;
-	while (i)
-	{
-		i--;
-		j = 0;
-		while (j < i)
-		{
-			swap_players(&players[j], &players[j + 1],
-				&dists[j], &dists[j + 1]);
-			j++;
-		}
-	}
 }
 
 void	draw_players(t_app *app, t_vec2f plane, t_raycaster *raycaster)

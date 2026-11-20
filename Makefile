@@ -50,7 +50,12 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/raycaster/billboards.c \
 	   $(SRC_DIR)/input/device_utils.c \
 	   $(SRC_DIR)/raycaster/raycast_utils.c \
-	   $(SRC_DIR)/raycaster/filling.c
+	   $(SRC_DIR)/raycaster/filling.c \
+	   $(SRC_DIR)/gui/ui_create.c \
+	   $(SRC_DIR)/gui/minimap_drawing.c \
+	   $(SRC_DIR)/gui/ui_card.c \
+	   $(SRC_DIR)/gui/ui_utils.c \
+	   $(SRC_DIR)/raycaster/billboards_sorting.c
 
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c

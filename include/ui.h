@@ -6,7 +6,7 @@
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/07 14:11:47 by cboucher          #+#    #+#             */
-/*   Updated: 2026/10/07 14:11:48 by cboucher         ###   ########.fr       */
+/*   Updated: 2026/11/20 19:47:27 by yben-dje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			grab_card_update(t_app *app, t_grab_card *card,
 					t_card_slot slots[4], double delta_time);
 t_grab_card		grab_card_create(t_vec2f pos, t_vec2i size, int device_id);
 
-t_card_slot		card_slot_create(t_app *app, t_vec2i pos, t_vec2i size, int id);
+t_card_slot		card_slot_create(t_vec2i pos, t_vec2i size, int id);
 void			render_minimap(t_app *app);
 void			mask_out_vert_line(t_app *app, unsigned int x,
 					unsigned int start, unsigned int stop);
@@ -34,5 +34,12 @@ void			draw_rect_checked(t_region *buffer, t_vec2i pos, t_vec2i size,
 					mlx_color color);
 void			draw_rect_raw(t_region *buffer, t_vec2i pos, t_vec2i size,
 					mlx_color color);
+
+bool			box_to_box_collision(t_vec2i pos1, t_vec2i size1, t_vec2i pos2,
+					t_vec2i size2);
+bool			point_to_box_collision(t_app *app, t_vec2i box_pos,
+					t_vec2i box_size, t_vec2i point_pos);
+bool			mouse_perfect_collision(t_app *app, t_vec2i pos, t_vec2i size,
+					t_region *image);
 
 #endif

@@ -269,13 +269,13 @@ void	init_input_select_menu(t_app *app)
 		app->input_select_menu.cards[i].hide = false;
 		i++;
 	}
-	app->input_select_menu.card_slots[0] = card_slot_create(app, (t_vec2i){-200,
+	app->input_select_menu.card_slots[0] = card_slot_create((t_vec2i){-200,
 			-300}, (t_vec2i){192, 192}, 0);
-	app->input_select_menu.card_slots[1] = card_slot_create(app, (t_vec2i){200,
+	app->input_select_menu.card_slots[1] = card_slot_create((t_vec2i){200,
 			-300}, (t_vec2i){192, 192}, 1);
-	app->input_select_menu.card_slots[2] = card_slot_create(app, (t_vec2i){-600,
+	app->input_select_menu.card_slots[2] = card_slot_create((t_vec2i){-600,
 			-300}, (t_vec2i){192, 192}, 2);
-	app->input_select_menu.card_slots[3] = card_slot_create(app, (t_vec2i){600,
+	app->input_select_menu.card_slots[3] = card_slot_create((t_vec2i){600,
 			-300}, (t_vec2i){192, 192}, 3);
 	app->input_select_menu.docked_cards_count = 0;
 	printf("pc: %d\n", app->input_handler.player_count);
