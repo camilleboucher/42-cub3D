@@ -50,17 +50,29 @@ typedef struct s_raycaster
 	t_vec2f			camera_dir;
 }					t_raycaster;
 
-typedef struct s_sprite_render_info {
-	t_region *texture;
-	int sprite_screen_x;
-	t_vec2i sprite_size;
-	t_vec2f transformed;
-	t_vec2i draw_start;
-	t_vec2i draw_end;
-	int v_offset;
-} t_sprite_render_info;
+typedef struct s_sprite_render_info
+{
+	t_region		*texture;
+	int				sprite_screen_x;
+	t_vec2i			sprite_size;
+	t_vec2f			transformed;
+	t_vec2i			draw_start;
+	t_vec2i			draw_end;
+	int				v_offset;
+}					t_sprite_render_info;
 
 void				draw_raycast(t_app *app, t_raycaster *raycaster);
-void				draw_players(t_app *app, t_vec2f plane, t_raycaster *raycaster);
+void				draw_players(t_app *app, t_vec2f plane,
+						t_raycaster *raycaster);
+
+void				set_delta_dist(t_app *app, t_hit_info *hit);
+t_vec2f				compute_plane(t_app *app, t_raycaster *raycaster);
+void				compute_perp_wall_dist(t_app *app, t_hit_info *hit);
+void				compute_wall_x(t_hit_info *hit, t_raycaster *raycaster);
+void				set_side_dist_and_step_values(t_hit_info *hit,
+						t_raycaster *raycaster);
+
+void				draw_vertical_line(t_app *app, t_hit_info *hit,
+						bool is_door);
 
 #endif
