@@ -48,7 +48,7 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop, bool is_door)
 		hit->stepstep += hit->scale;
 		color = get_pixel_opt(hit->image, hit->tex_row
 				+ ((unsigned int)hit->tex_pos % (hit->image->height)));
-		while (hit->y < hit->stepstep - 1e-6)
+		while (hit->y < hit->stepstep - 1e-6 && hit->y < app->frame_buffer.height)
 			set_pxl(app->frame_buffer.buffer, hit->fb_row + hit->y++,
 				color, is_door);
 		hit->tex_pos++;
