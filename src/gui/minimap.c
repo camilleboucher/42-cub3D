@@ -1,10 +1,4 @@
 #include "cub3D.h"
-#include "frame_buffer.h"
-#include "mlx.h"
-#include "ui.h"
-#include "vector.h"
-#include <math.h>
-#include <stdio.h>
 
 void mask_out_vert_line(t_app *app, unsigned int x, unsigned int start, unsigned int stop)
 {

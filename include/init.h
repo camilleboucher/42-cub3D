@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   app.h                                              :+:      :+:    :+:   */
+/*   init.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cboucher <private_mail>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,13 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef APP_H
-# define APP_H
+#ifndef INIT_H
+# define INIT_H
 
 # include "cub3D.h"
 
-bool	app_init(t_app *app);
-
 void	init_parser(t_player *player, t_map *map);
+bool	app_init(t_app *app);
 
 #endif

@@ -34,13 +34,13 @@
 # include "ft_string.h"
 
 # include "get_next_line.h"
-# include "vector.h"
+# include "data_structures.h"
 
 # include "constants.h"
 # include "structs.h"
 
 # include "error_manager.h"
-# include "app.h"
+# include "init.h"
 
 # include "input.h"
 # include "frame_buffer.h"

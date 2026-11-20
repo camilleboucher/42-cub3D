@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "mlx.h"
-#include <stdio.h>
 
 void	draw_rect(t_app *app, t_vec2i pos, t_vec2i size, mlx_color color)
 {
