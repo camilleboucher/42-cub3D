@@ -78,8 +78,8 @@ void	update_mouse_and_keyboard(t_input_handler *handler,
 		device->sprint_key = false;
 	if (!device->sprint_key && is_key_down(handler, MLX_KEY_LSHIFT))
 		device->sprint_key = true;
-	device->angle = device->initial_angle
-	    + (double)handler->total_mouse_pos.x / 600.;
+	device->angle = device->initial_angle + (double)handler->total_mouse_pos.x
+		/ 600.;
 	if (device->angle > M_PI)
 		device->angle -= M_PI * 2.;
 	if (device->angle < -M_PI)
