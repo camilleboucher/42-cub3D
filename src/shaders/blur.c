@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "cub3D.h"
 
 #define MAX_BLUR_RADIUS 64
@@ -85,3 +86,4 @@ void	apply_blur(t_app *app, int radius)
 		y++;
 	}
 }
+*/
