@@ -27,6 +27,7 @@
 # include "mlx.h"
 # include "mlx_extended.h"
 # include "mlx_keycodes.h"
+# include "mlx_profile.h"
 
 # include "ft_list.h"
 # include "ft_ctype.h"
