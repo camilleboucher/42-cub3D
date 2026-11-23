@@ -44,15 +44,15 @@ static void	set_card_image(t_app *app, t_grab_card *card)
 
 void	init_input_select_menu(t_app *app)
 {
-	unsigned int				i;
-	unsigned int	devices_count;
+	int							i;
+	unsigned int				devices_count;
 
 	i = 0;
 	devices_count = 2 + app->input_handler.controller_count;
-	while (i < 2 + app->input_handler.controller_count)
+	while (i < 2 + (int)app->input_handler.controller_count)
 	{
 		app->input_select_menu.cards[i]
-			= grab_card_create((t_vec2f){0 - (int)devices_count * 100
+			= grab_card_create((t_vec2f){(0 - (int)devices_count) * 100
 				+ 192 / 2 + 200 * i + (200 - 192) / 2, 0}, (t_vec2i){192,
 				192}, i);
 		set_card_image(app, &app->input_select_menu.cards[i]);

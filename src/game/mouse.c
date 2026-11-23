@@ -59,8 +59,8 @@ static void	mouse_jail_x(t_app *app, t_vec2i mouse_box)
 
 static void	mouse_jail_y(t_app *app, t_vec2i mouse_box)
 {
-	if (app->input_handler.mouse_pos.y < (int)app->frame_buffer.screen_height / 2
-		- mouse_box.y)
+	if (app->input_handler.mouse_pos.y
+		< (int)app->frame_buffer.screen_height / 2 - mouse_box.y)
 	{
 		mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x,
 			app->frame_buffer.screen_height / 2 + mouse_box.y);
@@ -68,8 +68,8 @@ static void	mouse_jail_y(t_app *app, t_vec2i mouse_box)
 			app->frame_buffer.screen_height / 2 + mouse_box.y};
 		app->input_handler.old_mouse_pos = app->input_handler.mouse_pos;
 	}
-	if (app->input_handler.mouse_pos.y > (int)app->frame_buffer.screen_height / 2
-		+ mouse_box.y)
+	if (app->input_handler.mouse_pos.y
+		> (int)app->frame_buffer.screen_height / 2 + mouse_box.y)
 	{
 		mlx_mouse_move(app->ctx, app->window, app->input_handler.mouse_pos.x,
 			app->frame_buffer.screen_height / 2 - mouse_box.y);
