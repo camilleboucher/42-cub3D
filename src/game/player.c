@@ -38,8 +38,7 @@ void	move_player(t_map *map, t_player *player, t_vec2f delta_pos,
 		player->pos = new_pos;
 }
 
-t_vec2f	get_move_vector(t_player *player, t_input_handler *input_handler,
-	double delta_time)
+t_vec2f	get_move_vector(t_player *player, t_input_handler *input_handler)
 {
 	t_vec2f	move;
 
@@ -54,7 +53,6 @@ t_vec2f	get_move_vector(t_player *player, t_input_handler *input_handler,
 	move = vec2f_add(move, vec2f_mul(player->right,
 				get_controler_left_vector(input_handler, player->device_id).x));
 	move = vec2f_mul(move, PLAYER_FORCE);
-	player->speed = vec2f_add(player->speed, vec2f_mul(move, delta_time));
 	return (move);
 }
 
@@ -64,7 +62,7 @@ void	move_input(t_player *player, t_input_handler *input_handler,
 	t_vec2f	move;
 	t_vec2f	invert_friction;
 
-	move = get_move_vector(player, input_handler, delta_time);
+	move = get_move_vector(player, input_handler);
 	player->speed = vec2f_add(player->speed, vec2f_mul(move, delta_time));
 	if (vec2f_length(player->speed) > PLAYER_MAX_SPEED)
 		player->speed = vec2f_mul(vec2f_normalize(player->speed),
