@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "mlx_profile.h"
 
 void	free_all_images(t_app *app)
 {
@@ -26,24 +25,26 @@ void	free_all_images(t_app *app)
 	}
 }
 
-void copy_image_to_region_hflip(t_app *app, t_region *region, mlx_image image, t_vec2i size) {
-    int x;
-    int y;
+void	copy_image_to_region_hflip(t_app *app, t_region *region,
+	mlx_image image, t_vec2i size)
+{
+	int			x;
+	int			y;
+	mlx_color	color;
 
-    x = 0;
-    while (x < size.x)
-    {
-        y = 0;
-        while (y < size.y)
-        {
-            mlx_color color = mlx_get_image_pixel(app->ctx, image, size.x - x - 1, y);
-            set_pixel(region, x, y, color);
-            y++;
-        }
-        x++;
-    }
+	x = 0;
+	while (x < size.x)
+	{
+		y = 0;
+		while (y < size.y)
+		{
+			color = mlx_get_image_pixel(app->ctx, image, size.x - x - 1, y);
+			set_pixel(region, x, y, color);
+			y++;
+		}
+		x++;
+	}
 }
-
 
 void	copy_image_to_region(t_app *app, t_region *region, mlx_image image,
 		t_vec2i size)
@@ -66,10 +67,9 @@ void	copy_image_to_region(t_app *app, t_region *region, mlx_image image,
 	}
 }
 
-t_region	*load_image(t_app *app, const char *path, bool hflip)
+t_region	*load_image(t_app *app, const char *path, bool hflip, mlx_image img)
 {
 	t_region	*region;
-	mlx_image	img;
 	t_vec2i		size;
 
 	img = mlx_new_image_from_file(app->ctx, path, &size.x, &size.y);
@@ -89,9 +89,9 @@ t_region	*load_image(t_app *app, const char *path, bool hflip)
 	region->width = size.x;
 	region->height = size.y;
 	if (hflip)
-        copy_image_to_region_hflip(app, region, img, size);
-    else
-        copy_image_to_region(app, region, img, size);
+		copy_image_to_region_hflip(app, region, img, size);
+	else
+		copy_image_to_region(app, region, img, size);
 	mlx_destroy_image(app->ctx, img);
 	return (region);
 }
@@ -99,33 +99,23 @@ t_region	*load_image(t_app *app, const char *path, bool hflip)
 bool	atlas_load_buttons(t_app *app)
 {
 	unsigned int		i;
-	const char *const	files[] = {"assets/play_button.png",
-		"assets/play_button_hover.png", "assets/stone.png",
+	mlx_image			img;
+	const char *const	files[] = {TEX_0, TEX_1, TEX_2,
 		app->map.path_textures[1], app->map.path_textures[0],
-		app->map.path_textures[3], app->map.path_textures[2], "assets/one.png",
-		"assets/two.png", "assets/three.png", "assets/four.png",
-		"assets/one_hover.png", "assets/two_hover.png",
-		"assets/three_hover.png", "assets/four_hover.png",
-		"assets/how_many_players_sign.png", "assets/controler.png",
-		"assets/keyboard_mouse.png", "assets/keyboard.png",
-		"assets/input_slot.png", "assets/ok.png", "assets/ok_hover.png",
-		"assets/maomao.png", "assets/door_closed.png",
-		"assets/door_almost_closed.png", "assets/door_almost_opened.png",
-		"assets/door_opened.png", "assets/map/indicator_east.png",
-		"assets/map/indicator_west.png", "assets/map/indicator_south.png",
-		"assets/map/indicator_north.png", "assets/map/frame.png",
-		"assets/map/minimap_wall.png", "assets/map/minimap_door.png",
-		"assets/map/minimap_door2.png", "assets/map/minimap_door3.png",
-		"assets/map/minimap_door4.png", "assets/mao_mao-s.png",
-		"assets/jinshi-s.png", "assets/gaoshun-s.png",
-		"assets/xiaolan-s.png"};
+		app->map.path_textures[3], app->map.path_textures[2],
+		TEX_7, TEX_8, TEX_9, TEX_10, TEX_11, TEX_12, TEX_13, TEX_14,
+		TEX_15, TEX_16, TEX_17, TEX_18, TEX_19, TEX_20, TEX_21, TEX_22,
+		TEX_23, TEX_24, TEX_25, TEX_26, TEX_27, TEX_28, TEX_29, TEX_30,
+		TEX_31, TEX_32, TEX_33, TEX_34, TEX_35, TEX_36, TEX_37, TEX_38,
+		TEX_39, TEX_40};
 
 	app->image_atlas.image_amount = 0;
 	i = 0;
 	while (i < sizeof(files) / sizeof(char *))
 	{
+		img = NULL;
 		app->image_atlas.images[app->image_atlas.image_amount] = load_image(app,
-				files[i++], false);
+				files[i++], false, img);
 		if (!app->image_atlas.images[app->image_atlas.image_amount++])
 			return (false);
 	}

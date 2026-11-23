@@ -26,10 +26,10 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/data_structures/vec2f_math.c \
 	   $(SRC_DIR)/data_structures/vec2f_utils.c \
 	   $(SRC_DIR)/data_structures/vec2i.c \
-	   $(SRC_DIR)/atlas/atlas.c \
+	   $(SRC_DIR)/app/atlas.c \
 	   $(SRC_DIR)/frame_buffer/alloc.c \
 	   $(SRC_DIR)/frame_buffer/interface.c \
-	   $(SRC_DIR)/shaders/blur.c \
+	   $(SRC_DIR)/graphic/blur_shader.c \
 	   $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/app/error_manager.c \
 	   $(SRC_DIR)/parser/parser.c \
@@ -46,7 +46,6 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/input/handler.c \
 	   $(SRC_DIR)/input/device.c \
 	   $(SRC_DIR)/game/player.c \
-	   $(SRC_DIR)/animated_sprite/animated_sprite.c \
 	   $(SRC_DIR)/raycaster/billboards.c \
 	   $(SRC_DIR)/input/device_utils.c \
 	   $(SRC_DIR)/raycaster/raycast_utils.c \
@@ -55,7 +54,8 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/gui/minimap_drawing.c \
 	   $(SRC_DIR)/gui/ui_card.c \
 	   $(SRC_DIR)/gui/ui_utils.c \
-	   $(SRC_DIR)/raycaster/billboards_sorting.c
+	   $(SRC_DIR)/raycaster/billboards_sorting.c \
+	   $(SRC_DIR)/graphic/animated_sprite.c
 
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c
@@ -72,24 +72,13 @@ $(NAME_BONUS): MacroLibX/libmlx.so $(OUTPUT_DIR_BONUS) $(OBJ_BONUS) libft/libft.
 	$(CC) $(OBJ_BONUS) MacroLibX/libmlx.so libft/libft.a $(CFLAGS) $(LDFLAGS) -o $@ libft/libft.a
 
 $(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/input \
+	mkdir -p $(OUTPUT_DIR) $(OUTPUT_DIR)/input $(OUTPUT_DIR)/graphic \
 		$(OUTPUT_DIR)/tools $(OUTPUT_DIR)/game $(OUTPUT_DIR)/gui \
 		$(OUTPUT_DIR)/data_structures $(OUTPUT_DIR)/app \
-		$(OUTPUT_DIR)/atlas $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/shaders \
-		$(OUTPUT_DIR)/parser $(OUTPUT_DIR)/error_manager $(OUTPUT_DIR)/cleaner \
-		$(OUTPUT_DIR)/raycaster \
-		$(OUTPUT_DIR)/animated_sprite
+	    $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/parser \
+		$(OUTPUT_DIR)/raycaster $(OUTPUT_DIR)/animated_sprite
 
 $(OUTPUT_DIR_BONUS):
-	mkdir -p $(OUTPUT_DIR_BONUS) $(OUTPUT_DIR_BONUS)/player \
-		$(OUTPUT_DIR_BONUS)/input_handler $(OUTPUT_DIR_BONUS)/time_tools \
-		$(OUTPUT_DIR_BONUS)/game $(OUTPUT_DIR_BONUS)/gui \
-		$(OUTPUT_DIR_BONUS)/data_structures $(OUTPUT_DIR_BONUS)/app \
-		$(OUTPUT_DIR_BONUS)/menus $(OUTPUT_DIR_BONUS)/atlas \
-		$(OUTPUT_DIR_BONUS)/frame_buffer $(OUTPUT_DIR_BONUS)/shaders \
-		$(OUTPUT_DIR_BONUS)/parser $(OUTPUT_DIR_BONUS)/error_manager \
-		$(OUTPUT_DIR_BONUS)/cleaner $(OUTPUT_DIR_BONUS)/map_tools \
-		$(OUTPUT_DIR_BONUS)/raycaster
 
 $(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES)

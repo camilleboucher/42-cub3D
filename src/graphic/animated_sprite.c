@@ -35,42 +35,46 @@ mlx_color	*animated_sprite_get_buffer_start(t_animated_sprite *sprite,
 			* sprite->frame_index));
 }
 
+void	init_draw(t_draw *d, t_vec2i *out_pos,
+	t_frame_buffer *buffer, t_animated_sprite *sprite)
+{
+	d->pos = (t_vec2i){0, 0};
+	if (out_pos->x < 0)
+		out_pos->x = 0;
+	if (out_pos->y < 0)
+		out_pos->y = 0;
+	d->stop = (t_vec2i){sprite->frame_width, sprite->frames->height};
+	if (d->pos.x + out_pos->x > buffer->width
+		|| d->pos.y + out_pos->y > buffer->height)
+		return ;
+	if (out_pos->x + d->stop.x > buffer->width)
+		d->stop.x = buffer->width;
+	if (out_pos->y + d->stop.y > buffer->height)
+		d->stop.y = buffer->height;
+	d->screen_i = buffer->height * out_pos->x;
+	d->frame_i = sprite->frame_index * sprite->frame_width
+		* sprite->frames->height;
+}
+
 void	animated_sprite_draw(t_frame_buffer *buffer, t_animated_sprite *sprite,
 		t_vec2i out_pos)
 {
-	t_vec2i			pos;
-	t_vec2i			stop;
-	unsigned int	screen_i;
-	unsigned int	frame_i;
-	mlx_color		color;
+	t_draw	d;
 
-	pos = (t_vec2i){0, 0};
-	if (out_pos.x < 0)
-		out_pos.x = 0;
-	if (out_pos.y < 0)
-		out_pos.y = 0;
-	stop = (t_vec2i){sprite->frame_width, sprite->frames->height};
-	if (pos.x + out_pos.x > buffer->width || pos.y + out_pos.y > buffer->height)
-		return ;
-	if (out_pos.x + stop.x > buffer->width)
-		stop.x = buffer->width;
-	if (out_pos.y + stop.y > buffer->height)
-		stop.y = buffer->height;
-	screen_i = buffer->height * out_pos.x;
-	frame_i = sprite->frame_index * sprite->frame_width
-		* sprite->frames->height;
-	while (pos.x < stop.x)
+	init_draw(&d, &out_pos, buffer, sprite);
+	while (d.pos.x < d.stop.x)
 	{
-		pos.y = 0;
-		while (pos.y < stop.y)
+		d.pos.y = 0;
+		while (d.pos.y < d.stop.y)
 		{
-			color = get_pixel_opt(sprite->frames, frame_i + pos.y);
-			set_pixel_opt(buffer->buffer, out_pos.y + pos.y + screen_i, color);
-			pos.y++;
+			d.color = get_pixel_opt(sprite->frames, d.frame_i + d.pos.y);
+			set_pixel_opt(buffer->buffer,
+				out_pos.y + d.pos.y + d.screen_i, d.color);
+			d.pos.y++;
 		}
-		pos.x++;
-		frame_i += sprite->frames->height;
-		screen_i += buffer->buffer->height;
+		d.pos.x++;
+		d.frame_i += sprite->frames->height;
+		d.screen_i += buffer->buffer->height;
 	}
 }
 

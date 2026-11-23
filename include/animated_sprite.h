@@ -15,16 +15,22 @@
 
 # include "cub3D.h"
 
+typedef struct s_draw
+{
+	t_vec2i			pos;
+	t_vec2i			stop;
+	unsigned int	screen_i;
+	unsigned int	frame_i;
+	mlx_color		color;
+}	t_draw;
+
 t_animated_sprite	animated_sprite_from_region(t_region *frames,
 						unsigned int frame_count, double frame_time,
 						bool playing);
-
 mlx_color			*animated_sprite_get_buffer_start(t_animated_sprite *sprite,
 						unsigned int *frame_width);
-
 void				animated_sprite_draw(t_frame_buffer *buffer,
 						t_animated_sprite *sprite, t_vec2i out_pos);
-
 void				animated_sprite_update(t_animated_sprite *sprite,
 						double delta_time);
 
