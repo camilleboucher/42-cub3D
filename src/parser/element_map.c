@@ -55,8 +55,8 @@ t_error	save_line(char *s, char *cell, t_app *app, t_map *map)
 		else if (save_player(s, &i, app, &error))
 			continue ;
 		else if (!(s[i] == C_VOID || s[i] == C_FLOOR || s[i] == C_WALL
-				|| s[i] == C_DOOR
-				|| s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W'))
+				|| s[i] == C_DOOR || s[i] == 'N' || s[i] == 'S' || s[i] == 'E'
+				|| s[i] == 'W'))
 			error |= ERR_INVALID_C;
 		cell[i + y] = get_id(s[i]);
 		i++;
@@ -71,8 +71,8 @@ static t_error	checks_openmap(char *cell, int x, int y, int map_width)
 	{
 		if (cell[x + y] == get_id(C_VOID))
 		{
-			if (cell[x + y - map_width] == get_id(C_FLOOR)
-				|| cell[x + y - map_width] == get_id(C_DOOR))
+			if (cell[x + y - map_width] == get_id(C_FLOOR) || cell[x + y
+					- map_width] == get_id(C_DOOR))
 				return (ERR_OPEN_MAP);
 		}
 		x++;
@@ -84,8 +84,8 @@ static bool	is_char_valid_place(t_map *map, char *s, int x, int y)
 {
 	if (s[x] == C_VOID)
 	{
-		if (map->cell[x + y - map->width] == get_id(C_FLOOR)
-			|| map->cell[x + y - map->width] == get_id(C_DOOR))
+		if (map->cell[x + y - map->width] == get_id(C_FLOOR) || map->cell[x + y
+				- map->width] == get_id(C_DOOR))
 			return (false);
 	}
 	else if (s[x] == C_FLOOR || s[x] == C_DOOR)
@@ -94,9 +94,8 @@ static bool	is_char_valid_place(t_map *map, char *s, int x, int y)
 			return (false);
 		else if (!s[x + 1] || s[x + 1] == '\n')
 			return (false);
-		else if (s[x - 1] == C_VOID
-			|| s[x + 1] == C_VOID
-			|| map->cell[x + y - map->width] == get_id(C_VOID))
+		else if (s[x - 1] == C_VOID || s[x + 1] == C_VOID || map->cell[x + y
+				- map->width] == get_id(C_VOID))
 			return (false);
 	}
 	return (true);
@@ -114,7 +113,7 @@ static bool	save_player(char *s, int *i, t_app *app, t_error *error)
 	else if (dir == 'E')
 		init_players_angle(app, 4, 0);
 	else if (dir == 'N')
-	    init_players_angle(app, 4, -M_PI_2);
+		init_players_angle(app, 4, -M_PI_2);
 	else if (dir == 'W')
 		init_players_angle(app, 4, M_PI);
 	else if (dir == 'S')

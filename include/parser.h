@@ -18,7 +18,7 @@ typedef enum e_step
 	GET_INFOS,
 	SKIP_NEW_LINES,
 	GET_MAP
-}	t_step;
+}		t_step;
 
 // parser.c
 void	parsing(int fd, t_app *app, t_step step);
@@ -28,7 +28,7 @@ char	*skip_spaces(char *s);
 t_error	check_split_rgb8(char **rgb, char *s);
 bool	is_rgb8(char *s);
 char	get_id(char c);
-void    init_players_angle(t_app *app, int nb_players, double angle);
+void	init_players_angle(t_app *app, int nb_players, double angle);
 
 // element_infos.c
 bool	get_info(t_map *map, char *s, t_error *error);
