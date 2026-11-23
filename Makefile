@@ -1,5 +1,5 @@
 CC := cc
-CFLAGS := -Wall -Wextra -Wno-unused-result -march=native -flto -O3 #TODO: -Werror
+CFLAGS := -Wall -Wextra -Wno-unused-result -march=native -flto -O3 -Werror
 LDFLAGS = -flto -lSDL2 -lm
 
 ifeq ($(FSANITIZE), true)
@@ -55,7 +55,18 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/gui/ui_card.c \
 	   $(SRC_DIR)/gui/ui_utils.c \
 	   $(SRC_DIR)/raycaster/billboards_sorting.c \
-	   $(SRC_DIR)/graphic/animated_sprite.c
+	   $(SRC_DIR)/graphic/animated_sprite.c \
+	   $(SRC_DIR)/frame_buffer/clear.c \
+	   $(SRC_DIR)/frame_buffer/display.c \
+	   $(SRC_DIR)/game/player_utils.c \
+	   $(SRC_DIR)/game/ingame_logic.c \
+	   $(SRC_DIR)/game/input_events.c \
+	   $(SRC_DIR)/game/input_select_menu_logic.c \
+	   $(SRC_DIR)/game/main_menu_logic.c \
+	   $(SRC_DIR)/game/mouse.c \
+	   $(SRC_DIR)/game/player_count_menu.c \
+	   $(SRC_DIR)/game/player_interact.c \
+	   $(SRC_DIR)/game/window.c
 
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c

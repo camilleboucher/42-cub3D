@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-void	set_delta_dist(t_app *app, t_hit_info *hit)
+void	set_delta_dist(t_hit_info *hit)
 {
 	if (hit->ray_dir.x == 0.)
 		hit->delta_dist.x = 1e30;

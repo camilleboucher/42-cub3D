@@ -44,12 +44,12 @@ void	init_draw(t_draw *d, t_vec2i *out_pos,
 	if (out_pos->y < 0)
 		out_pos->y = 0;
 	d->stop = (t_vec2i){sprite->frame_width, sprite->frames->height};
-	if (d->pos.x + out_pos->x > buffer->width
-		|| d->pos.y + out_pos->y > buffer->height)
+	if (d->pos.x + out_pos->x > (int)buffer->width
+		|| d->pos.y + out_pos->y > (int)buffer->height)
 		return ;
-	if (out_pos->x + d->stop.x > buffer->width)
+	if (out_pos->x + d->stop.x > (int)buffer->width)
 		d->stop.x = buffer->width;
-	if (out_pos->y + d->stop.y > buffer->height)
+	if (out_pos->y + d->stop.y > (int)buffer->height)
 		d->stop.y = buffer->height;
 	d->screen_i = buffer->height * out_pos->x;
 	d->frame_i = sprite->frame_index * sprite->frame_width

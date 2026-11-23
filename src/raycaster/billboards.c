@@ -48,7 +48,7 @@ void	display_sprite(t_frame_buffer *buffer, t_sprite_render_info *info)
 						/ 2)) * info->texture->width / info->sprite_size.x)
 			/ 256;
 		if (info->transformed.y > 0 && info->transformed.y < buffer->z_buffer[x]
-			&& x >= 0 && x < buffer->width)
+			&& x >= 0 && x < (int)buffer->width)
 			v_scan_line(buffer, info, tex_x, x);
 		x++;
 	}
@@ -90,9 +90,9 @@ void	draw_single_player(t_app *app, int player_i, t_vec2f plane,
 	transformed = vec2f_mul(transformed, inv_det);
 	info.sprite_screen_x = (int)(((double)app->frame_buffer.width / 2.) * (1.
 				+ transformed.x / transformed.y));
-	info.sprite_size.x = abs((double)app->frame_buffer.height / transformed.y)
+	info.sprite_size.x = fabs((double)app->frame_buffer.height / transformed.y)
 		* .8;
-	info.sprite_size.y = abs((double)app->frame_buffer.height / transformed.y)
+	info.sprite_size.y = fabs((double)app->frame_buffer.height / transformed.y)
 		* .8;
 	info.transformed = transformed;
 	info.texture = app->image_atlas.images[37 + player_i];

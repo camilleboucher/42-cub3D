@@ -103,7 +103,7 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 	while (hit.screen_x < app->frame_buffer.width)
 	{
 		update_hit_with_screen_x(app, &hit, raycaster, plane);
-		set_delta_dist(app, &hit);
+		set_delta_dist(&hit);
 		set_side_dist_and_step_values(&hit, raycaster);
 		walk_raycaster(app, &hit, raycaster);
 		if (hit.perp_wall_dist < 0.)

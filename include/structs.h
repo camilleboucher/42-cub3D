@@ -65,10 +65,10 @@ typedef struct s_frame_buffer
 	mlx_image				screen_image;
 	unsigned int			screen_width;
 	unsigned int			screen_height;
-	t_region				*minimap_frame_buffer;
-	t_region				*minimap_overlay_frame_buffer;
-	mlx_image				minimap_frame_buffer_image;
-	mlx_image				minimap_overlay_frame_buffer_image;
+	t_region				*minimap_fb;
+	t_region				*minimap_overlay_fb;
+	mlx_image				minimap_fb_image;
+	mlx_image				minimap_overlay_fb_img;
 	double					*z_buffer;
 }							t_frame_buffer;
 

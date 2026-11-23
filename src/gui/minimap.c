@@ -29,20 +29,20 @@ void	minimap_put_tile(t_app *app, t_vec2i map_pos, int scare_size,
 		&& map_pos.y < app->map.height)
 	{
 		if (cell_type == 1)
-			draw_image_strech(app->frame_buffer.minimap_frame_buffer,
+			draw_image_strech(app->frame_buffer.minimap_fb,
 				screen_pos, (t_vec2i){scare_size, scare_size},
 				app->image_atlas.images[32]);
 		else if (cell_type >= 3 && cell_type <= 6)
-			draw_image_strech(app->frame_buffer.minimap_frame_buffer,
+			draw_image_strech(app->frame_buffer.minimap_fb,
 				screen_pos, (t_vec2i){scare_size, scare_size},
 				app->image_atlas.images[30 + cell_type]);
 		else
-			draw_rect_checked(app->frame_buffer.minimap_frame_buffer,
+			draw_rect_checked(app->frame_buffer.minimap_fb,
 				screen_pos, (t_vec2i){scare_size, scare_size},
 				(mlx_color){.rgba = 0xFFFFFFFF});
 	}
 	else
-		draw_rect_checked(app->frame_buffer.minimap_frame_buffer, screen_pos,
+		draw_rect_checked(app->frame_buffer.minimap_fb, screen_pos,
 			(t_vec2i){scare_size, scare_size}, (mlx_color){.rgba = 0xFFFFFFFF});
 }
 
@@ -74,23 +74,23 @@ void	render_map_to_buffer(t_app *app, int dist, int canvas_size, int offset)
 
 void	draw_overlay(t_app *app, t_vec2i size, t_vec2i indicator_size)
 {
-	clear_region(app->frame_buffer.minimap_overlay_frame_buffer,
+	clear_region(app->frame_buffer.minimap_overlay_fb,
 		(mlx_color){.rgba = 0x00000000});
-	draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer,
+	draw_image_strech(app->frame_buffer.minimap_overlay_fb,
 		(t_vec2i){0, 0}, size, app->image_atlas.images[31]);
-	draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer,
+	draw_image_strech(app->frame_buffer.minimap_overlay_fb,
 		(t_vec2i){(cos(-app->players[0].angle - M_PI / 2.) * size.x) / 2,
 		(sin(-app->players[0].angle - M_PI / 2.) * size.y) / 2}, indicator_size,
 		app->image_atlas.images[27]);
-	draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer,
+	draw_image_strech(app->frame_buffer.minimap_overlay_fb,
 		(t_vec2i){(cos(-app->players[0].angle + M_PI / 2.) * size.x) / 2,
 		(sin(-app->players[0].angle + M_PI / 2.) * size.y) / 2}, indicator_size,
 		app->image_atlas.images[28]);
-	draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer,
+	draw_image_strech(app->frame_buffer.minimap_overlay_fb,
 		(t_vec2i){(cos(-app->players[0].angle) * size.x) / 2,
 		(sin(-app->players[0].angle) * size.y) / 2}, indicator_size,
 		app->image_atlas.images[29]);
-	draw_image_strech(app->frame_buffer.minimap_overlay_frame_buffer,
+	draw_image_strech(app->frame_buffer.minimap_overlay_fb,
 		(t_vec2i){(cos(-app->players[0].angle - M_PI) * size.x) / 2,
 		(sin(-app->players[0].angle - M_PI) * size.y) / 2}, indicator_size,
 		app->image_atlas.images[30]);
@@ -108,10 +108,10 @@ void	render_minimap(t_app *app)
 	render_map_to_buffer(app, 5, app->minimap.size.x, -app->minimap.size.x / 4);
 	mid_point_disc(app, (double)size.x / 2.08, (t_vec2i){app->minimap.pos.x / 2,
 		app->minimap.pos.y / 2});
-	draw_rect_raw(app->frame_buffer.minimap_frame_buffer, (t_vec2i){0, 0},
+	draw_rect_raw(app->frame_buffer.minimap_fb, (t_vec2i){0, 0},
 		(t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4,
 		app->minimap.size.y}, (mlx_color){.rgba = 0x00000000});
-	draw_rect_raw(app->frame_buffer.minimap_frame_buffer,
+	draw_rect_raw(app->frame_buffer.minimap_fb,
 		(t_vec2i){app->minimap.size.x - (app->minimap.size.x - size.x / 2.1) / 4
 		+ 1, 0}, (t_vec2i){(app->minimap.size.x - size.x / 2.1) / 4,
 		app->minimap.size.y}, (mlx_color){.rgba = 0x00000000});

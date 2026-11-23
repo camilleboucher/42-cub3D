@@ -19,13 +19,13 @@ void	mask_out_vert_line(t_app *app, unsigned int x, unsigned int start,
 	int	row;
 
 	y = 0;
-	row = x * app->frame_buffer.minimap_frame_buffer->height;
-	while (y <= start)
-		set_pixel_opt(app->frame_buffer.minimap_frame_buffer, row + y++,
+	row = x * app->frame_buffer.minimap_fb->height;
+	while (y <= (int)start)
+		set_pixel_opt(app->frame_buffer.minimap_fb, row + y++,
 			(mlx_color){.rgba = 0x00000000});
 	y = stop;
 	while (y < app->minimap.size.y)
-		set_pixel_opt(app->frame_buffer.minimap_frame_buffer, row + y++,
+		set_pixel_opt(app->frame_buffer.minimap_fb, row + y++,
 			(mlx_color){.rgba = 0x00000000});
 }
 

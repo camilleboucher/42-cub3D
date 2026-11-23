@@ -16,7 +16,8 @@ void	device_notify(t_app *app, int device_id)
 {
 	t_input_device	*device;
 
-	if (device_id >= 2 && device_id < app->input_handler.controller_count + 2)
+	if (device_id >= 2 && device_id
+		< (int)app->input_handler.controller_count + 2)
 		device = &app->input_handler.devices[device_id];
 	else
 		return ;
