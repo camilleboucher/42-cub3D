@@ -41,7 +41,7 @@ With a controller you can open doors with `X` (`Square`) or `RIGHT STICK` and yo
 2.	Raycasting : [Lode's Computer Graphics Tutorial](https://lodev.org/cgtutor/raycasting.html)
 3.	[DDA (Digital Differential Analyzer)](https://www.youtube.com/watch?v=NbSee-XM7WA)
 4.	Wikipedia Article: [Fonction trigonométrique](https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique)
-5.	Web research and AI chat for documentation.
+5.	Web research and AI chat for documentation. No IA was used to write code.
 
 ### Player sprites
 
