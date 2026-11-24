@@ -41,7 +41,6 @@ bool	app_init(t_app *app)
 	app->request_immediate_abort = false;
 	app->game_state = main_menu;
 	app->input_handler = (t_input_handler){0};
-	app->minimap.showed = false;
 	if (!resize_frame_buffer(app, app->info.width, app->info.height))
 		return (false);
 	return (true);

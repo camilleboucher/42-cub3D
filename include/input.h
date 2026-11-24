@@ -30,12 +30,11 @@ t_vec2f	get_controler_left_vector(t_input_handler *handler,
 			unsigned int controller_index);
 double	get_controler_angle(t_input_handler *handler,
 			unsigned int controller_index);
-void	input_handler_update(t_input_handler *handler, mlx_context ctx,
+void	input_handler_update(t_input_handler *handler,
 			double delta_time);
 void	init_devices(t_input_handler *handler);
 
 bool	is_key_down(t_input_handler *handler, int key);
-t_vec2f	dead_zone(t_vec2f a);
 double	dead_one_axis(double a);
 t_vec2f	get_controler_left_vector(t_input_handler *handler,
 			unsigned int controller_index);

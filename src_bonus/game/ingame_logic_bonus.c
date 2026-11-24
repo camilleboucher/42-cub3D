@@ -56,6 +56,7 @@ void	ingame_update(t_app *app)
 	app->time.delta = app->time.now - app->time.last;
 	if (app->time.last == 0.)
 		app->time.last = app->time.now;
+	printf("FPS: %d\n", (int)(1.0 / app->time.delta));
 	mouse_jail(app);
 	input_handler_update(&app->input_handler, app->ctx, app->time.delta);
 	app->input_handler.total_mouse_pos.x += app->input_handler.mouse_pos.x

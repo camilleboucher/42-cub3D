@@ -21,15 +21,13 @@ OUTPUT_DIR_BONUS := $(OUTPUT_DIR)_bonus
 SRC_DIR := src
 SRC_DIR_BONUS := $(SRC_DIR)_bonus
 
-SRC := $(SRC_DIR)/gui/ui.c \
-	   $(SRC_DIR)/app/init.c \
+SRC := $(SRC_DIR)/app/init.c \
 	   $(SRC_DIR)/data_structures/vec2f_math.c \
 	   $(SRC_DIR)/data_structures/vec2f_utils.c \
 	   $(SRC_DIR)/data_structures/vec2i.c \
 	   $(SRC_DIR)/app/atlas.c \
 	   $(SRC_DIR)/frame_buffer/alloc.c \
 	   $(SRC_DIR)/frame_buffer/interface.c \
-	   $(SRC_DIR)/graphic/blur_shader.c \
 	   $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/app/error_manager.c \
 	   $(SRC_DIR)/parser/parser.c \
@@ -41,31 +39,18 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/game/game.c \
 	   $(SRC_DIR)/game/objects.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
-	   $(SRC_DIR)/gui/minimap.c \
 	   $(SRC_DIR)/app/tools.c \
 	   $(SRC_DIR)/input/handler.c \
 	   $(SRC_DIR)/input/device.c \
 	   $(SRC_DIR)/game/player/player.c \
-	   $(SRC_DIR)/raycaster/billboards.c \
 	   $(SRC_DIR)/input/device_utils.c \
 	   $(SRC_DIR)/raycaster/raycast_utils.c \
 	   $(SRC_DIR)/raycaster/filling.c \
-	   $(SRC_DIR)/gui/ui_create.c \
-	   $(SRC_DIR)/gui/minimap_drawing.c \
-	   $(SRC_DIR)/gui/ui_card.c \
-	   $(SRC_DIR)/gui/ui_utils.c \
-	   $(SRC_DIR)/raycaster/billboards_sorting.c \
-	   $(SRC_DIR)/graphic/animated_sprite.c \
 	   $(SRC_DIR)/frame_buffer/clear.c \
 	   $(SRC_DIR)/frame_buffer/display.c \
 	   $(SRC_DIR)/game/player/player_utils.c \
 	   $(SRC_DIR)/game/ingame_logic.c \
 	   $(SRC_DIR)/game/input_events.c \
-	   $(SRC_DIR)/game/input_select_menu_logic.c \
-	   $(SRC_DIR)/game/main_menu_logic.c \
-	   $(SRC_DIR)/game/mouse.c \
-	   $(SRC_DIR)/game/player/player_count_menu.c \
-	   $(SRC_DIR)/game/player/player_interact.c \
 	   $(SRC_DIR)/game/window.c
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui_bonus.c \

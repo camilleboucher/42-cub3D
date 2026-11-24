@@ -32,15 +32,7 @@ void	app_destroy(t_app *app)
 	objects_destroy(&app->objects);
 	free(app->frame_buffer.buffer);
 	free(app->frame_buffer.shader_buffer);
-	free(app->frame_buffer.minimap_fb);
-	free(app->frame_buffer.minimap_overlay_fb);
 	free(app->frame_buffer.z_buffer);
-	if (app->frame_buffer.minimap_fb_image)
-		mlx_destroy_image(app->ctx,
-			app->frame_buffer.minimap_fb_image);
-	if (app->frame_buffer.minimap_overlay_fb_img)
-		mlx_destroy_image(app->ctx,
-			app->frame_buffer.minimap_overlay_fb_img);
 	if (app->frame_buffer.screen_image)
 		mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
 	mlx_destroy_window(app->ctx, app->window);

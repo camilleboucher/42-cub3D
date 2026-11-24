@@ -67,32 +67,6 @@ void	update_hit_with_screen_x(t_app *app, t_hit_info *hit,
 		(int)raycaster->camera_pos.y};
 }
 
-void	draw_door_transparency(t_app *app, t_raycaster *raycaster,
-		t_hit_info *hit)
-{
-	unsigned int	i;
-
-	i = hit->screen_x * app->frame_buffer.height;
-	while (i < (hit->screen_x + 1) * app->frame_buffer.height)
-		set_pixel_opt(app->frame_buffer.buffer, i++, (mlx_color){.rgba = 0x0});
-	while (true)
-	{
-		if (hit->cell_id >= ID_DOOR_CLOSED)
-			hit->image = app->image_atlas.images[20 + hit->cell_id];
-		else
-			hit->image = app->image_atlas.images[3 + hit->side];
-		draw_vertical_line(app, hit, true);
-		if (hit->cell_id < ID_DOOR_CLOSED)
-			break ;
-		walk_raycaster(app, hit, raycaster);
-		compute_perp_wall_dist(app, hit);
-		if (hit->perp_wall_dist < 0)
-			return ;
-		hit->line_height = (int)app->frame_buffer.height / hit->perp_wall_dist;
-		set_hit_info_side(hit->side, hit->ray_dir, hit);
-	}
-}
-
 void	draw_raycast(t_app *app, t_raycaster *raycaster)
 {
 	t_vec2f		plane;
@@ -110,14 +84,8 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 			return ;
 		hit.line_height = (int)app->frame_buffer.height / hit.perp_wall_dist;
 		set_hit_info_side(hit.side, hit.ray_dir, &hit);
-		if (hit.cell_id >= ID_DOOR_CLOSED)
-			draw_door_transparency(app, raycaster, &hit);
-		else
-		{
-			hit.image = app->image_atlas.images[3 + hit.side];
-			draw_vertical_line(app, &hit, false);
-		}
+		hit.image = app->image_atlas.images[3 + hit.side];
+		draw_vertical_line(app, &hit);
 		hit.screen_x++;
 	}
-	draw_players(app, plane, raycaster);
 }
