@@ -28,6 +28,9 @@ void	draw_screens(t_app *app)
 		move_input(&app->players[player_index], &app->input_handler,
 			app->time.delta, &app->map);
 		draw_raycast(app, &raycaster);
+		if (app->input_handler.devices
+			[app->players[player_index].device_id].sprint_key)
+			apply_blur(app);
 		if (player_index == 0)
 			render_minimap(app);
 		push_buffer_to_screen_image(app, player_index);
