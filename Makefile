@@ -45,7 +45,7 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/app/tools.c \
 	   $(SRC_DIR)/input/handler.c \
 	   $(SRC_DIR)/input/device.c \
-	   $(SRC_DIR)/game/player.c \
+	   $(SRC_DIR)/game/player/player.c \
 	   $(SRC_DIR)/raycaster/billboards.c \
 	   $(SRC_DIR)/input/device_utils.c \
 	   $(SRC_DIR)/raycaster/raycast_utils.c \
@@ -58,14 +58,14 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/graphic/animated_sprite.c \
 	   $(SRC_DIR)/frame_buffer/clear.c \
 	   $(SRC_DIR)/frame_buffer/display.c \
-	   $(SRC_DIR)/game/player_utils.c \
+	   $(SRC_DIR)/game/player/player_utils.c \
 	   $(SRC_DIR)/game/ingame_logic.c \
 	   $(SRC_DIR)/game/input_events.c \
 	   $(SRC_DIR)/game/input_select_menu_logic.c \
 	   $(SRC_DIR)/game/main_menu_logic.c \
 	   $(SRC_DIR)/game/mouse.c \
-	   $(SRC_DIR)/game/player_count_menu.c \
-	   $(SRC_DIR)/game/player_interact.c \
+	   $(SRC_DIR)/game/player/player_count_menu.c \
+	   $(SRC_DIR)/game/player/player_interact.c \
 	   $(SRC_DIR)/game/window.c
 
 
@@ -87,7 +87,7 @@ $(OUTPUT_DIR):
 		$(OUTPUT_DIR)/tools $(OUTPUT_DIR)/game $(OUTPUT_DIR)/gui \
 		$(OUTPUT_DIR)/data_structures $(OUTPUT_DIR)/app \
 	    $(OUTPUT_DIR)/frame_buffer $(OUTPUT_DIR)/parser \
-		$(OUTPUT_DIR)/raycaster $(OUTPUT_DIR)/animated_sprite
+		$(OUTPUT_DIR)/raycaster $(OUTPUT_DIR)/animated_sprite $(OUTPUT_DIR)/game/player
 
 $(OUTPUT_DIR_BONUS):
 
