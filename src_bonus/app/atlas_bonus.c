@@ -115,9 +115,10 @@ bool	atlas_load_buttons(t_app *app)
 	{
 		img = NULL;
 		app->image_atlas.images[app->image_atlas.image_amount] = load_image(app,
-				files[i++], false, img);
+				files[i], i == 4 || i == 5, img);
 		if (!app->image_atlas.images[app->image_atlas.image_amount++])
 			return (false);
+		i++;
 	}
 	app->image_atlas.animated_sprite[0] = animated_sprite_from_region(
 			app->image_atlas.images[22], 54, 0.03, true);
