@@ -13,7 +13,6 @@
 #ifndef FRAME_BUFFER_H
 # define FRAME_BUFFER_H
 
-
 # include "cub3D.h"
 
 bool		reallocate_frame_buffer(t_app *app);
@@ -29,15 +28,12 @@ bool		resize_frame_buffer(t_app *app, unsigned int width,
 void		set_pixel(t_region *frame_buffer, unsigned int x, unsigned int y,
 				mlx_color color);
 
-void		set_pxl(t_region *frame_buf, unsigned int i,
-				mlx_color color, bool is_door);
-
 mlx_color	get_pixel(t_region *frame_buffer, unsigned int x, unsigned int y);
 
 void		set_pixel_opt(t_region *frame_buffer, unsigned int i,
 				mlx_color color);
 mlx_color	get_pixel_opt(t_region *frame_buffer, unsigned int i);
 
-void clear_region(t_region *region, mlx_color color);
+void		clear_region(t_region *region, mlx_color color);
 
 #endif

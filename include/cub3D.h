@@ -45,16 +45,12 @@
 
 # include "input.h"
 # include "frame_buffer.h"
-# include "animated_sprite.h"
 # include "atlas.h"
-# include "ui.h"
 # include "game.h"
 # include "parser.h"
 # include "cleaner.h"
 
-# include "math.h"
 # include "raycaster.h"
 # include "tools.h"
-# include "shaders.h"
 
 #endif

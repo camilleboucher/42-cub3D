@@ -25,7 +25,7 @@ int	main(int argc, char *argv[])
 	app = (struct s_app){0};
 	load_map(&app, argv[1]);
 	app_init(&app);
-	if (!atlas_load_buttons(&app) || !create_objects(&app))
+	if (!atlas_load_buttons(&app))
 	{
 		app_destroy(&app);
 		return (1);

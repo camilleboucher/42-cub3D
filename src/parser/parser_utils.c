@@ -62,16 +62,14 @@ char	get_id(char c)
 		return (ID_WALL);
 	if (c == C_FLOOR)
 		return (ID_FLOOR);
-	if (c == C_DOOR)
-		return (ID_DOOR_CLOSED);
 	return (-128);
 }
 
-void    init_players_angle(t_app *app, int nb_players, double angle)
+void	init_players_angle(t_app *app, int nb_players, double angle)
 {
-    while (nb_players)
-    {
-        nb_players--;
-        app->players[nb_players].angle = angle;
-    }
+	while (nb_players)
+	{
+		nb_players--;
+		app->players[nb_players].angle = angle;
+	}
 }

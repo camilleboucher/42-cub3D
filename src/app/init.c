@@ -30,7 +30,7 @@ bool	app_init(t_app *app)
 	if (app->ctx == MLX_NULL_HANDLE)
 		return (false);
 	app->info = (mlx_window_create_info){0};
-	app->info.title = "Cube 3D";
+	app->info.title = "Cub3D";
 	app->info.width = 800;
 	app->info.height = 600;
 	app->info.is_resizable = true;
@@ -41,7 +41,6 @@ bool	app_init(t_app *app)
 	app->request_immediate_abort = false;
 	app->game_state = main_menu;
 	app->input_handler = (t_input_handler){0};
-	app->minimap.showed = false;
 	if (!resize_frame_buffer(app, app->info.width, app->info.height))
 		return (false);
 	return (true);

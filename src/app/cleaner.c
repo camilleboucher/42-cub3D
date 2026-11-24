@@ -21,26 +21,12 @@ void	clean_map(t_map *map)
 	free(map->path_textures[3]);
 }
 
-void	objects_destroy(t_objects *objects)
-{
-	free(objects->door);
-}
-
 void	app_destroy(t_app *app)
 {
 	clean_map(&app->map);
-	objects_destroy(&app->objects);
 	free(app->frame_buffer.buffer);
 	free(app->frame_buffer.shader_buffer);
-	free(app->frame_buffer.minimap_frame_buffer);
-	free(app->frame_buffer.minimap_overlay_frame_buffer);
 	free(app->frame_buffer.z_buffer);
-	if (app->frame_buffer.minimap_frame_buffer_image)
-		mlx_destroy_image(app->ctx,
-			app->frame_buffer.minimap_frame_buffer_image);
-	if (app->frame_buffer.minimap_overlay_frame_buffer_image)
-		mlx_destroy_image(app->ctx,
-			app->frame_buffer.minimap_overlay_frame_buffer_image);
 	if (app->frame_buffer.screen_image)
 		mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
 	mlx_destroy_window(app->ctx, app->window);
