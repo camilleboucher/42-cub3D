@@ -8,7 +8,7 @@ Cub3D is the final C project in 42’s common core. Developed in pairs, it chall
 
 ### Bonus++
 
-To make the game even more fun, we added a menu, split-screen multiplayer for up to four players, controller support, and a hidden Easter egg!
+To make the game even more fun, we added a menu, split-screen multiplayer for up to four players, controller support, 2D sprites (billboards) and a hidden Easter egg!
 
 ### Technical Details and Design Choices
 
@@ -20,15 +20,17 @@ Cub3D uses a raycasting engine to create a 3D-like view of a 2D map. For each ve
 
 Clone with `git clone --recursive https://github.com/camilleboucher/42-cub3D.git`
 
-Use `make` or `make re` to compile the program. For cleaning the generated files use `make clean` or `make fclean`.
+Use `make bonus`, `make` or `make re` to compile the program. For cleaning the generated files use `make clean` or `make fclean`.
+We recommend using the bonus program to access all the features.
 
 ### Usage
 
 To use the cub3D program, run cub3D with a .cub map file.
 
-Example : `./cub3D maps/valid/better_map_subject.cub`
+Example for the bonus program : `./cub3D_bonus maps/valid/bonus/ultimate_demo_bonus.cub`
 
-The player can move with the QWSD keys.
+Move the player with the `W`, `A`, `S`, and `D` keys. Press `F` to open doors and `LEFT SHIFT` to run.
+With a controler you can open doors with `X` (`Square`) or `RIGHT STICK` and you can run with `LEFT SHOULDER` or `RIGHT SHOULDER`.
 
 ## Resources
 
@@ -38,8 +40,9 @@ The player can move with the QWSD keys.
 4.	Wikipedia Article: [Fonction trigonométrique](https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique)
 5.	Web research and AI chat for some notions.
 
-Image sources:
-Mao Mao: https://greatcharacters.miraheze.org/wiki/File:Maomao_Anime_Design_Season_2.png
-Jinshi: https://greatcharacters.miraheze.org/wiki/File:Jinshi_anime_season_2.png
-Xiaolan: https://www.animecharactersdatabase.com/characters.php?id=133148
-Gaoshun: https://www.animecharactersdatabase.com/characters.php?id=133147
+### Player sprites
+
+1.	[Mao Mao](https://greatcharacters.miraheze.org/wiki/File:Maomao_Anime_Design_Season_2.png)
+2.	[Jinshi](https://greatcharacters.miraheze.org/wiki/File:Jinshi_anime_season_2.png)
+3.	[Xiaolan](https://www.animecharactersdatabase.com/characters.php?id=133148)
+4.	[Gaoshun](https://www.animecharactersdatabase.com/characters.php?id=133147)
