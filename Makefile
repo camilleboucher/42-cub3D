@@ -68,8 +68,52 @@ SRC := $(SRC_DIR)/gui/ui.c \
 	   $(SRC_DIR)/game/player/player_interact.c \
 	   $(SRC_DIR)/game/window.c
 
-
-SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui.c
+SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui_bonus.c \
+	   $(SRC_DIR_BONUS)/app/init_bonus.c \
+	   $(SRC_DIR_BONUS)/data_structures/vec2f_math_bonus.c \
+	   $(SRC_DIR_BONUS)/data_structures/vec2f_utils_bonus.c \
+	   $(SRC_DIR_BONUS)/data_structures/vec2i_bonus.c \
+	   $(SRC_DIR_BONUS)/app/atlas_bonus.c \
+	   $(SRC_DIR_BONUS)/frame_buffer/alloc_bonus.c \
+	   $(SRC_DIR_BONUS)/frame_buffer/interface_bonus.c \
+	   $(SRC_DIR_BONUS)/graphic/blur_shader_bonus.c \
+	   $(SRC_DIR_BONUS)/main_bonus.c \
+	   $(SRC_DIR_BONUS)/app/error_manager_bonus.c \
+	   $(SRC_DIR_BONUS)/parser/parser_bonus.c \
+	   $(SRC_DIR_BONUS)/parser/map_parser_bonus.c \
+	   $(SRC_DIR_BONUS)/parser/element_infos_bonus.c \
+	   $(SRC_DIR_BONUS)/parser/element_map_bonus.c \
+	   $(SRC_DIR_BONUS)/parser/parser_utils_bonus.c \
+	   $(SRC_DIR_BONUS)/app/cleaner_bonus.c \
+	   $(SRC_DIR_BONUS)/game/game_bonus.c \
+	   $(SRC_DIR_BONUS)/game/objects_bonus.c \
+	   $(SRC_DIR_BONUS)/raycaster/raycast_bonus.c \
+	   $(SRC_DIR_BONUS)/gui/minimap_bonus.c \
+	   $(SRC_DIR_BONUS)/app/tools_bonus.c \
+	   $(SRC_DIR_BONUS)/input/handler_bonus.c \
+	   $(SRC_DIR_BONUS)/input/device_bonus.c \
+	   $(SRC_DIR_BONUS)/game/player/player_bonus.c \
+	   $(SRC_DIR_BONUS)/raycaster/billboards_bonus.c \
+	   $(SRC_DIR_BONUS)/input/device_utils_bonus.c \
+	   $(SRC_DIR_BONUS)/raycaster/raycast_utils_bonus.c \
+	   $(SRC_DIR_BONUS)/raycaster/filling_bonus.c \
+	   $(SRC_DIR_BONUS)/gui/ui_create_bonus.c \
+	   $(SRC_DIR_BONUS)/gui/minimap_drawing_bonus.c \
+	   $(SRC_DIR_BONUS)/gui/ui_card_bonus.c \
+	   $(SRC_DIR_BONUS)/gui/ui_utils_bonus.c \
+	   $(SRC_DIR_BONUS)/raycaster/billboards_sorting_bonus.c \
+	   $(SRC_DIR_BONUS)/graphic/animated_sprite_bonus.c \
+	   $(SRC_DIR_BONUS)/frame_buffer/clear_bonus.c \
+	   $(SRC_DIR_BONUS)/frame_buffer/display_bonus.c \
+	   $(SRC_DIR_BONUS)/game/player/player_utils_bonus.c \
+	   $(SRC_DIR_BONUS)/game/ingame_logic_bonus.c \
+	   $(SRC_DIR_BONUS)/game/input_events_bonus.c \
+	   $(SRC_DIR_BONUS)/game/input_select_menu_logic_bonus.c \
+	   $(SRC_DIR_BONUS)/game/main_menu_logic_bonus.c \
+	   $(SRC_DIR_BONUS)/game/mouse_bonus.c \
+	   $(SRC_DIR_BONUS)/game/player/player_count_menu_bonus.c \
+	   $(SRC_DIR_BONUS)/game/player/player_interact_bonus.c \
+	   $(SRC_DIR_BONUS)/game/window_bonus.c
 
 INCLUDES := -Iinclude -IMacroLibX/includes -Ilibft/include
 INCLUDES_BONUS := -Iinclude_bonus -IMacroLibX/includes -Ilibft/include
@@ -90,6 +134,11 @@ $(OUTPUT_DIR):
 		$(OUTPUT_DIR)/raycaster $(OUTPUT_DIR)/animated_sprite $(OUTPUT_DIR)/game/player
 
 $(OUTPUT_DIR_BONUS):
+	mkdir -p $(OUTPUT_DIR_BONUS) $(OUTPUT_DIR_BONUS)/input $(OUTPUT_DIR_BONUS)/graphic \
+		$(OUTPUT_DIR_BONUS)/tools $(OUTPUT_DIR_BONUS)/game $(OUTPUT_DIR_BONUS)/gui \
+		$(OUTPUT_DIR_BONUS)/data_structures $(OUTPUT_DIR_BONUS)/app \
+	    $(OUTPUT_DIR_BONUS)/frame_buffer $(OUTPUT_DIR_BONUS)/parser \
+		$(OUTPUT_DIR_BONUS)/raycaster $(OUTPUT_DIR_BONUS)/animated_sprite $(OUTPUT_DIR_BONUS)/game/player
 
 $(OUTPUT_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDES)
