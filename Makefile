@@ -107,10 +107,10 @@ SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui_bonus.c \
 	   $(SRC_DIR_BONUS)/frame_buffer/display_bonus.c \
 	   $(SRC_DIR_BONUS)/game/player/player_utils_bonus.c \
 	   $(SRC_DIR_BONUS)/game/ingame_logic_bonus.c \
-	   $(SRC_DIR_BONUS)/game/input_events_bonus.c \
-	   $(SRC_DIR_BONUS)/game/input_select_menu_logic_bonus.c \
+	   $(SRC_DIR_BONUS)/input/events_bonus.c \
+	   $(SRC_DIR_BONUS)/input/select_menu_logic_bonus.c \
 	   $(SRC_DIR_BONUS)/game/main_menu_logic_bonus.c \
-	   $(SRC_DIR_BONUS)/game/mouse_bonus.c \
+	   $(SRC_DIR_BONUS)/input/mouse_bonus.c \
 	   $(SRC_DIR_BONUS)/game/player/player_count_menu_bonus.c \
 	   $(SRC_DIR_BONUS)/game/player/player_interact_bonus.c \
 	   $(SRC_DIR_BONUS)/game/window_bonus.c

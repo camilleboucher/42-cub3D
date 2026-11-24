@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input_events_bonus.c                               :+:      :+:    :+:   */
+/*   events_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yben-dje <yben-dje@student.42angouleme.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,9 +37,11 @@ void	handle_controler_up(mlx_controller_event_code event, void *param)
 
 	app = param;
 	device = &app->input_handler.devices[2 + event.controller_id];
-	if (device->action_key && event.button == MLX_CONTROLLER_X)
+	if (device->action_key && (event.button == MLX_CONTROLLER_X
+			|| event.button == MLX_CONTROLLER_RIGHTSTICK))
 		device->action_key = false;
-	if (device->sprint_key && event.button == MLX_CONTROLLER_A)
+	if (device->sprint_key && (event.button == MLX_CONTROLLER_LEFTSHOULDER
+			|| event.button == MLX_CONTROLLER_RIGHTSHOULDER))
 		device->sprint_key = false;
 }
 
@@ -79,8 +81,10 @@ void	handle_controler_down(mlx_controller_event_code event, void *param)
 	app = param;
 	device = &app->input_handler.devices[2 + event.controller_id];
 	handle_controller_connections(event, app);
-	if (!device->action_key && event.button == MLX_CONTROLLER_X)
+	if (!device->action_key && (event.button == MLX_CONTROLLER_X
+			|| event.button == MLX_CONTROLLER_RIGHTSTICK))
 		device->action_key = true;
-	if (!device->sprint_key && event.button == MLX_CONTROLLER_A)
+	if (!device->sprint_key && (event.button == MLX_CONTROLLER_LEFTSHOULDER
+			|| event.button == MLX_CONTROLLER_RIGHTSHOULDER))
 		device->sprint_key = true;
 }
