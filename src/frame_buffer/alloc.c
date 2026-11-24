@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "mlx.h"
-#include "mlx_profile.h"
-#include "structs.h"
-#include <stdlib.h>
 
 static bool	allocate_buffers(t_app *app)
 {

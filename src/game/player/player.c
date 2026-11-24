@@ -12,14 +12,10 @@
 
 #include "cub3D.h"
 
-void	move_player(t_map *map, t_player *player, t_vec2f delta_pos,
-		bool sprint_key)
+void	move_player(t_map *map, t_player *player, t_vec2f delta_pos)
 {
 	t_vec2f	new_pos;
 
-	if (sprint_key)
-		delta_pos = (t_vec2f){delta_pos.x * PLAYER_SPRINT, delta_pos.y
-			* PLAYER_SPRINT};
 	new_pos = vec2f_add(player->pos, delta_pos);
 	if (has_collision(map, new_pos))
 	{
@@ -76,7 +72,6 @@ void	move_input(t_player *player, t_input_handler *input_handler,
 		else
 			player->speed = vec2f_sub(player->speed, invert_friction);
 	}
-	move_player(map, player, vec2f_mul(player->speed, delta_time),
-		input_handler->devices[player->device_id].sprint_key);
+	move_player(map, player, vec2f_mul(player->speed, delta_time));
 	player->angle = get_controler_angle(input_handler, player->device_id);
 }

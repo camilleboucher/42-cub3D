@@ -30,7 +30,7 @@ bool	app_init(t_app *app)
 	if (app->ctx == MLX_NULL_HANDLE)
 		return (false);
 	app->info = (mlx_window_create_info){0};
-	app->info.title = "Cube 3D";
+	app->info.title = "Cub3D";
 	app->info.width = 800;
 	app->info.height = 600;
 	app->info.is_resizable = true;

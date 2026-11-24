@@ -50,7 +50,6 @@
 # include "parser.h"
 # include "cleaner.h"
 
-# include "math.h"
 # include "raycaster.h"
 # include "tools.h"
 

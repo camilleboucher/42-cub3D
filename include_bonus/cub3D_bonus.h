@@ -54,6 +54,5 @@
 
 # include "raycaster_bonus.h"
 # include "tools_bonus.h"
-# include "shaders_bonus.h"
 
 #endif

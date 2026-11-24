@@ -62,8 +62,6 @@ char	get_id(char c)
 		return (ID_WALL);
 	if (c == C_FLOOR)
 		return (ID_FLOOR);
-	if (c == C_DOOR)
-		return (ID_DOOR_CLOSED);
 	return (-128);
 }
 

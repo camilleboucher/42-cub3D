@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include "raycaster.h"
 
 void	set_hit_info_side(int side, t_vec2f ray_dir, t_hit_info *hit)
 {

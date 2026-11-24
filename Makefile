@@ -37,7 +37,6 @@ SRC := $(SRC_DIR)/app/init.c \
 	   $(SRC_DIR)/parser/parser_utils.c \
 	   $(SRC_DIR)/app/cleaner.c \
 	   $(SRC_DIR)/game/game.c \
-	   $(SRC_DIR)/game/objects.c \
 	   $(SRC_DIR)/raycaster/raycast.c \
 	   $(SRC_DIR)/app/tools.c \
 	   $(SRC_DIR)/input/handler.c \
@@ -50,7 +49,7 @@ SRC := $(SRC_DIR)/app/init.c \
 	   $(SRC_DIR)/frame_buffer/display.c \
 	   $(SRC_DIR)/game/player/player_utils.c \
 	   $(SRC_DIR)/game/ingame_logic.c \
-	   $(SRC_DIR)/game/input_events.c \
+	   $(SRC_DIR)/input/events.c \
 	   $(SRC_DIR)/game/window.c
 
 SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui_bonus.c \
@@ -61,7 +60,6 @@ SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui_bonus.c \
 	   $(SRC_DIR_BONUS)/app/atlas_bonus.c \
 	   $(SRC_DIR_BONUS)/frame_buffer/alloc_bonus.c \
 	   $(SRC_DIR_BONUS)/frame_buffer/interface_bonus.c \
-	   $(SRC_DIR_BONUS)/graphic/blur_shader_bonus.c \
 	   $(SRC_DIR_BONUS)/main_bonus.c \
 	   $(SRC_DIR_BONUS)/app/error_manager_bonus.c \
 	   $(SRC_DIR_BONUS)/parser/parser_bonus.c \

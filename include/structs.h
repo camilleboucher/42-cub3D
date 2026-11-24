@@ -29,8 +29,6 @@ typedef struct s_input_device
 	double					initial_angle;
 	t_device_type			type;
 	int						controller_slot;
-	bool					action_key;
-	bool					sprint_key;
 }							t_input_device;
 
 // for input handler
