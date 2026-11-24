@@ -49,7 +49,8 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
 				+ ((unsigned int)hit->tex_pos % (hit->image->height)));
 		while (hit->y < hit->stepstep - 1e-6
 			&& hit->y < app->frame_buffer.height)
-			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++, color);
+			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
+				color);
 		hit->tex_pos++;
 	}
 	if (hit->tex_pos < (int)hit->image->height && hit->stepstep
@@ -58,7 +59,8 @@ void	texture_to_screen_fill(t_app *app, t_hit_info *hit, int stop)
 		color = get_pixel_opt(hit->image, hit->tex_row
 				+ ((unsigned int)hit->tex_pos % (hit->image->height)));
 		while (hit->y < app->frame_buffer.height)
-			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++, color);
+			set_pixel_opt(app->frame_buffer.buffer, hit->fb_row + hit->y++,
+				color);
 	}
 }
 

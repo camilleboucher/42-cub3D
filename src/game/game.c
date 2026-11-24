@@ -20,7 +20,6 @@ void	start_game(t_app *app)
 		= app->players[0].angle;
 	app->input_handler.devices[0].initial_angle
 		= app->players[0].angle;
-
 	app->input_handler.total_mouse_pos = (t_vec2f){0, 0};
 	app->input_handler.mouse_pos = (t_vec2i){app->frame_buffer.width / 2,
 		app->frame_buffer.height / 2};
