@@ -59,7 +59,6 @@ typedef struct s_region
 typedef struct s_frame_buffer
 {
 	t_region				*buffer;
-	t_region				*shader_buffer;
 	unsigned int			width;
 	unsigned int			height;
 	mlx_image				screen_image;

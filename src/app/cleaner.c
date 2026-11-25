@@ -25,8 +25,6 @@ void	app_destroy(t_app *app)
 {
 	clean_map(&app->map);
 	free(app->frame_buffer.buffer);
-	free(app->frame_buffer.shader_buffer);
-	free(app->frame_buffer.z_buffer);
 	if (app->frame_buffer.screen_image)
 		mlx_destroy_image(app->ctx, app->frame_buffer.screen_image);
 	mlx_destroy_window(app->ctx, app->window);

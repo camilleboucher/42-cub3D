@@ -67,7 +67,7 @@ void				draw_players(t_app *app, t_vec2f plane,
 
 void				set_delta_dist(t_hit_info *hit);
 t_vec2f				compute_plane(t_app *app, t_raycaster *raycaster);
-void				compute_perp_wall_dist(t_app *app, t_hit_info *hit);
+void				compute_perp_wall_dist(t_hit_info *hit);
 void				compute_wall_x(t_hit_info *hit, t_raycaster *raycaster);
 void				set_side_dist_and_step_values(t_hit_info *hit,
 						t_raycaster *raycaster);

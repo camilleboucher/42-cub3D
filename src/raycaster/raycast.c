@@ -50,7 +50,7 @@ void	walk_raycaster(t_app *app, t_hit_info *hit, t_raycaster *raycaster)
 		if (hit->cell_id != 2)
 			break ;
 	}
-	compute_perp_wall_dist(app, hit);
+	compute_perp_wall_dist(hit);
 	compute_wall_x(hit, raycaster);
 }
 

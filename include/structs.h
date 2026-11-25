@@ -57,13 +57,11 @@ typedef struct s_region
 typedef struct s_frame_buffer
 {
 	t_region				*buffer;
-	t_region				*shader_buffer;
 	unsigned int			width;
 	unsigned int			height;
 	mlx_image				screen_image;
 	unsigned int			screen_width;
 	unsigned int			screen_height;
-	double					*z_buffer;
 }							t_frame_buffer;
 
 // for animated_sprite.h

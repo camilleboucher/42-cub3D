@@ -31,7 +31,6 @@ void	app_destroy(t_app *app)
 	clean_map(&app->map);
 	objects_destroy(&app->objects);
 	free(app->frame_buffer.buffer);
-	free(app->frame_buffer.shader_buffer);
 	free(app->frame_buffer.minimap_fb);
 	free(app->frame_buffer.minimap_overlay_fb);
 	free(app->frame_buffer.z_buffer);

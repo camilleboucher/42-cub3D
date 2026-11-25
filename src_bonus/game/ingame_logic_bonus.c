@@ -28,7 +28,7 @@ void	draw_screens(t_app *app)
 		move_input(&app->players[player_index], &app->input_handler,
 			app->time.delta, &app->map);
 		draw_raycast(app, &raycaster);
-		if (player_index == 0)
+		if (player_index == 0 && app->minimap.showed)
 			render_minimap(app);
 		push_buffer_to_screen_image(app, player_index);
 		player_index++;
