@@ -44,10 +44,11 @@ t_vec2f	get_move_vector(t_player *player, t_input_handler *input_handler)
 	player->right.y = cos(player->angle);
 	move = (t_vec2f){0., 0.};
 	move = vec2f_add(move, vec2f_mul(player->forward,
-				-get_controler_left_vector(input_handler,
+				-get_controller_left_vector(input_handler,
 					player->device_id).y));
 	move = vec2f_add(move, vec2f_mul(player->right,
-				get_controler_left_vector(input_handler, player->device_id).x));
+				get_controller_left_vector(input_handler,
+					player->device_id).x));
 	move = vec2f_mul(move, PLAYER_FORCE);
 	return (move);
 }
@@ -73,5 +74,5 @@ void	move_input(t_player *player, t_input_handler *input_handler,
 			player->speed = vec2f_sub(player->speed, invert_friction);
 	}
 	move_player(map, player, vec2f_mul(player->speed, delta_time));
-	player->angle = get_controler_angle(input_handler, player->device_id);
+	player->angle = get_controller_angle(input_handler, player->device_id);
 }

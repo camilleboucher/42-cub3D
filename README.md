@@ -43,6 +43,8 @@ With a controller you can open doors with `X` (`Square`) or `RIGHT STICK` and yo
 4.	Wikipedia Article: [Fonction trigonométrique](https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique)
 5.	Web research and AI chat for documentation. No IA was used to write code.
 
+A big thank to Daemo who helped us optimizing the raycaster.
+
 ### Player sprites
 
 1.	[Mao Mao](https://greatcharacters.miraheze.org/wiki/File:Maomao_Anime_Design_Season_2.png)

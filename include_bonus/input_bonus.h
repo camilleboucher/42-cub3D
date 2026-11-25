@@ -26,9 +26,9 @@ void	update_keyboard(t_input_handler *handler, t_input_device *device,
 void	input_handler_set_down(t_input_handler *handler, int key);
 void	input_handler_set_up(t_input_handler *handler, int key);
 bool	is_key_down(t_input_handler *handler, int key);
-t_vec2f	get_controler_left_vector(t_input_handler *handler,
+t_vec2f	get_controller_left_vector(t_input_handler *handler,
 			unsigned int controller_index);
-double	get_controler_angle(t_input_handler *handler,
+double	get_controller_angle(t_input_handler *handler,
 			unsigned int controller_index);
 void	input_handler_update(t_input_handler *handler, mlx_context ctx,
 			double delta_time);
@@ -37,9 +37,9 @@ void	init_devices(t_input_handler *handler);
 bool	is_key_down(t_input_handler *handler, int key);
 t_vec2f	dead_zone(t_vec2f a);
 double	dead_one_axis(double a);
-t_vec2f	get_controler_left_vector(t_input_handler *handler,
+t_vec2f	get_controller_left_vector(t_input_handler *handler,
 			unsigned int controller_index);
-double	get_controler_angle(t_input_handler *handler,
+double	get_controller_angle(t_input_handler *handler,
 			unsigned int controller_index);
 
 #endif

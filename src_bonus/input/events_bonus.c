@@ -30,7 +30,7 @@ void	handle_key_up(int key, void *param)
 	input_handler_set_up(&app->input_handler, key);
 }
 
-void	handle_controler_up(mlx_controller_event_code event, void *param)
+void	handle_controller_up(mlx_controller_event_code event, void *param)
 {
 	t_app			*app;
 	t_input_device	*device;
@@ -73,7 +73,7 @@ void	handle_controller_connections(mlx_controller_event_code event,
 	}
 }
 
-void	handle_controler_down(mlx_controller_event_code event, void *param)
+void	handle_controller_down(mlx_controller_event_code event, void *param)
 {
 	t_app			*app;
 	t_input_device	*device;

@@ -47,8 +47,8 @@ void	input_select_menu_window_update(t_app *app);
 
 void	handle_key_down(int key, void *param);
 void	handle_key_up(int key, void *param);
-void	handle_controler_up(mlx_controller_event_code event, void *param);
-void	handle_controler_down(mlx_controller_event_code event, void *param);
+void	handle_controller_up(mlx_controller_event_code event, void *param);
+void	handle_controller_down(mlx_controller_event_code event, void *param);
 
 void	ingame_update(t_app *app);
 void	start_game(t_app *app);

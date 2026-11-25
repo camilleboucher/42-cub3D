@@ -158,7 +158,7 @@ typedef struct s_input_select_menu
 {
 	t_grab_card				cards[6];
 	t_card_slot				card_slots[4];
-	int						controler_ids[4];
+	int						controller_ids[4];
 	unsigned int			docked_cards_count;
 	t_tex_button			valid_button;
 }							t_input_select_menu;

@@ -39,13 +39,13 @@ double	dead_one_axis(double a)
 	return (a);
 }
 
-t_vec2f	get_controler_left_vector(t_input_handler *handler,
+t_vec2f	get_controller_left_vector(t_input_handler *handler,
 		unsigned int controller_index)
 {
 	return (dead_zone(handler->devices[controller_index].move_vector));
 }
 
-double	get_controler_angle(t_input_handler *handler,
+double	get_controller_angle(t_input_handler *handler,
 		unsigned int controller_index)
 {
 	return (handler->devices[controller_index].angle);

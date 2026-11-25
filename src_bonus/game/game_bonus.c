@@ -82,8 +82,8 @@ void	main_loop(t_app *app)
 	mlx_on_event(app->ctx, app->window, MLX_KEYDOWN, &handle_key_down, app);
 	mlx_on_event(app->ctx, app->window, MLX_KEYUP, &handle_key_up, app);
 	mlx_on_event(app->ctx, app->window, MLX_CONTROLLERDOWN,
-		(void (*)(int, void *))handle_controler_down, app);
+		(void (*)(int, void *))handle_controller_down, app);
 	mlx_on_event(app->ctx, app->window, MLX_CONTROLLERUP,
-		(void (*)(int, void *))handle_controler_up, app);
+		(void (*)(int, void *))handle_controller_up, app);
 	mlx_loop(app->ctx);
 }
