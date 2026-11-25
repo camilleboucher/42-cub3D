@@ -80,7 +80,7 @@ void	draw_door_transparency(t_app *app, t_raycaster *raycaster,
 			hit->image = app->image_atlas.images[20 + hit->cell_id];
 		else
 			hit->image = app->image_atlas.images[3 + hit->side];
-		draw_vertical_line(app, hit, true);
+		draw_vertical_line_door(app, hit);
 		if (hit->cell_id < ID_DOOR_CLOSED)
 			break ;
 		walk_raycaster(app, hit, raycaster);
@@ -114,7 +114,7 @@ void	draw_raycast(t_app *app, t_raycaster *raycaster)
 		else
 		{
 			hit.image = app->image_atlas.images[3 + hit.side];
-			draw_vertical_line(app, &hit, false);
+			draw_vertical_line(app, &hit);
 		}
 		hit.screen_x++;
 	}

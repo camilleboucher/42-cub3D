@@ -96,7 +96,8 @@ SRC_BONUS := $(SRC_DIR_BONUS)/gui/ui_bonus.c \
 	   $(SRC_DIR_BONUS)/input/mouse_bonus.c \
 	   $(SRC_DIR_BONUS)/game/player/player_count_menu_bonus.c \
 	   $(SRC_DIR_BONUS)/game/player/player_interact_bonus.c \
-	   $(SRC_DIR_BONUS)/game/window_bonus.c
+	   $(SRC_DIR_BONUS)/game/window_bonus.c \
+	   $(SRC_DIR_BONUS)/raycaster/filling_door_bonus.c
 
 INCLUDES := -Iinclude -IMacroLibX/includes -Ilibft/include
 INCLUDES_BONUS := -Iinclude_bonus -IMacroLibX/includes -Ilibft/include

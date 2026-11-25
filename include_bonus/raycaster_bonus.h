@@ -72,8 +72,8 @@ void				compute_wall_x(t_hit_info *hit, t_raycaster *raycaster);
 void				set_side_dist_and_step_values(t_hit_info *hit,
 						t_raycaster *raycaster);
 
-void				draw_vertical_line(t_app *app, t_hit_info *hit,
-						bool is_door);
+void				draw_vertical_line(t_app *app, t_hit_info *hit);
+void				draw_vertical_line_door(t_app *app, t_hit_info *hit);
 mlx_color			blend_colors(mlx_color a, mlx_color b);
 
 void				quick_players_sort(double dists[4], int players[4],
